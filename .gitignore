@@ -33,5 +33,5 @@ nosetests.xml
 
 .DS_Store
 
-Thumb.db
+Thumbs.db
 
