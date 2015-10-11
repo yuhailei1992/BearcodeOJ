@@ -32,3 +32,6 @@ nosetests.xml
 .pydevproject
 
 .DS_Store
+
+Thumb.db
+
