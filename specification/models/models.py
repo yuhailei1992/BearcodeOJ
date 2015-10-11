@@ -15,9 +15,13 @@ class UserProfile(models.Model):
 		return self.firstname + " " + self.lastname
 
 class Submission(models.Model):
+    LANGUAGE_CHOICES = [(TYPE_JAVA, 'Java'),
+                  (TYPE_PYTHON, 'Python')]
+
 	user = models.ForeignKey(User, null=False)
 	problem = models.ForeignKey(Problem, null=False)
 	result = models.BooleanField(null=False)
+	submissionType = models.CharField(choices=LANGUAGE_CHOICES, default=TYPE_PYTHON)
 	createdAt = models.DateTimeField(auto_now_add=True)
 	def __unicode__(self):
 		return str(self.user.id) + " " + str(self.problem.id)
@@ -27,7 +31,9 @@ class Problem(models.Model):
 	createdUser = models.ForeignKey(User, null=False)
 	createdAt = models.DateTimeField(auto_now_add=True)
 	description = models.CharField(max_length=420)
-	tests = models.FileField(upload_to='/', default='/tests/', null=False)
+	javaTests = models.FileField(upload_to='/', default='/tests/', null=False)
+    pythonTests = models.FileField(upload_to='/', default='/tests/', null=False)
+
 	def __unicode__(self):
 		return self.name
 
@@ -40,7 +46,7 @@ class DiscussionPost(models.Model):
 	def __unicode__(self):
 		return self.title
 
-class FolowUp(modesl.Model):
+class FolowUp(models.Model):
 	createdUser = models.ForeignKey(User, null=False)
 	createdAt = models.DateTimeField(auto_now_add=True)
 	discussionPost = models.ForeignKey(DiscussionPost, null=False)
