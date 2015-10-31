@@ -1,6 +1,12 @@
 from exec_java_file import run_code
+import subprocess
 
-PATH = '/Users/Caesar/Documents/tests/python/'
+PATH = '/Users/Caesar/Documents/workspace/Team142/src/source_code_executor/'
 
-res = run_code(PATH)
-print res
+def exec_java_file_test():
+    print 'Exec java file test...'
+    # subprocess.check_call('sleep 1', shell=True)
+    res = run_code(PATH, 2)
+    print 'The result is' + str(res)
+
+exec_java_file_test()

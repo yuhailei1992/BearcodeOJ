@@ -1,3 +1,6 @@
+# Return a dict.
+
+import multiprocessing
 import subprocess
 from subprocess import CalledProcessError
 from os import listdir
@@ -10,7 +13,7 @@ JAVA_SUFFIX = '.java'
 EXPECTED = 'expected'
 
 
-def run_code(path):
+def run_code(path, timeout):
     # Parameter sanity check.
     if not path or len(path) == 0:
         raise ValueError("Invalid path")
@@ -20,6 +23,7 @@ def run_code(path):
     # Execute the first .java file.
     for filename in filenames:
         if filename.endswith(JAVA_SUFFIX):
+            print 'Found a java file'
             class_name = filename[:-5]
 
             # Attempt to compile it.
@@ -34,8 +38,22 @@ def run_code(path):
 
             # If the file compiles successfully, attempt to run it.
             run_command = format(RUN % class_name)
-            try:
+            print run_command
+            def run_java_code():
                 subprocess.check_call(run_command, shell=True)
+
+            try:
+                p = multiprocessing.Process(target=run_java_code)
+                p.start()
+                p.join(timeout)
+                # If thread is active
+                if p.is_alive():
+                    print "The process is running... let's kill it..."
+                    p.terminate()
+                    p.join()
+                    return {'return_code': 4, 'return_msg': 'Time Limit Exceeded'}
+                else:
+                    print 'The code terminated within deadline.'
             except CalledProcessError:
                 print 'Error running'
                 err_file_name = path + 'run_err'
