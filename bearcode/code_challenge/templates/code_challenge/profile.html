@@ -1,0 +1,44 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+
+{% block title %}Global_Stream{% endblock %}
+
+{% block mainbody %} 
+<!-- Profiles goes here -->
+<div class="col-md-4 profile" >
+
+    {% if userprofile %}
+      <p><img src="{{userprofile.image}}" width="200"/></p>
+      <ol class="profileInfo">First Name:<label class="name">{{userprofile.first_name}}</label></ol>
+      <ol class="profileInfo">Last Name:<label class="name">{{userprofile.last_name}}</label></ol>
+      <ol class="profileInfo">Age:<label class="name">{{userprofile.age}}</label></ol>
+      <ol class="profileInfo">Bio:<label class="name">{{userprofile.bio}}</label></ol>
+    {% endif %}
+    
+    {% ifequal currentuser.username user.username %}
+      <p><a class="btn btn-success" href="/edit_profile">Edit My Profile</a></p>
+      <p><a class="btn btn-primary" href="/change_password">Change My Password</a></p>
+    {% else %}
+
+      {% if not user in following %}
+        <a class="btn btn-success" href="{% url 'follow' user.username %}">Follow!</a>
+      {% else %}
+        <a class="btn btn-primary" href="{% url 'unfollow' user.username %}">Unfollow</a>
+      {% endif %}
+      
+    {% endifequal %}
+</div>
+
+<!-- Posts go here -->
+<div class="col-md-8 post">
+  <h2> Your posts: </h2><br>
+  <p></p>
+  <p>    
+    <ol class="posts">
+    {% for post in posts %}
+      <ol>{{post}} <a href="{% url 'profile' post.user.username %}">{{post.user.username}}</a></ol>
+      <ol>{{post.createdAt}}</ol><br>
+    {% endfor %}
+    </ol>
+  </p>
+</div>
+{% endblock %}

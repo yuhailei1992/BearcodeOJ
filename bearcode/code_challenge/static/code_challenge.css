@@ -1,0 +1,64 @@
+#nav1 {
+	background-color: #66FF99;
+}
+#brand {
+	padding-top: 30px;
+	line-height: 10px;
+	color: #0000FF;
+	height: 70px;
+	font-size: 50px;
+	text-align: right;
+	font-style: italic;
+}
+
+.active {
+	font-size: 22px;
+	text-align: left;
+	font-style: italic;
+}
+
+.eachPost {
+	font-size: 20px;
+	float: left;
+	padding: 20px 20px;
+	line-height: 20px;
+	border-radius: 10px;
+}
+
+.form-register {
+	text-align: center;
+	position: relative;
+	left: -10px;
+	width: 120px
+}
+
+#log-in-btn, #sign-up-btn, #regitser-btn {
+	width: 300px;
+}
+
+#mainbody {
+	text-align: center;
+}
+#postT {
+	margin-bottom: 15px;
+	width: 400px;
+}
+.profileInfo {
+	padding-top: 13px;
+	font-size: 20px;
+	color: #800000;
+	text-align: left;
+}
+.posts {
+	padding-top: 5px;
+	font-size: 15px;
+}
+
+.image {
+	width: 200px;
+	height: 200px;
+}
+#edit_form {
+	padding-top: 10px;
+	text-align: left;
+}

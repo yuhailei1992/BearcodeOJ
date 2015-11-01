@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <!-- Latest compiled and minified CSS -->
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static "/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}">
+  <!-- My own css -->
+  <link rel="stylesheet" href="{% static "/static/code_challenge.css" %}">
+  {% block js %}
+  {% endblock %}
+  <meta charset="utf-8">
+  <title>{% block title %}base{% endblock %}</title>
+</head>
+<body>
+  <div>
+  {% block brand %}
+    <nav class="navbar navbar-default">
+      <div id="nav1" class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a id="brand" class="navbar-brand" href="/">Code Challenge</a>
+        </div>
+      </div>
+    </nav>
+  {% endblock %}
+  </div>
+  
+  <div id="sidebar">
+    {% block sidebar %} {% endblock %}
+  </div>
+  <div>
+    {% block editmyprofile %} {% endblock %}
+  </div>
+<body>
+
+{% for error in form.non_field_errors %}
+<p style="color: red">
+{{ error }}
+</p>
+{% endfor %}
+
+<!-- Add the inputs here -->
+<div id="mainbody">
+  {% block mainbody %}
+  {% endblock mainbody %}
+</div>
+<div>
+  {% block divider %} {% endblock %}
+</div>
+<div>
+  {% block posts %} {% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+
+{% block title %}Global_Stream{% endblock %}
+
+{% block editmyprofile %} 
+    
+{% endblock %}
+
+{% block mainbody %}
+{% if form.errors %}
+<p style="color:red">
+Invalid input
+{{form.errors}}
+</p>
+{% endif %}
+  <div class="container" id="edit_form">
+  <p>
+    <form action="{% url 'edit' %}" method="post" enctype="multipart/form-data">
+    <table>
+      {{form}}
+    </table>
+
+    <input type="submit" value="Save Profile" align="left">
+    {% csrf_token %}
+    </form>
+    <a href="{% url 'home' %}"><button>Cancel</button></a>
+  </p>
+  </div>
+{% endblock %}

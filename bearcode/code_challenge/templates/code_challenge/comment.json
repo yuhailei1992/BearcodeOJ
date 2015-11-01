@@ -1,0 +1,6 @@
+{
+	"comment_user": "{{comment.comment_user}}",
+	"user_photo": "{{comment.user_photo}}",
+	"created_at": "{{comment.created_at}}",
+	"comment_text": "{{comment.comment_text}}"
+}

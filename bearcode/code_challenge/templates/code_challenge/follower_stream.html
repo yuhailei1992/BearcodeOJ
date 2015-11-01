@@ -1,0 +1,20 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+
+{% block title %}Global_Stream{% endblock %}
+
+{% block mainbody %}
+
+  <!-- posts go here -->
+  <div class="container" align="center">
+    <h2> Your follower Stream: </h2><br>
+    <p>       
+      <ol>
+      {% for item in posts %}
+        <ol>{{item}} <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
+        <ol>{{item.createdAt}}</ol><br>
+      {% endfor %}
+      </ol>
+    </p>
+  </div>
+
+{% endblock %}
