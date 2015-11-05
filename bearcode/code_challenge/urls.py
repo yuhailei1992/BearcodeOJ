@@ -18,7 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    
+    url(r'^problem/(?P<problemid>\d+)/$', 'code_challenge.views.problem', name='problem'),
     url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'template_name': 'code_challenge/password_reset_form.html'}, name='reset_password_reset1'),
     url(r'^password_reset/done/$', 'django.contrib.auth.views.password_reset_done', {'template_name': 'code_challenge/password_reset_done.html'}, name='password_reset_done'),
     url(r'^(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', {'template_name': 'code_challenge/password_reset_confirm.html'} , name='password_reset_confirm'),
@@ -31,6 +31,9 @@ urlpatterns = [
     # Route to logout a user and send them back to the login page
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     url(r'^register$', 'code_challenge.views.register', name='regitser'),
+    url(r'^add_problem$', 'code_challenge.views.add_problem', name='addproblem'),
+    url(r'^trysubmit$', 'code_challenge.views.try_submit', name='trysubmit'),
+
     url(r'^profile/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.profile', name='profile'),
     url(r'^edit_profile$', 'code_challenge.views.edit_profile', name='edit'),
     url(r'^change_password$', 'django.contrib.auth.views.password_change', {'template_name': 'code_challenge/password_change_form.html'}, name='password_change'),

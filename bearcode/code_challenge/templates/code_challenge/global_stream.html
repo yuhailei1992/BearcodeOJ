@@ -6,15 +6,7 @@
 
 {% block title %}Global_Stream{% endblock %}
 
-{% block mainbody %} 
-  <div class="container" align="center">
-      <form action="/add-post" method="post">
-        <textarea class="input-large" id="postT" name="posttext" rows="3"></textarea><br>
-        <button class="btn btn-success" type="submit">Add new Post</button>
-        <input type="hidden" name="next" value="{{ next }}" />
-        {% csrf_token %}
-      </form>
-  </div>
+{% block mainbody %}
   
   <!-- divider line -->
   <div class="container" align="center">
@@ -25,18 +17,11 @@
   <div class="container" align="center">
     <h2> Global Stream: </h2><br>
     <p>    
-      <ol id="postToAddComment" class="posts">
-      {% for item in items %}
-        <ol id="eachpost">{{item.text}} <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
-        <ol id="eachtime">{{item.created_at}}</ol>
-        <!-- add comment for each post here -->
-        <ol id="comment" class="comments" data-comment="{{item.id}}">
-          <a name="add-btn" class="btn btn-success">Comment</a>
-        </ol>
-        <ol id="commentBox" post-id="{{item.id}}">         
-        </ol><br>
+      <ul id="postToAddComment" class="posts">
+      {% for problem in problems %}
+        <li><a href="{% url 'problem' problem.id %}">{{problem.name}}</a></li>
       {% endfor %}
-      </ol>
+      </ul>
     </p>
   </div>
 

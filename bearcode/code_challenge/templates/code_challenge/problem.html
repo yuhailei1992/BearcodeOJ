@@ -1,0 +1,81 @@
+{% extends "code_challenge/base.html" %}
+
+{% block title %}Problem{% endblock %}
+
+{% block mainbody %}
+<div style="text-align:left">
+    <h1>{{problem.name}}</h1>
+    <hr>
+    <p>Description: {{problem.description}}</p>
+    <p>{{problem.example}}</p>
+    <textarea class="form-control" id="codecontent" rows="10">{{problem.default}}</textarea>
+    <input type="hidden" id="problemid" value="{{problem.id}}">
+    <hr>
+    <button id="submitbtn" class="btn btn-success btn-lg">Submit Code</button>
+    <div id="status"></div>
+    <div id="message"></div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#submitbtn").on("click", function(event) {
+            console.log("submit once!");
+            submitCode();
+        });
+
+          // CSRF set-up copied from Django docs
+          function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+          }
+          var csrftoken = getCookie('csrftoken');
+          $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+          });
+    });
+
+    function submitCode(){
+        var problemid = $("#problemid").val();
+        var submit_url = "/trysubmit";
+        var code_content = $("#codecontent").val();
+        console.log("url is:"+submit_url+", problem id is:"+problemid);
+        console.log("submitted content is:"+code_content);
+
+        $.ajax({
+            url : submit_url,
+            dataType: "json",
+            method: "POST",
+            data: {problemid:problemid,codecontent:code_content}
+        })
+        .done(function(result) {
+            console.log("successfully submitted, get result"+result.status);
+            var resultstatus = result.status;
+            var statusPanel = $("#status")
+            var msgPanel = $("#message")
+            if(resultstatus=="success"){
+                statusPanel.css("color","green");
+                statusPanel.text(result.status);
+            }
+            else{
+                statusPanel.css("color","red");
+                statusPanel.text(result.status);
+                msgPanel.text(result.message);
+            }
+        });
+
+    }
+</script>
+{% endblock %}

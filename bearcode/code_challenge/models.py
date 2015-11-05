@@ -25,6 +25,21 @@ class UserProfile(models.Model):
 	def __unicode__(self):
 		return self.first_name + " " + self.last_name
 
+
+class Problem(models.Model):
+    name = models.CharField(max_length=50, default="newproblem")
+    # created_at = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(max_length=420, default="", blank=True)
+    example = models.TextField(max_length=420, default="", blank=True)
+    default = models.TextField(max_length=420, default="", blank=True)
+    tle_limit = models.PositiveIntegerField(default=1000)
+    mle_limit = models.PositiveIntegerField(default=500)
+    javaTests = models.FileField(upload_to="/javatests", default="/tests/", null=False)
+    pythonTests = models.FileField(upload_to="/pythontests", default="/tests/", null=False)
+
+    def __unicode__(self):
+        return self.name
+
 class Post(models.Model):
 	text = models.CharField(max_length=42)
 	user = models.ForeignKey(User)

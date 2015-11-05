@@ -75,4 +75,8 @@ class PostForm(forms.ModelForm):
 
         return cleaned_data
 
-
+class ProblemForm(forms.ModelForm):
+    class Meta:
+        model = Problem
+        exclude = {}
+        field = ('name', 'description', 'example', 'default', 'tle_limit', 'mle_limit','javaTests','pythonTests')

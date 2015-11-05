@@ -1,0 +1,24 @@
+{% extends "code_challenge/base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block mainbody %}
+  <form method="post" action="/add_problem">
+    <table align="center">
+    {% for field in form.visible_fields %}
+    <tr>
+      <td>{{field.label_tag}}</td>
+      <td>{{field}}</td>
+      <td style="color: red">{{field.errors}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% for field in form.hidden_fields %}
+      {{field}}
+    {% endfor %}
+    {% csrf_token %}
+    <input class="btn btn-success" type="submit" value="Add Problem" />
+  </form>
+
+<div><a href="/">Back to Login</a> </div>
+{% endblock %}

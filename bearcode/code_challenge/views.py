@@ -10,7 +10,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 # Used to create and manually log in a user
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
-
+from exec_java_file import *
 from code_challenge.models import *
 from code_challenge.forms import *
 import os
@@ -20,8 +20,9 @@ import time
 def home(request):
     # Sets up list of just the logged-in user's (request.user's) items
     user = request.user
-    items = Post.objects.all().order_by('-created_at')
-    return render(request, 'code_challenge/global_stream.html', {'items' : items, 'currentuser' : user})
+    problems = Problem.objects.all()
+    print "There are "+str(len(problems))+" problems in the list"
+    return render(request, 'code_challenge/global_stream.html', {'problems' : problems, 'currentuser' : user})
 
 @login_required
 @transaction.atomic
@@ -212,6 +213,59 @@ def edit_profile(request):
     posts = get_object_or_404(Post, user=request.user).order_by('-created_at')
 
     return render(request, 'code_challenge/profile.html', {'form': form, 'userprofile' : userprofile, 'currentuser': request.user, 'posts' : posts})
+
+
+@transaction.atomic
+def add_problem(request):
+    print "in add_problem"
+    context = {}
+    if request.method == 'GET':
+        print "add_problem in GET, should not be here"
+        context['form'] = ProblemForm()
+        return render(request, 'code_challenge/add_problem.html', context)
+
+    # if method is POST, get form data to update the model
+    form = ProblemForm(request.POST, request.FILES)
+    context['form'] = form
+
+    if not form.is_valid():
+        print "An invalid form!"
+        return render(request,'code_challenge/add_problem.html', context)
+
+    form.save()
+
+    # new_problem = Problem(name=form.cleaned_data['name'], \
+    #                       description = form.cleaned_data['description']
+    #                       )
+
+
+    return render(request, 'code_challenge/add_problem.html', {'form': form})
+
+@login_required
+@transaction.atomic
+def problem(request, problemid):
+    print "in problem!!!!"
+    problem = Problem.objects.get(id=problemid)
+    context = {}
+    context['problem'] = problem
+
+    return render(request, 'code_challenge/problem.html', context)
+
+@login_required
+@transaction.atomic
+def try_submit(request):
+    print "in try_submit!!!!"
+    problemid = request.POST['problemid']
+    problem = Problem.objects.get(id=problemid)
+
+    submit_content = request.POST['codecontent']
+    print "Submit content is:"
+    print submit_content
+    print "problem tle is:"+str(problem.tle_limit)
+
+
+    context = run_code("",problem.tle_limit)
+    return render(request, 'code_challenge/result.json', context, content_type="application/json")
 
 def handle_uploaded_file(f):
     if f != False :
