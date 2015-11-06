@@ -34,9 +34,10 @@ class Problem(models.Model):
     default = models.TextField(max_length=420, default="", blank=True)
     tle_limit = models.PositiveIntegerField(default=1000)
     mle_limit = models.PositiveIntegerField(default=500)
-    javaTests = models.FileField(upload_to="/javatests", default="/tests/", null=False)
-    pythonTests = models.FileField(upload_to="/pythontests", default="/tests/", null=False)
-
+    # javaTests = models.FileField(upload_to="/javatests", default="/tests/", null=False)
+    # pythonTests = models.FileField(upload_to="/pythontests", default="/tests/", null=False)
+    java_tests = models.TextField(max_length=1000, default="", blank=True)
+    python_tests = models.TextField(max_length=1000, default="", blank=True)
     def __unicode__(self):
         return self.name
 
@@ -55,7 +56,7 @@ class Comment(models.Model):
 
 	def __unicode__(self):
 		return self.text
-    
+
 	def __str__(self):
 		return self.__unicode__()
 

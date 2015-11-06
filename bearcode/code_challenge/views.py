@@ -259,12 +259,16 @@ def try_submit(request):
     problem = Problem.objects.get(id=problemid)
 
     submit_content = request.POST['codecontent']
+    java_tests_content = problem.java_tests
+
     print "Submit content is:"
     print submit_content
+    print "Java Tests content is:"
+    print java_tests_content
     print "problem tle is:"+str(problem.tle_limit)
 
 
-    context = run_code("",problem.tle_limit)
+    context = run_code(java_tests_content,submit_content,problem.tle_limit)
     return render(request, 'code_challenge/result.json', context, content_type="application/json")
 
 def handle_uploaded_file(f):
