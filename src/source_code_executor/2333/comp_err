@@ -1,0 +1,13 @@
+2333/Solution.java:3: error: class, interface, or enum expected
+    public static int foo(int x) {
+                  ^
+2333/Solution.java:5: error: class, interface, or enum expected
+    }
+    ^
+2333/Solution.java:16: error: illegal start of type
+    package 2333
+    ^
+2333/Solution.java:16: error: ';' expected
+    package 2333
+           ^
+4 errors
