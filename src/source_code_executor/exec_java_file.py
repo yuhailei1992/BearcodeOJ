@@ -7,6 +7,7 @@ RUN = 'exec java %s 2> %s'
 RAND_RANGE = 100000000
 CLEAN = 'rm -r %s'
 
+# test_code is what the admin should write in the form.
 test_code = '''
 %s
 public class Solution {
@@ -21,6 +22,7 @@ public class Solution {
 }
 '''
 
+# user_code is what the user should write in the form.
 user_code = '''
     public static int foo(int x) {
         return x;
