@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^follower_stream$', 'code_challenge.views.follower_stream', name='follower_stream'),
     url(r'^add_comment/$', 'code_challenge.views.add_comment', name='add_comment'),
     url(r'^get_comments/$', 'code_challenge.views.get_comments', name='get-comments'),
+    url(r'^foo/$', 'code_challenge.views.foo', name='foo'),
 ]

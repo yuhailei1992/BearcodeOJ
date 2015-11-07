@@ -313,4 +313,7 @@ def get_changes(request, log_id=-1):
     items = Post.objects.all().order_by('-created_at')
     context = {"items":items, "currentuser":user}
     return render(request, 'items.json', context, content_type='application/json')
-    
+
+
+def foo(request):
+    return render(request, 'code_challenge/test.html', {})
