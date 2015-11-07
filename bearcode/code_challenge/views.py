@@ -309,7 +309,6 @@ def register(request):
     password = form.cleaned_data['password1']
     firstname = form.cleaned_data['firstname']
     lastname = form.cleaned_data['lastname']
-    
 
     # Creates the new user from the valid form data
     new_user = User.objects.create_user(username=username, \
@@ -328,19 +327,14 @@ def register(request):
                                 first_name=firstname, \
                                 last_name=lastname)
     new_profile.save()
-    #print 'after create profile'
-    #print new_profile.username
-    #print new_profile.first_name
-    #print new_profile.last_name
 
     login(request, new_user)
     return redirect(reverse('home'))
 
 def get_changes(request, log_id=-1):
-    max_logentry = LogEntry.get_max_id()
     #posts = Post.get_changes(log_id)
     user = request.user
     items = Post.objects.all().order_by('-created_at')
-    context = {"max_entry":max_logentry, "items":items, "currentuser":user} 
+    context = {"items":items, "currentuser":user}
     return render(request, 'items.json', context, content_type='application/json')
     

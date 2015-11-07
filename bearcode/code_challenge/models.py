@@ -1,8 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
-from time import time
 
-#from django.contrib.auth.models import AbstractUser
 # User class for built-in authentication module
 from django.contrib.auth.models import User
 
@@ -19,7 +16,6 @@ class UserProfile(models.Model):
 	# Returns all comments associated with a specific post id
 	@staticmethod
 	def get_profile(user_profile_id=-1):
-		#print "asjdlasj"
 		return UserProfile.objects.get(user_id=user_profile_id)
 
 	def __unicode__(self):
@@ -28,14 +24,11 @@ class UserProfile(models.Model):
 
 class Problem(models.Model):
     name = models.CharField(max_length=50, default="newproblem")
-    # created_at = models.DateTimeField(auto_now_add=True)
     description = models.TextField(max_length=420, default="", blank=True)
     example = models.TextField(max_length=420, default="", blank=True)
     default = models.TextField(max_length=420, default="", blank=True)
     tle_limit = models.PositiveIntegerField(default=1000)
     mle_limit = models.PositiveIntegerField(default=500)
-    # javaTests = models.FileField(upload_to="/javatests", default="/tests/", null=False)
-    # pythonTests = models.FileField(upload_to="/pythontests", default="/tests/", null=False)
     java_tests = models.TextField(max_length=1000, default="", blank=True)
     python_tests = models.TextField(max_length=1000, default="", blank=True)
     def __unicode__(self):
@@ -64,3 +57,4 @@ class Comment(models.Model):
 	@staticmethod
 	def get_comments(post=-1):
 		return Comment.objects.filter(post_id=post).order_by('-created_at')
+

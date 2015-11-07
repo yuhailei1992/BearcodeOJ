@@ -41,14 +41,18 @@ def run_code(test_code, user_code, timeout):
 
     # Attempt to compile the source code.
     comp_err_file_path = child_dir + 'comp_err'
+    print comp_err_file_path
     compile_command = format(COMPILE % (file_path, comp_err_file_path))
     try:
         subprocess.check_call(compile_command, shell=True)
     except CalledProcessError:
         print 'Error compiling'
         # Read the compilation error message, and return in a dictionary.
+
+        msg = open(comp_err_file_path, 'r').read()
+        print msg
         os.system(clean_cmd)
-        return {'status': 'Compiler error', 'message': open(comp_err_file_path, 'r').read()}
+        return {'status': 'Compiler error', 'message': msg}
 
     # If the file compiles successfully, attempt to run it.
     run_err_file_path = child_dir + 'run_err'
@@ -71,8 +75,10 @@ def run_code(test_code, user_code, timeout):
 
     except CalledProcessError:
         print 'Error running'
+        print 'Trying to get err msg from ' + run_err_file_path
+        msg = open(run_err_file_path, 'r').read()
         os.system(clean_cmd)
-        return {'status': 'Runtime error', 'message': open(run_err_file_path, 'r').read()}
+        return {'status': 'Runtime error', 'message': msg}
 
     # Return accepted or wrong answer.
     os.system(clean_cmd)
