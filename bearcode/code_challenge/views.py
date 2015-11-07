@@ -268,7 +268,8 @@ def try_submit(request):
     print "problem tle is:"+str(problem.tle_limit)
 
 
-    context = run_code(java_tests_content,submit_content,problem.tle_limit)
+    context = run_code(java_tests_content, submit_content, problem.tle_limit)
+    print context
     return render(request, 'code_challenge/result.json', context, content_type="application/json")
 
 def handle_uploaded_file(f):
