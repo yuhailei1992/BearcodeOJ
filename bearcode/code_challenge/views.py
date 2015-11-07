@@ -200,7 +200,7 @@ def edit_profile(request):
 
 @transaction.atomic
 def add_problem(request):
-    print "in add_problem"
+    print "add_problem"
     context = {}
     if request.method == 'GET':
         print "add_problem in GET, should not be here"
@@ -222,7 +222,6 @@ def add_problem(request):
 @login_required
 @transaction.atomic
 def problem(request, problemid):
-    print "in problem!!!!"
     problem = Problem.objects.get(id=problemid)
     context = {}
     context['problem'] = problem
