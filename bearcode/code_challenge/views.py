@@ -1,17 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
 
 # Decorator to use built-in authentication system
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 # Used to create and manually log in a user
-from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from exec_java_file import *
-from code_challenge.models import *
 from code_challenge.forms import *
 import os
 import time
@@ -37,7 +33,7 @@ def add_post(request):
     
     new_post_form = PostForm(request.POST, instance=new_post)
     if not new_post_form.is_valid():
-        print 'invalid here'  # something going wrong here
+        print 'invalid here'
         context['form'] = new_post_form
         context['user'] = request.user
         context['items'] = Post.objects.all().order_by('-created_at')
@@ -67,8 +63,6 @@ def add_comment(request):
 
     comment_post = Post.objects.get(id=int(request.GET['post_id']))
     comment_user = UserProfile.objects.get(username=request_user)
-    #print comment_user
-    #print type(comment_user)
 
     to_comment = Comment(user=comment_user, text=comment_text, post=comment_post)
     to_comment.save()
@@ -110,10 +104,7 @@ def get_comments(request):
             print item
             comments.append(item)
 
-    #print "end"
-    #print comments
     context = {'size': len(comments), 'comments': comments};
-    #print context
     return render(request, 'code_challenge/comments.json', context, content_type='application/json')
 
 @login_required
@@ -126,7 +117,6 @@ def profile(request, username):
     # users that the current user is following
     currentuser = request.user
     currentuserprofile = get_object_or_404(UserProfile, user=currentuser)
-    #currentuserprofile = currentuserprofiles[0]
     following = currentuserprofile.following.all()
     print following
     posts = Post.objects.filter(user=user).order_by('-created_at')
@@ -139,7 +129,6 @@ def profile(request, username):
 def follow(request, username):
     user = get_object_or_404(User, username=username)
     userprofile = get_object_or_404(UserProfile, user=user)
-    #userprofile = userprofiles[0]
     posts = Post.objects.filter(user=user).order_by('-created_at')
 
     currentuser = request.user
@@ -157,7 +146,6 @@ def follow(request, username):
 def unfollow(request, username):
     user = get_object_or_404(User, username=username)
     userprofile = get_object_or_404(UserProfile, user=user)
-    #userprofile = userprofiles[0]
     posts = get_object_or_404(Post, user=user).order_by('-created_at')
 
     currentuser = request.user
@@ -176,7 +164,6 @@ def unfollow(request, username):
 def follower_stream(request):
     user = request.user
     userprofile = get_object_or_404(UserProfile, user=user)
-    #userprofile = userprofiles[0]
     following = userprofile.following.all()
     posts = Post.objects.filter(user__in = following).order_by('-created_at');
 
@@ -199,10 +186,6 @@ def edit_profile(request):
     form = ProfileForm(request.POST, instance=profile_to_edit)
 
     if form.is_valid():
-        #context = {'form':form, 'currentuser': request.user} 
-        #print "form is not valid"
-        #form = ProfileForm() # A empty, unbound form
-    #else:
         print "This is valid"
         print request.FILES.get('image', False);
         form.image =  handle_uploaded_file(request.FILES.get('image', False))
@@ -234,11 +217,6 @@ def add_problem(request):
 
     form.save()
 
-    # new_problem = Problem(name=form.cleaned_data['name'], \
-    #                       description = form.cleaned_data['description']
-    #                       )
-
-
     return render(request, 'code_challenge/add_problem.html', {'form': form})
 
 @login_required
@@ -266,7 +244,6 @@ def try_submit(request):
     print "Java Tests content is:"
     print java_tests_content
     print "problem tle is:"+str(problem.tle_limit)
-
 
     context = run_code(java_tests_content, submit_content, problem.tle_limit)
     print context
