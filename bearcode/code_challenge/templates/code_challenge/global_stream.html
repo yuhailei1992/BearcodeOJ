@@ -15,13 +15,13 @@
 
   <!-- posts go here -->
   <div class="container" align="center">
-    <h2> Global Stream: </h2><br>
+    <h2> Problems </h2><br>
     <p>    
-      <ul id="postToAddComment" class="posts">
+      <ol id="postToAddComment" class="posts">
       {% for problem in problems %}
         <li><a href="{% url 'problem' problem.id %}">{{problem.name}}</a></li>
       {% endfor %}
-      </ul>
+      </ol>
     </p>
   </div>
 

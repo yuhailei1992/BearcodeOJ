@@ -193,7 +193,8 @@ def edit_profile(request):
         userprofile = get_object_or_404(UserProfile, user=request.user)
         userprofile.image = form.image
         userprofile.save()
-    posts = get_object_or_404(Post, user=request.user).order_by('-created_at')
+    posts = Post.objects.filter(user=request.user).order_by('created_at').reverse()
+    # posts = get_object_or_404(Post, user=request.user)#.order_by('created_at')
 
     return render(request, 'code_challenge/profile.html', {'form': form, 'userprofile' : userprofile, 'currentuser': request.user, 'posts' : posts})
 

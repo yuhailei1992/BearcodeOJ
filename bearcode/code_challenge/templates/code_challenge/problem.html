@@ -12,17 +12,17 @@
 
 <style type="text/css" media="screen">
     textarea {
-    display: block;
-    margin: auto;
-    width: 600px;
-    height: 5px;
+        display: block;
+        margin: auto;
+        width: 600px;
+        height: 5px;
     }
     #editor_div {
-    display: block;
-    margin: auto;
-    width: 600px;
-    height: 300px;
-    border: 1px solid #888;
+        display: block;
+        margin: auto;
+        width: 700px;
+        height: 400px;
+        border: 1px solid #888;
     }
 </style>
 
@@ -47,7 +47,7 @@
         var textarea = $('textarea[name="editor"]');
         textarea.hide();
         var editor = ace.edit("editor_div");
-        editor.setTheme("ace/theme/github");
+        editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/java");
         $('#submitbtn').on('click', function() {
             submitCode(editor.getValue());
