@@ -1,0 +1,54 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}Discussion_board{% endblock %}
+
+{% block mainbody %}
+
+<style type="text/css" media="screen">
+    #editor_div {
+        display: block;
+        margin: auto;
+        width: 700px;
+        height: 400px;
+        border: 1px solid #888;
+    }
+</style>
+
+  <!-- divider line -->
+  <div class="container" align="center">
+    <hr style="height: 1px;/* font-weight: 100; */background-color: #000;">
+  </div>
+  <!-- Discussion body goes here -- >
+  <div>
+    
+  </div>
+
+  <!-- add comment for the discussion here -->
+  <div class="container" align="center">
+      <form action="/add-comment/{{discussion.id}}/" method="post">
+        <textarea class="input-large" name="discussiontext" rows="3"></textarea><br>
+        <button class="btn btn-success" type="submit">Add new Discussion</button>
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% csrf_token %}
+      </form>
+  </div>
+
+  <!-- comments go here -->
+  <div class="container" align="center">
+    <h2> Existing comments for discussion: <a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h2><br>
+    <p>
+      <ol id="comments" class="comments">
+        {% for item in comments %}
+        <ol id="eachtext">{{item.text}} </ol>
+        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
+        <ol id="time">{{item.created_at}}</ol><br>
+        {% endfor %}
+      
+      </ol>
+    </p>
+  </div>
+
+{% endblock %}

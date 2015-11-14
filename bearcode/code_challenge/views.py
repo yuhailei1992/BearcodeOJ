@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.shortcuts import render_to_response
 
 # Decorator to use built-in authentication system
 from django.contrib.auth.decorators import login_required
@@ -22,6 +23,67 @@ def home(request):
 
 @login_required
 @transaction.atomic
+def discussion(request, problemid):
+    context = {}
+    context['currentuser'] = request.user
+    print "in discussion"
+    problem = Problem.objects.get(id=problemid)
+    context['problem'] = problem
+    discussions = Discussion.objects.filter(problem=problem)
+    context['discussions'] = discussions
+    #print "here" + str(discussions)
+    print "discussions number: " + str(discussions.count())
+    return render(request, 'code_challenge/discussion.html', context)
+
+@login_required
+@transaction.atomic
+def add_discussion(request, problemid):
+    context = {}
+    context['currentuser'] = request.user
+    print "add discussion"
+    problem = Problem.objects.get(id=problemid)
+    context['problem'] = problem
+    if request.method == 'GET':
+        print "come into get"
+        context['form'] = DiscussionForm()
+        return render(request, 'code_challenge/discussion.html', context)
+
+    new_discussion = Discussion(title = request.POST['discussiontitle'], text = request.POST['discussiontext'], user=request.user, problem=problem)
+    new_discussion_form = DiscussionForm(request.POST, instance = new_discussion)
+    if not new_discussion_form.is_valid():
+        context['form'] = new_discussion_form
+        context['discussions'] = Discussion.objects.filter(problem=problem)
+        new_discussion.save()
+        return render(request, 'code_challenge/discussion.html', context)
+
+    context['form'] = new_discussion_form
+    context['discussions'] = Discussion.objects.filter(problem=problem)
+    new_discussion.save()
+    new_discussion_form.save()
+    return render(request, 'code_challenge/discussion.html', context)
+
+@login_required
+@transaction.atomic
+def each_discussion(request, discussionid):
+    context = {}
+    context['currentuser'] = request.user
+    discussion = Discussion.objects.get(id=discussionid)
+    context['discussion'] = discussion
+    comments = Comment.objects.filter(discussion=discussion)
+    context['comments'] = commnets
+    print "comments number: " + str(comments)
+
+    return render(request, 'code_challenge/each_discussion.html', context)    
+
+@login_required
+@transaction.atomic
+def add_comment(request, discussionid):
+    context = {}
+    context['currentuser'] = request.user
+    print "add comment"
+
+@login_required
+@transaction.atomic
 def add_post(request):
     context = {}
     if request.method == 'GET':
@@ -29,53 +91,53 @@ def add_post(request):
         return render(request, 'code_challenge/global_stream.html', context)
 
     # Creates a new item if it is present as a parameter in the request
-    new_post = Post(text=request.POST['posttext'], user=request.user)
+    #new_post = Post(text=request.POST['posttext'], user=request.user)
     
-    new_post_form = PostForm(request.POST, instance=new_post)
-    if not new_post_form.is_valid():
-        print 'invalid here'
-        context['form'] = new_post_form
-        context['user'] = request.user
-        context['items'] = Post.objects.all().order_by('-created_at')
-        context['currentuser'] = request.user
-        new_post = Post(text=request.POST['posttext'], user=request.user)
-        new_post.save()
-        return render(request, 'code_challenge/global_stream.html', context)
-    new_post_form.save()
+    #new_post_form = PostForm(request.POST, instance=new_post)
+    #if not new_post_form.is_valid():
+    #    print 'invalid here'
+    #    context['form'] = new_post_form
+    #    context['user'] = request.user
+    #    context['items'] = Post.objects.all().order_by('-created_at')
+    #    context['currentuser'] = request.user
+    #    new_post = Post(text=request.POST['posttext'], user=request.user)
+    #    new_post.save()
+    #    return render(request, 'code_challenge/global_stream.html', context)
+    #new_post_form.save()
 
     return redirect(reverse('home'))
 
-@login_required
-@transaction.atomic
-def add_comment(request):
-    print "running into add comment"
-    context = {}
-    print "post id:" + str(request.GET['post_id'])
+#@login_required
+#@transaction.atomic
+#def add_comment(request):
+#    print "running into add comment"
+#    context = {}
+#    print "post id:" + str(request.GET['post_id'])
 
-    if not 'post_id' in request.GET or not request.GET['post_id'] or not 'new_comment' in request.GET or not request.GET['new_comment']:
-        print "invalid comment"
-        context = {'comment_user': '', 'user_photo': '', 'created_at': '', 'comment_text': ''}
-        return render(request, 'code_challenge/comment.json', context, content_type="application/json")
+#    if not 'post_id' in request.GET or not request.GET['post_id'] or not 'new_comment' in request.GET or not request.GET['new_comment']:
+#        print "invalid comment"
+#        context = {'comment_user': '', 'user_photo': '', 'created_at': '', 'comment_text': ''}
+#        return render(request, 'code_challenge/comment.json', context, content_type="application/json")
 
-    request_user = str(request.user)
-    comment_text = request.GET['new_comment'].strip()
+#    request_user = str(request.user)
+#    comment_text = request.GET['new_comment'].strip()
     #print comment_text
 
-    comment_post = Post.objects.get(id=int(request.GET['post_id']))
-    comment_user = UserProfile.objects.get(username=request_user)
+#    comment_post = Post.objects.get(id=int(request.GET['post_id']))
+#    comment_user = UserProfile.objects.get(username=request_user)
 
-    to_comment = Comment(user=comment_user, text=comment_text, post=comment_post)
-    to_comment.save()
+#    to_comment = Comment(user=comment_user, text=comment_text, post=comment_post)
+#    to_comment.save()
 
-    try:
-        resp = Comment.objects.get(id=to_comment.id)
-        comment = {'comment_user': comment_user.username, 'user_photo': comment_user.image, 'created_at': to_comment.created_at, 'comment_text': to_comment.text}
-        print comment
-        return render(request, 'code_challenge/comment.json', {'comment': comment}, content_type="application/json")
-    except Comment.DoesNotExist:
-        print "error"
-        comment = {'comment_user': '', 'user_photo': '', 'created_at': '', 'comment_text': ''}
-        return render(request, 'code_challenge/comment.json', {'comment': comment}, content_type="application/json")
+#    try:
+#        resp = Comment.objects.get(id=to_comment.id)
+#        comment = {'comment_user': comment_user.username, 'user_photo': comment_user.image, 'created_at': to_comment.created_at, 'comment_text': to_comment.text}
+#        print comment
+#        return render(request, 'code_challenge/comment.json', {'comment': comment}, content_type="application/json")
+#    except Comment.DoesNotExist:
+#        print "error"
+#        comment = {'comment_user': '', 'user_photo': '', 'created_at': '', 'comment_text': ''}
+#        return render(request, 'code_challenge/comment.json', {'comment': comment}, content_type="application/json")
 
 @login_required
 @transaction.atomic

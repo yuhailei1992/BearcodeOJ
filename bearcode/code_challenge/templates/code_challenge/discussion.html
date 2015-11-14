@@ -1,0 +1,42 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}Discussion_board{% endblock %}
+
+{% block mainbody %}
+  
+  <div class="container" align="center">
+      <form action="/add-discussion/{{problem.id}}/" method="post">
+        <textarea class="input-large" id="postT" name="discussiontitle" rows="1"></textarea><br>
+        <textarea class="input-large" id="postT" name="discussiontext" rows="3"></textarea><br>
+        <button class="btn btn-success" type="submit">Add new Discussion</button>
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% csrf_token %}
+      </form>
+  </div>
+
+  <!-- divider line -->
+  <div class="container" align="center">
+    <hr style="height: 1px;/* font-weight: 100; */background-color: #000;">
+  </div>
+
+  <!-- posts go here -->
+  <div class="container" align="center">
+    <h2> Discussion for problem: <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h2><br>
+    <p>
+      <ol id="discussions" class="discussions">
+        {% for item in discussions %}
+        <ol id="eachtitle">{{item.title}}</ol>
+        <ol id="eachtext">{{item.text}} </ol>
+        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
+        <ol id="time">{{item.created_at}}</ol>
+        <ol><a class="btn btn-info" href="{% url 'each_discussion' item.id %}">Get more info</a></ol></br>
+        {% endfor %}
+      
+      </ol>
+    </p>
+  </div>
+
+{% endblock %}

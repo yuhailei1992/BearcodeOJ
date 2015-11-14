@@ -4,6 +4,11 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^problem/(?P<problemid>\d+)/$', 'code_challenge.views.problem', name='problem'),
+    url(r'^discussion/(?P<problemid>\d+)/$', 'code_challenge.views.discussion', name='discussion'),
+    url(r'^add-discussion/(?P<problemid>\d+)/$', 'code_challenge.views.add_discussion', name='add_discussion'),
+    url(r'^add-comment/(?P<discussionid>\d+)/$', 'code_challenge.views.add_comment', name='add_comment'),    
+    url(r'^each_discussion/(?P<discussionid>\d+)/$', 'code_challenge.views.each_discussion', name='each_discussion'),
+    
     url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'template_name': 'code_challenge/password_reset_form.html'}, name='reset_password_reset1'),
     url(r'^password_reset/done/$', 'django.contrib.auth.views.password_reset_done', {'template_name': 'code_challenge/password_reset_done.html'}, name='password_reset_done'),
     url(r'^(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', {'template_name': 'code_challenge/password_reset_confirm.html'} , name='password_reset_confirm'),
@@ -28,7 +33,8 @@ urlpatterns = [
     url(r'^follow/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.follow', name='follow'),
     url(r'^unfollow/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.unfollow', name='unfollow'),
     url(r'^follower_stream$', 'code_challenge.views.follower_stream', name='follower_stream'),
-    url(r'^add_comment/$', 'code_challenge.views.add_comment', name='add_comment'),
+    #url(r'^add_comment/$', 'code_challenge.views.add_comment', name='add_comment'),
     url(r'^get_comments/$', 'code_challenge.views.get_comments', name='get-comments'),
     url(r'^foo/$', 'code_challenge.views.foo', name='foo'),
+
 ]

@@ -29,6 +29,8 @@
 
 <div style="text-align:left">
     <h1>{{problem.name}}</h1>
+    <!-- Discussion board link here-->
+    <li class="btn btn-info"><a href="{% url 'discussion' problem.id %}">Discussion for {{problem.name}}</a></li>
     <hr>
     <p>Description: {{problem.description}}</p>
 

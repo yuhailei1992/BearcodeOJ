@@ -34,6 +34,15 @@ class Problem(models.Model):
     def __unicode__(self):
         return self.name
 
+class Discussion(models.Model):
+	title = models.CharField(max_length=30)
+	text = models.CharField(max_length=100)
+	user = models.ForeignKey(User)
+	problem = models.ForeignKey(Problem)
+	created_at = models.DateTimeField(auto_now_add=True)
+	def __unicode__(self):
+		return self.text
+
 class Post(models.Model):
 	text = models.CharField(max_length=42)
 	user = models.ForeignKey(User)
@@ -42,19 +51,9 @@ class Post(models.Model):
 		return self.text
 
 class Comment(models.Model):
-	post = models.ForeignKey(Post)
-	text = models.CharField(max_length=250)
+	text = models.CharField(max_length=42)
+	user = models.ForeignKey(User)
+	discussion = models.ForeignKey(Discussion)
 	created_at = models.DateTimeField(auto_now_add=True)
-	user = models.ForeignKey(UserProfile)
-
 	def __unicode__(self):
 		return self.text
-
-	def __str__(self):
-		return self.__unicode__()
-
-    # Returns all comments associated with a specific post id
-	@staticmethod
-	def get_comments(post=-1):
-		return Comment.objects.filter(post_id=post).order_by('-created_at')
-

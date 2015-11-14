@@ -80,3 +80,16 @@ class ProblemForm(forms.ModelForm):
         model = Problem
         exclude = {}
         field = ('name', 'description', 'example', 'default', 'tle_limit', 'mle_limit','javaTests','pythonTests')
+
+class DiscussionForm(forms.ModelForm):
+    class Meta:
+        model = Discussion
+        exclude = {}
+        field = ('title', 'text', 'user', 'problem', 'created_at')
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = {}
+        field = ('text', 'user', 'discussion', 'created_at')
+
