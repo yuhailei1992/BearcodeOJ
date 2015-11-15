@@ -2,15 +2,3 @@
 
 {% block title %}Register{% endblock %}
 
-{% block sidebar %} 
-  <nav class="navbar-collapse collapse">
-    <ul>
-      <li class="active"><a href="{% url 'home' %}">Home Page</a></li>
-      {% if currentuser %}
-      <li class="active"><a href="{% url 'profile' request.user.username %}">View My Profile</a></li>
-      {% endif %}
-      <li class="active"><a href="{% url 'follower_stream' %}">Follower Stream</a></li>
-      <li class="active"><a href="{% url 'logout' %}">Logout</a></li>
-    </ul>
-  </nav>
-{% endblock %}
