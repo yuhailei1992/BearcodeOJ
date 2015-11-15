@@ -317,7 +317,8 @@ def problem(request, problemid):
     problem = Problem.objects.get(id=problemid)
     context = {}
     context['problem'] = problem
-
+    
+    context['currentuser'] = request.user
     return render(request, 'code_challenge/problem.html', context)
 
 @login_required
