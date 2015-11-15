@@ -4,6 +4,7 @@
   <!-- Latest compiled and minified CSS -->
   {% load staticfiles %}
   <link rel="stylesheet" href="{% static "/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "/static/sticky-footer.css" %}"/>
   <!-- My own css -->
   <link rel="stylesheet" href="{% static "/static/code_challenge.css" %}">
   {% block js %}
@@ -74,5 +75,11 @@
 </div>
 
 </body>
+
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">CodeChallenge © 2015</p>
+    </div>
+</footer>
 </html>
 
