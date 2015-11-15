@@ -5,7 +5,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^problem/(?P<problemid>\d+)/$', 'code_challenge.views.problem', name='problem'),
     url(r'^discussion/(?P<problemid>\d+)/$', 'code_challenge.views.discussion', name='discussion'),
-    url(r'^add-discussion/(?P<problemid>\d+)/$', 'code_challenge.views.add_discussion', name='add_discussion'),
+    url(r'^add-discussion/(?P<problemid>\d+)/$', 'code_challenge.views.add_discussion', name='add-discussion'),
     url(r'^add-comment/(?P<discussionid>\d+)/$', 'code_challenge.views.add_comment', name='add_comment'),    
     url(r'^each_discussion/(?P<discussionid>\d+)/$', 'code_challenge.views.each_discussion', name='each_discussion'),
     
@@ -28,12 +28,10 @@ urlpatterns = [
     url(r'^edit_profile$', 'code_challenge.views.edit_profile', name='edit'),
     url(r'^change_password$', 'django.contrib.auth.views.password_change', {'template_name': 'code_challenge/password_change_form.html'}, name='password_change'),
     url(r'^change_password/done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'code_challenge/password_change_done.html'}, name='password_change_done'),
-    #url(r'^follower_stream$', 'code_challenge.views.follower_stream', name='follower_stream'),
 
     url(r'^follow/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.follow', name='follow'),
     url(r'^unfollow/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.unfollow', name='unfollow'),
     url(r'^follower_stream$', 'code_challenge.views.follower_stream', name='follower_stream'),
-    #url(r'^add_comment/$', 'code_challenge.views.add_comment', name='add_comment'),
     url(r'^get_comments/$', 'code_challenge.views.get_comments', name='get-comments'),
     url(r'^foo/$', 'code_challenge.views.foo', name='foo'),
 
