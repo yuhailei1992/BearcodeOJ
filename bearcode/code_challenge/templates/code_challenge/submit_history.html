@@ -9,7 +9,10 @@
 <style type="text/css" media="screen">
     #submitHistory {
         text-align: center;
-        font-size: 20px;
+    }
+    #header {
+      font-size: 17px;
+      color: #0B0B3B;
     }
 </style>
 
@@ -18,7 +21,7 @@
 <div class="container" stype="text-align:right">
   <!-- history table goes here -->
   <table style="width:90%;" id="submitHistory">
-  <tr>
+  <tr id="header">
     <td>Submit Time</td>
     <td>Status</td>    
     <td>Source code</td>
@@ -27,7 +30,7 @@
   <tr>
     <td>{{history.created_at}}</td>
     <td>{{history.result}}</td>    
-    <td>{{history.text}}</td>
+    <td><a href="{% url 'submit_details' history.id %}">code available</a></td>
   </tr>
   {% endfor %}
 </table>

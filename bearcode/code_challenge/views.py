@@ -338,6 +338,22 @@ def try_submit(request):
     print "problem tle is:"+str(problem.tle_limit)
 
     context = run_code(java_tests_content, submit_content, problem.tle_limit)
+
+    # save to history
+    new_history = SubmitHistory(text=submit_content, user=request.user, problem=problem, result=context['status'])
+    new_history_form = HistoryForm(request.POST, instance=new_history)
+    if not new_history_form.is_valid():
+        context['form'] = new_history_form
+        #context['comments'] = Comment.objects.filter(discussion=discussion).order_by('-created_at')
+        new_history.save()
+        return render(request, 'code_challenge/result.json', context, content_type="application/json")
+
+    context['form'] = new_history_form
+    #context['comments'] = Comment.objects.filter(discussion=discussion).order_by('-created_at')
+    new_history.save()
+    new_history_form.save()
+    print "history saved" + str(new_history)
+
     print context
     return render(request, 'code_challenge/result.json', context, content_type="application/json")
 
@@ -347,7 +363,7 @@ def submit_history(request, problemid):
     context = {}
     context['currentuser'] = request.user
     problem = get_object_or_404(Problem, id=problemid)
-    histories = SubmitHistory.objects.filter(problem=problem)
+    histories = SubmitHistory.objects.filter(problem=problem).order_by('-created_at')
     context['problem'] = problem
     context['histories'] = histories
 
@@ -355,6 +371,19 @@ def submit_history(request, problemid):
     print "histories: " + str(histories)
 
     return render(request, 'code_challenge/submit_history.html', context)
+
+@login_required
+@transaction.atomic
+def submit_details(request, historyid):
+    context = {}
+    context['currentuser'] = request.user
+    history = get_object_or_404(SubmitHistory, id=historyid)
+    context['history'] = history
+    problem = history.problem
+    context['problem'] = problem
+    print "details" + str(history)
+
+    return render(request, 'code_challenge/submit_details.html', context)
 
 def handle_uploaded_file(f):
     if f != False :
