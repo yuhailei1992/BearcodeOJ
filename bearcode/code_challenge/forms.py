@@ -93,3 +93,9 @@ class CommentForm(forms.ModelForm):
         exclude = {}
         field = ('text', 'user', 'discussion', 'created_at')
 
+class HistoryForm(forms.ModelForm):
+    class Meta:
+        model = SubmitHistory
+        exclude = {}
+        field = ('text', 'user', 'problem', 'created_at', 'result', 'runtime')
+        

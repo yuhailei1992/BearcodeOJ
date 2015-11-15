@@ -1,0 +1,35 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}Discussion_board{% endblock %}
+
+{% block mainbody %}
+<style type="text/css" media="screen">
+    #submitHistory {
+        text-align: center;
+        font-size: 20px;
+    }
+</style>
+
+  <!-- Discussion body goes here -->
+  <h2>You submission history for <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h2><hr>
+<div class="container" stype="text-align:right">
+  <!-- history table goes here -->
+  <table style="width:90%;" id="submitHistory">
+  <tr>
+    <td>Submit Time</td>
+    <td>Status</td>    
+    <td>Source code</td>
+  </tr>
+  {% for history in histories %}
+  <tr>
+    <td>{{history.created_at}}</td>
+    <td>{{history.result}}</td>    
+    <td>{{history.text}}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+{% endblock %}

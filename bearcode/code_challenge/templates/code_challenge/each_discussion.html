@@ -15,20 +15,22 @@
         padding-left: 10px;
         padding-right: 10px;
         margin: auto;
-        width: 500px;
+        width: 40%;
         border: 1px solid #888;
     }
     #commentsSection {
+        display: block;
+        margin: auto;
         text-align: left;
-        padding-left: 400px;
+        padding-left: 40%;
     }
 </style>
   <!-- Discussion body goes here -->
   <h2>Current Discussion: </h2>
   <div id="dicussionbody">
     {% if discussion %}
-    <h2>{{discussion.title}}</h2>
-    <p style="color:black; font-size: 20px;">{{discussion.text}}</p><br>
+    <h3>{{discussion.title}}</h3>
+    <p style="color:black; font-size: 18px;">{{discussion.text}}</p><br>
     <p style="text-align:right"><a href="{% url 'profile' discussion.user.username %}">{{discussion.user.username}}</a></p>
     <p style="color:black; text-align:right">{{discussion.created_at}}</p>
     {% endif %}
@@ -42,7 +44,7 @@
   <!-- add comment for the discussion here -->
   <div class="container" align="center">
       <form action="/add-comment/{{discussion.id}}/" method="post">
-        <textarea style="width:250px" class="input-large" name="commenttext" rows="2"></textarea><br>
+        <textarea style="width:30%" class="input-large" name="commenttext" rows="2"></textarea><br>
         <button class="btn btn-success" type="submit">Add new Discussion</button>
         <input type="hidden" name="next" value="{{ next }}" />
         {% csrf_token %}
@@ -51,7 +53,7 @@
 
   <!-- comments go here -->
   <div class="container" align="center">
-    <h2> Existing comments for discussion: <a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h2><br>
+    <h3> Existing comments for discussion: <a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h3><br>
     <p>
       <ol id="commentsSection">
         {% for item in comments %}

@@ -57,3 +57,14 @@ class Comment(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 	def __unicode__(self):
 		return self.text
+
+class SubmitHistory(models.Model):
+	text = models.CharField(max_length=400)
+	user = models.ForeignKey(User)
+	problem = models.ForeignKey(Problem)
+	created_at = models.DateTimeField(auto_now_add=True)
+	result = models.CharField(max_length=42)
+	runtime = models.PositiveIntegerField(null=True)
+	def __unicode__(self):
+		return self.text
+
