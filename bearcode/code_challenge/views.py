@@ -52,15 +52,20 @@ def add_discussion(request, problemid):
     new_discussion_form = DiscussionForm(request.POST, instance = new_discussion)
     if not new_discussion_form.is_valid():
         context['form'] = new_discussion_form
-        context['discussions'] = Discussion.objects.filter(problem=problem)
+        context['discussions'] = Discussion.objects.filter(problem=problem).order_by('-created_at')
         new_discussion.save()
-        return render(request, 'code_challenge/discussion.html', context)
+        # return redirect(reverse('discussion'))
+        return redirect(reverse('discussion', kwargs={'problemid':problemid}))
+        # return render(request, 'code_challenge/discussion.html', context)
 
     context['form'] = new_discussion_form
-    context['discussions'] = Discussion.objects.filter(problem=problem)
+    context['discussions'] = Discussion.objects.filter(problem=problem).order_by('-created_at')
     new_discussion.save()
     new_discussion_form.save()
-    return render(request, 'code_challenge/discussion.html', context)
+    # return redirect(reverse('discussion'))
+    return redirect(reverse('discussion', kwargs={'problemid':problemid}))
+
+    # return render(request, 'code_challenge/discussion.html', context)
 
 @login_required
 @transaction.atomic
@@ -68,10 +73,13 @@ def each_discussion(request, discussionid):
     context = {}
     context['currentuser'] = request.user
     discussion = Discussion.objects.get(id=discussionid)
+    print "in each discussion " + str(discussion)
+
     context['discussion'] = discussion
-    comments = Comment.objects.filter(discussion=discussion)
-    context['comments'] = commnets
-    print "comments number: " + str(comments)
+    comments = Comment.objects.filter(discussion=discussion).order_by('-created_at')
+    context['comments'] = comments
+
+    print "comments: " + str(comments)
 
     return render(request, 'code_challenge/each_discussion.html', context)    
 
@@ -81,6 +89,27 @@ def add_comment(request, discussionid):
     context = {}
     context['currentuser'] = request.user
     print "add comment"
+    discussion = Discussion.objects.get(id=discussionid)
+    context['discussion'] = discussion
+    if request.method == 'GET':
+        print "come into get"
+        context['form'] = CommentForm()
+        return render(request, 'code_challenge/each_discussion.html', context)
+
+    new_comment = Comment(text = request.POST['commenttext'], user=request.user, discussion=discussion)
+    new_comment_form = CommentForm(request.POST, instance = new_comment)
+    if not new_comment_form.is_valid():
+        context['form'] = new_comment_form
+        context['comments'] = Comment.objects.filter(discussion=discussion).order_by('-created_at')
+        new_comment.save()
+        return redirect(reverse('each_discussion', kwargs={'discussionid':discussionid}))
+
+    context['form'] = new_comment_form
+    context['comments'] = Comment.objects.filter(discussion=discussion).order_by('-created_at')
+    new_comment.save()
+    new_comment_form.save()
+    return redirect(reverse('each_discussion', kwargs={'discussionid':discussionid}))
+
 
 @login_required
 @transaction.atomic

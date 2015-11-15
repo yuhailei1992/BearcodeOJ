@@ -27,7 +27,7 @@ class Problem(models.Model):
     description = models.TextField(max_length=420, default="", blank=True)
     example = models.TextField(max_length=420, default="", blank=True)
     default = models.TextField(max_length=420, default="", blank=True)
-    tle_limit = models.PositiveIntegerField(default=1000)
+    tle_limit = models.PositiveIntegerField(default=1)
     mle_limit = models.PositiveIntegerField(default=500)
     java_tests = models.TextField(max_length=1000, default="", blank=True)
     python_tests = models.TextField(max_length=1000, default="", blank=True)
