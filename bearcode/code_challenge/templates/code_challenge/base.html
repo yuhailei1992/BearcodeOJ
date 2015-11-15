@@ -21,6 +21,7 @@
             <a class="navbar-brand" href="{% url 'home' %}">CodeChallenge</a>
         </div>
         <!-- Note that the .navbar-collapse and .collapse classes have been removed from the #navbar -->
+        {% if currentuser %}
         <div id="navbar">
             <form class="navbar-form navbar-left" role="search">
                 <div class="form-group">
@@ -33,7 +34,10 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
       <li><a href="{% url 'profile' request.user.username %}">View My Profile</a></li>
+
+      <li><a href="{% url 'follower_stream' %}">Follower Stream</a></li>
       <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% endif %}
             </ul>
 
         </div>

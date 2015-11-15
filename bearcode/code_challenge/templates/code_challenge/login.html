@@ -9,6 +9,7 @@ Incorrect user name and password.
 {% endif %}
 
 {% block mainbody %}
+<div class="mainbody">
   <form class="form-horizontal" method="post" action="{% url 'django.contrib.auth.views.login' %}">
     <table align="center">
     <tr>
@@ -28,6 +29,6 @@ Incorrect user name and password.
   <p><a id="forgot-password-btn" href="{% url 'reset_password_reset1' %}">Forgot your password?</a></p>
   {% csrf_token %}
   </form>
-
+</div>
 <div>Add Problem: <a href="/add_problem">Add</a> </div>
 {% endblock %}
