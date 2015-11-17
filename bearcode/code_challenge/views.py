@@ -1,12 +1,14 @@
+import os
+import time
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
+
 from exec_java_file import *
 from code_challenge.forms import *
-import os
-import time
 
 
 @login_required
@@ -14,8 +16,9 @@ def home(request):
     # Sets up list of just the logged-in user's (request.user's) items
     user = request.user
     problems = Problem.objects.all()
-    print "There are "+str(len(problems))+" problems in the list"
-    return render(request, 'code_challenge/global_stream.html', {'problems' : problems, 'currentuser' : user})
+    print "There are " + str(len(problems)) + " problems in the list"
+    return render(request, 'code_challenge/global_stream.html',
+                  {'problems': problems, 'currentuser': user})
 
 
 @login_required
@@ -44,19 +47,21 @@ def add_discussion(request, problemid):
         context['form'] = DiscussionForm()
         return render(request, 'code_challenge/discussion.html', context)
 
-    new_discussion = Discussion(title = request.POST['discussiontitle'], text = request.POST['discussiontext'], user=request.user, problem=problem)
-    new_discussion_form = DiscussionForm(request.POST, instance = new_discussion)
+    new_discussion = Discussion(title=request.POST['discussiontitle'],
+                                text=request.POST['discussiontext'], user=request.user,
+                                problem=problem)
+    new_discussion_form = DiscussionForm(request.POST, instance=new_discussion)
     if not new_discussion_form.is_valid():
         context['form'] = new_discussion_form
         context['discussions'] = Discussion.objects.filter(problem=problem).order_by('-created_at')
         new_discussion.save()
-        return redirect(reverse('discussion', kwargs={'problemid':problemid}))
+        return redirect(reverse('discussion', kwargs={'problemid': problemid}))
 
     context['form'] = new_discussion_form
     context['discussions'] = Discussion.objects.filter(problem=problem).order_by('-created_at')
     new_discussion.save()
     new_discussion_form.save()
-    return redirect(reverse('discussion', kwargs={'problemid':problemid}))
+    return redirect(reverse('discussion', kwargs={'problemid': problemid}))
 
 
 @login_required
@@ -72,7 +77,7 @@ def each_discussion(request, discussionid):
     context['comments'] = comments
     print "comments: " + str(comments)
 
-    return render(request, 'code_challenge/each_discussion.html', context)    
+    return render(request, 'code_challenge/each_discussion.html', context)
 
 
 @login_required
@@ -88,19 +93,20 @@ def add_comment(request, discussionid):
         context['form'] = CommentForm()
         return render(request, 'code_challenge/each_discussion.html', context)
 
-    new_comment = Comment(text = request.POST['commenttext'], user=request.user, discussion=discussion)
-    new_comment_form = CommentForm(request.POST, instance = new_comment)
+    new_comment = Comment(text=request.POST['commenttext'], user=request.user,
+                          discussion=discussion)
+    new_comment_form = CommentForm(request.POST, instance=new_comment)
     if not new_comment_form.is_valid():
         context['form'] = new_comment_form
         context['comments'] = Comment.objects.filter(discussion=discussion).order_by('-created_at')
         new_comment.save()
-        return redirect(reverse('each_discussion', kwargs={'discussionid':discussionid}))
+        return redirect(reverse('each_discussion', kwargs={'discussionid': discussionid}))
 
     context['form'] = new_comment_form
     context['comments'] = Comment.objects.filter(discussion=discussion).order_by('-created_at')
     new_comment.save()
     new_comment_form.save()
-    return redirect(reverse('each_discussion', kwargs={'discussionid':discussionid}))
+    return redirect(reverse('each_discussion', kwargs={'discussionid': discussionid}))
 
 
 @login_required
@@ -128,15 +134,18 @@ def get_comments(request):
     except StopIteration:
         # No rows were found, so do nothing.
         context = {'size': 0, 'items': None}
-        return render(request, 'code_challenge/comments.json', context, content_type='application/json')
+        return render(request, 'code_challenge/comments.json', context,
+                      content_type='application/json')
     else:
         # At least one row was found, so iterate over
         # all the rows, including the first one.
         from itertools import chain
+
         for comment in chain([first_item], comments_iter):
             profile_img = UserProfile.get_profile(comment.user.user.id).image
 
-            item = {'comment_user': comment.user.username, 'user_photo': profile_img, 'created_at': comment.created_at, 'comment_text': comment.text}
+            item = {'comment_user': comment.user.username, 'user_photo': profile_img,
+                    'created_at': comment.created_at, 'comment_text': comment.text}
             print item
             comments.append(item)
 
@@ -158,7 +167,8 @@ def profile(request, username):
     print following
     posts = Post.objects.filter(user=user).order_by('-created_at')
 
-    context = {'user': user, 'posts': posts, 'userprofile': userprofile, 'currentuser': currentuser, 'following': following}
+    context = {'user': user, 'posts': posts, 'userprofile': userprofile, 'currentuser': currentuser,
+               'following': following}
     return render(request, 'code_challenge/profile.html', context)
 
 
@@ -175,7 +185,9 @@ def follow(request, username):
     currentuserprofile.following.add(user)
     currentuserprofile.save()
     following = currentuserprofile.following.all()
-    context = {'user' : user, 'posts' : posts, 'currentuser' : currentuser, 'currentuserprofile' : currentuserprofile, 'userprofile': userprofile, 'following': following}
+    context = {'user': user, 'posts': posts, 'currentuser': currentuser,
+               'currentuserprofile': currentuserprofile, 'userprofile': userprofile,
+               'following': following}
     print 'follow success'
     return render(request, 'code_challenge/profile.html', context)
 
@@ -191,10 +203,12 @@ def unfollow(request, username):
     currentuserprofiles = get_object_or_404(UserProfile, user=currentuser)
     currentuserprofile = currentuserprofiles[0]
     if user in currentuserprofile.following.all():
-        currentuserprofile.following.remove(user) 
+        currentuserprofile.following.remove(user)
     currentuserprofile.save()
     following = currentuserprofile.following.all()
-    context = {'user' : user, 'posts' : posts, 'currentuser' : currentuser, 'currentuserprofile' : currentuserprofile, 'userprofile': userprofile, 'following': following}
+    context = {'user': user, 'posts': posts, 'currentuser': currentuser,
+               'currentuserprofile': currentuserprofile, 'userprofile': userprofile,
+               'following': following}
     print 'follow success'
     return render(request, 'code_challenge/profile.html', context)
 
@@ -205,9 +219,9 @@ def follower_stream(request):
     user = request.user
     userprofile = get_object_or_404(UserProfile, user=user)
     following = userprofile.following.all()
-    posts = Post.objects.filter(user__in = following).order_by('-created_at');
+    posts = Post.objects.filter(user__in=following).order_by('-created_at');
 
-    context = {'userprofile' : userprofile, 'posts': posts, 'currentuser': user}
+    context = {'userprofile': userprofile, 'posts': posts, 'currentuser': user}
     print len(posts)
     return render(request, 'code_challenge/follower_stream.html', context)
 
@@ -219,8 +233,8 @@ def edit_profile(request):
 
     if request.method == 'GET':
         form = ProfileForm(instance=profile_to_edit)  # Creates form
-        context = {'form':form, 'currentuser': request.user}        
-        print "We are here at GET in edit_profile"  
+        context = {'form': form, 'currentuser': request.user}
+        print "We are here at GET in edit_profile"
         return render(request, 'code_challenge/edit_profile.html', context)
 
     # if method is POST, get form data to update the model
@@ -229,14 +243,16 @@ def edit_profile(request):
     if form.is_valid():
         print "This is valid"
         print request.FILES.get('image', False);
-        form.image =  handle_uploaded_file(request.FILES.get('image', False))
+        form.image = handle_uploaded_file(request.FILES.get('image', False))
         form.save()
         userprofile = get_object_or_404(UserProfile, user=request.user)
         userprofile.image = form.image
         userprofile.save()
     posts = Post.objects.filter(user=request.user).order_by('created_at').reverse()
 
-    return render(request, 'code_challenge/profile.html', {'form': form, 'userprofile' : userprofile, 'currentuser': request.user, 'posts' : posts})
+    return render(request, 'code_challenge/profile.html',
+                  {'form': form, 'userprofile': userprofile, 'currentuser': request.user,
+                   'posts': posts})
 
 
 @transaction.atomic
@@ -254,7 +270,7 @@ def add_problem(request):
 
     if not form.is_valid():
         print "An invalid form!"
-        return render(request,'code_challenge/add_problem.html', context)
+        return render(request, 'code_challenge/add_problem.html', context)
 
     form.save()
     return redirect(reverse('home'))
@@ -285,17 +301,19 @@ def try_submit(request):
     print submit_content
     print "Java Tests content is: "
     print java_tests_content
-    print "problem tle is:"+str(problem.tle_limit)
+    print "problem tle is:" + str(problem.tle_limit)
 
     context = run_code(java_tests_content, submit_content, problem.tle_limit)
 
     # save to history
-    new_history = SubmitHistory(text=submit_content, user=request.user, problem=problem, result=context['status'])
+    new_history = SubmitHistory(text=submit_content, user=request.user, problem=problem,
+                                result=context['status'])
     new_history_form = HistoryForm(request.POST, instance=new_history)
     if not new_history_form.is_valid():
         context['form'] = new_history_form
         new_history.save()
-        return render(request, 'code_challenge/result.json', context, content_type="application/json")
+        return render(request, 'code_challenge/result.json', context,
+                      content_type="application/json")
 
     context['form'] = new_history_form
     new_history.save()
@@ -337,10 +355,10 @@ def submit_details(request, historyid):
 
 
 def handle_uploaded_file(f):
-    if f != False :
+    if f != False:
         fileName, fileExtension = os.path.splitext(f.name)
         url = '/static/photos/{}{}'.format(time.time(), fileExtension)
-        with open('./code_challenge'+ url, 'wb+') as destination:
+        with open('./code_challenge' + url, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
         return url
@@ -350,13 +368,14 @@ def handle_uploaded_file(f):
 @transaction.atomic
 def change_password(request):
     user = request.user
-    return render(request, 'code_challenge/password_change_form.html', {'currentuser': request.user})
+    return render(request, 'code_challenge/password_change_form.html',
+                  {'currentuser': request.user})
 
 
 @transaction.atomic
 def register(request):
     context = {}
-    
+
     # Just display the registration form if this is a GET request
     if request.method == 'GET':
         context['form'] = RegistrationForm()
@@ -386,10 +405,10 @@ def register(request):
     new_user = authenticate(username=username, \
                             password=password)
 
-    #print new_user.username + 'before create profile'
+    # print new_user.username + 'before create profile'
     new_profile = UserProfile(user=new_user, username=username, \
-                                first_name=firstname, \
-                                last_name=lastname)
+                              first_name=firstname, \
+                              last_name=lastname)
     new_profile.save()
 
     login(request, new_user)
@@ -399,6 +418,6 @@ def register(request):
 def get_changes(request, log_id=-1):
     user = request.user
     items = Post.objects.all().order_by('-created_at')
-    context = {"items":items, "currentuser":user}
+    context = {"items": items, "currentuser": user}
     return render(request, 'items.json', context, content_type='application/json')
 
