@@ -308,8 +308,8 @@ def add_problem(request):
         return render(request,'code_challenge/add_problem.html', context)
 
     form.save()
+    return redirect(reverse('home'))
 
-    return render(request, 'code_challenge/add_problem.html', {'form': form})
 
 @login_required
 @transaction.atomic
