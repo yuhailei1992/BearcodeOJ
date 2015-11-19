@@ -244,7 +244,7 @@ def try_submit(request):
     print submit_content
     print "Java Tests content is: "
     print java_tests_content
-    print "problem tle is:" + str(problem.tle_limit)
+    print "problem tle is:" + str(curr_problem.tle_limit)
 
     context = run_code(java_tests_content, submit_content, curr_problem.tle_limit)
 
