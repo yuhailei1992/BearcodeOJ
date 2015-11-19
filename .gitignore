@@ -31,10 +31,14 @@ nosetests.xml
 .project
 .pydevproject
 
+# Mac 
 .DS_Store
 
+# Windows
 Thumbs.db
 
 # Pycharm
 .idea/
 
+# Shared db 
+db.sqlite3
