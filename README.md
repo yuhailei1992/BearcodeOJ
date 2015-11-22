@@ -20,9 +20,12 @@ Users should be able to view their submission history for each coding problem, a
 7. Syntax Highlight (haileiy)
 
 <b> - Progress of implementation:</b>
-So far, most of the part has been implemented. 
+
+So far, most of the goals has been implemented.
 
 <b> - Goal of next sprint:</b>
+
+<b> Demo! </b>
 
 <b> - Self-evaluation of your progress</b>
 
