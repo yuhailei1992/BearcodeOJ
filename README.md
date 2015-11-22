@@ -25,7 +25,7 @@ So far, most of the goals has been implemented.
 
 <b> - Goal of next sprint:</b>
 
-<b> Demo! </b>
+<b> - Demo! </b>
 
 <b> - Self-evaluation of your progress</b>
 
