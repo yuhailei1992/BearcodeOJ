@@ -60,6 +60,18 @@ $(document).ready(function() {
         }
     });
 
+    $("#restore").on("click", function(){
+        var default_lang = $("#default_lang").val();
+        if(default_lang=='java'){
+            editor.setValue(java_default,1);
+            editor.getSession().setMode("ace/mode/java");
+        }
+        else{
+            editor.setValue(python_default,1);
+            editor.getSession().setMode("ace/mode/python");
+        }
+    });
+
 });
 
 </script>
@@ -68,8 +80,9 @@ $(document).ready(function() {
     
     <h1>{{problem.name}}</h1>
     <!-- Discussion board link here-->
-    <li class="btn btn-info" style="width:180px"><a href="{% url 'discussion' problem.id %}">Discussion for {{problem.name}}</a></li>
-    <li class="btn btn-success" style="width:180px" ><a href="{% url 'submit_history' problem.id %}">My submissions</a></li>
+    <a class="btn btn-default"  href="{% url 'discussion' problem.id %}">Discussion for {{problem.name}}</a>
+    <a class="btn btn-default" href="{% url 'submit_history' problem.id %}">My submissions</a>
+
     <hr>
     <p>Description: {{problem.description}}</p>
 
