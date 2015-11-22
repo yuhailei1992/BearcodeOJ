@@ -27,6 +27,43 @@
     }
 </style>
 
+<script>
+$(document).ready(function() {
+    var java_default = $("#java_default").val();
+    var python_default = $("#python_default").val();
+    var default_lang = $("#default_lang");
+    var editor = ace.edit("editor_div");
+
+    console.log("java:");
+    console.log(java_default);
+    console.log("python");
+    console.log(python_default);
+    var editor_div = $("editor_div");
+    $("#language").on("change", function() {
+        console.log(this.value);
+        var choice = this.value;
+        switch (choice) {
+            case "Java":
+                console.log("You choose java!");
+                default_lang.val("java");
+                //editor_div.text(java_default);
+                editor.setValue(java_default,1);
+                editor.getSession().setMode("ace/mode/java");
+                break;
+            case "Python":
+                console.log("You choose python!");
+                default_lang.val("python");
+                //editor_div.text(python_default);
+                editor.setValue(python_default,1);
+                editor.getSession().setMode("ace/mode/python");
+                break;
+        }
+    });
+
+});
+
+</script>
+
 <div style="text-align:left">
     
     <h1>{{problem.name}}</h1>
@@ -37,13 +74,22 @@
     <p>Description: {{problem.description}}</p>
 
     <p>{{problem.example}}</p>
+    <select id="language" name="language">
+        <option value="Java">Java</option>
+        <option value="Python">Python</option>
+    </select>
 
-    <div id="editor_div">{{problem.default}}</div>
+    <button id="restore">Restore</button>
+    <div id="editor_div">{{problem.java_default}}</div>
     <br>
     <input type="hidden" id="problemid" value="{{problem.id}}">
     <hr>
     <button id="submitbtn" class="btn btn-success btn-lg">Submit Code</button>
     <div id="status"></div>
     <div id="message"></div>
+
+    <input type="hidden" id="default_lang" value="java"/>
+    <input type="hidden" id="java_default" value="{{problem.java_default}}"/>
+    <input type="hidden" id="python_default" value="{{problem.python_default}}"/>
 </div>
 {% endblock %}

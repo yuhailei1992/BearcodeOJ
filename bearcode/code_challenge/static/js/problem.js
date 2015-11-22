@@ -2,7 +2,7 @@ $(document).ready(function() {
     var textarea = $('textarea[name="editor"]');
     textarea.hide();
     var editor = ace.edit("editor_div");
-    editor.setTheme("ace/theme/monokai");
+    editor.setTheme("ace/theme/default");
     editor.getSession().setMode("ace/mode/java");
     $('#submitbtn').on('click', function() {
         submitCode(editor.getValue());
@@ -38,7 +38,7 @@ function submitCode(code_content){
     var textarea = $('textarea[name="editor"]');
     textarea.hide();
     var editor = ace.edit("editor_div");
-
+    var language = $('#default_lang').val();
     console.log("url is:"+submit_url+", problem id is:"+problemid);
     console.log("submitted content is:"+code_content);
 
@@ -46,7 +46,7 @@ function submitCode(code_content){
         url : submit_url,
         dataType: "json",
         method: "POST",
-        data: {problemid:problemid,codecontent:code_content}
+        data: {problemid:problemid,codecontent:code_content,language:language}
     })
     .done(function(result) {
         console.log("successfully submitted, get result"+result.status);

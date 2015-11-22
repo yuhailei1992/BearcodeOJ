@@ -1,4 +1,4 @@
-{% extends "code_challenge/base.html" %}
+{% extends "code_challenge/base_welcome.html" %}
 
 {% block title %}Login{% endblock %}
 
@@ -12,40 +12,79 @@
 <!--the background image is specific to login page.-->
 <style>
     body {
-    height: 100%;
-    background-image:url('/static/login_bg.jpg');
-    background-size: 100% auto;
+        height: 100%;
+        background-image:url('/static/binary1.jpg');
+        background-size: 100% auto;
     }
-    #mainbody {
-    position: relative;
-    top: 130px;
+    .login-form {
+        width: 100%;
+        text-align: center;
+        position: relative;
+        fond-size: 30px;
+        padding-top: 250px;
+    }
+    .form-control {
+        height: 48px;
+        font-size: 25px;
+    }
+    h1 {
+        font-size: 50px;
+        font-family: "Fantasy",Helvetica,Arial,sans-serif;
+        font-weight: 700;
+        color: #fff;
+        padding: 20px;
+    }
+    td {
+        padding: 5px;
+    }
+
+    a {
+        color: #fff;
+    }
+
+    .btn {
+        font-weight: bolder;
     }
 </style>
 
-<div class="mainbody">
-    <form class="form-horizontal" method="post"
-          action="{% url 'django.contrib.auth.views.login' %}">
-        <table align="center">
-            <tr>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
-            </tr>
-            <tr>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
-            </tr>
-        </table>
-        <p></p>
-        <button class="btn btn-primary" type="submit" id="log-in-btn" name="login">Login</button>
-        <p></p>
 
-        <p><a class="btn btn-success" id="sign-up-btn" href="/register">Sign Up</a></p>
-        <input type="hidden" name="next" value="{{ next }}"/>
 
-        <p><a id="forgot-password-btn" href="{% url 'reset_password_reset1' %}">Forgot your
-            password?</a></p>
-        {% csrf_token %}
-    </form>
-</div>
-<div>Add Problem: <a href="/add_problem">Add</a></div>
+
+        <form class="form-horizontal login-form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+            <!--<table align="center">-->
+                <!--<tr>-->
+                    <!--<td>{{ form.username.label_tag }}</td>-->
+                    <!--<td>{{ form.username }}</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td>{{ form.password.label_tag }}</td>-->
+                    <!--<td>{{ form.password }}</td>-->
+                <!--</tr>-->
+                <!--</table>-->
+            <h1 id="title">Code Challenge</h1>
+            <table align="center">
+                <tr>
+                    <td><input id="id_username" maxlength="254" size="100" class="form-control" name="username" type="text" placeholder="username"/></td>
+                </tr>
+                <tr>
+                    <td><input id="id_password" class="form-control" size="100" name="password" type="password" placeholder="password"/></td>
+                </tr>
+            </table>
+
+            <p></p>
+            <button class="btn btn-default btn-lg" type="submit" id="log-in-btn" name="login">Sign IN</button>
+
+
+            <a class="btn btn-default btn-lg " id="sign-up-btn" href="/register">Sign UP</a>
+            <input type="hidden" name="next" value="{{ next }}"/>
+
+            <p><a id="forgot-password-btn" href="{% url 'reset_password_reset1' %}">Forgot your
+                password?</a></p>
+            {% csrf_token %}
+        </form>
+        <div>Add Problem: <a href="/add_problem">Add</a></div>
+
+
+
+
 {% endblock %}

@@ -1,85 +1,90 @@
 <!DOCTYPE HTML>
 <html lang="en">
-<head>
-  <!-- Latest compiled and minified CSS -->
-  {% load staticfiles %}
-  <link rel="stylesheet" href="{% static "/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "/static/sticky-footer.css" %}"/>
-  <!-- My own css -->
-  <link rel="stylesheet" href="{% static "/static/code_challenge.css" %}">
-  {% block js %}
-  {% endblock %}
-  <meta charset="utf-8">
-  <title>{% block title %}base{% endblock %}</title>
-</head>
-<body>
-  <div>
-  {% block brand %}
-      <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        {% load staticfiles %}
+        <link rel="stylesheet" href="{% static "/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}">
+        <link rel="stylesheet" type="text/css" href="{% static "/static/sticky-footer.css" %}"/>
+        <!-- My own css -->
+        <link rel="stylesheet" href="{% static "/static/code_challenge.css" %}">
+        {% block js %}
+        {% endblock %}
+        <meta charset="utf-8">
+        <title>{% block title %}base{% endblock %}</title>
+    </head>
+
+
+    <body>
+        <div>
+        {% block brand %}
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
         <div class="navbar-header">
-            <!-- The mobile navbar-toggle button can be safely removed since you do not need it in a non-responsive implementation -->
-            <a class="navbar-brand" href="{% url 'home' %}">CodeChallenge</a>
+        <!-- The mobile navbar-toggle button can be safely removed since you do not need it in a non-responsive implementation -->
+        <a class="navbar-brand" href="{% url 'home' %}">CodeChallenge</a>
         </div>
         <!-- Note that the .navbar-collapse and .collapse classes have been removed from the #navbar -->
         {% if currentuser %}
         <div id="navbar">
-            <form class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder=
-                            "Search">
-                </div>
-                <button type="submit" class=
-                        "button-search">Go!
-                </button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-      <li><a href="{% url 'profile' request.user.username %}">View My Profile</a></li>
+        <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+        <input type="text" class="form-control" placeholder=
+        "Search">
+        </div>
+        <button type="submit" class=
+        "button-search">Go!
+        </button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'profile' request.user.username %}">View My Profile</a></li>
 
-      <li><a href="{% url 'follower_stream' %}">Follower Stream</a></li>
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-                {% endif %}
-            </ul>
+        <li><a href="{% url 'follower_stream' %}">Follower Stream</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+
+        </ul>
 
         </div>
+        {% endif %}
         <!--/.nav-collapse -->
-    </div>
-</nav>
-  {% endblock %}
-  </div>
-  
-  <div id="sidebar">
-    {% block sidebar %} {% endblock %}
-  </div>
-  <div>
-    {% block editmyprofile %} {% endblock %}
-  </div>
-<body>
+        </div>
+        </nav>
+        {% endblock %}
+        </div>
 
-{% for error in form.non_field_errors %}
-<p style="color: red">
-{{ error }}
-</p>
-{% endfor %}
+        <div id="sidebar">
+        {% block sidebar %} {% endblock %}
+        </div>
+        <div>
+        {% block editmyprofile %} {% endblock %}
+        </div>
 
-<!-- Add the inputs here -->
-<div id="mainbody">
-  {% block mainbody %}
-  {% endblock mainbody %}
-</div>
-<div>
-  {% block divider %} {% endblock %}
-</div>
-<div>
-  {% block posts %} {% endblock %}
-</div>
 
-</body>
+        {% for error in form.non_field_errors %}
+        <p style="color: red">
+        {{ error }}
+        </p>
+        {% endfor %}
 
-<footer class="footer">
-    <div class="container">
-        <p class="text-muted">CodeChallenge © 2015</p>
-    </div>
-</footer>
+        <!-- Add the inputs here -->
+        <div id="mainbody">
+        {% block mainbody %}
+        {% endblock mainbody %}
+        </div>
+
+        <div>
+        {% block divider %} {% endblock %}
+        </div>
+        <div>
+        {% block posts %} {% endblock %}
+        </div>
+
+        <!--<footer class="footer">-->
+        <!--<div class="container">-->
+        <!--<p class="text-muted">CodeChallenge © 2015</p>-->
+        <!--</div>-->
+        <!--</footer>-->
+    </body>
+
+
 </html>
 

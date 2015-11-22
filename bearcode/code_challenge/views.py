@@ -245,6 +245,8 @@ def try_submit(request):
     print "Java Tests content is: "
     print java_tests_content
     print "problem tle is:" + str(curr_problem.tle_limit)
+    submit_lang = request.POST['language']
+    print "selected language is: "+submit_lang
 
     context = run_code(java_tests_content, submit_content, curr_problem.tle_limit)
 

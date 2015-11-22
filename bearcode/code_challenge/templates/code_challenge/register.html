@@ -1,23 +1,111 @@
-{% extends "code_challenge/base.html" %}
+{% extends "code_challenge/base_welcome.html" %}
 
 {% block title %}Register{% endblock %}
 
+{% if form.errors %}
+<p style="color:red">
+    Incorrect user name and password.
+</p>
+{% endif %}
+
 {% block mainbody %}
-  <form method="post" action="/register">
+<!--the background image is specific to login page.-->
+<style>
+    body {
+        height: 100%;
+        background-image:url('/static/binary1.jpg');
+        background-size: 100% auto;
+    }
+    .register-form {
+        width: 100%;
+        text-align: center;
+        position: relative;
+        fond-size: 30px;
+        padding-top: 150px;
+    }
+    .form-control {
+        height: 48px;
+        font-size: 25px;
+    }
+    h1 {
+        font-size: 50px;
+        font-family: "Fantasy",Helvetica,Arial,sans-serif;
+        font-weight: 700;
+        color: #fff;
+        padding: 20px;
+    }
+    td {
+        padding: 5px;
+    }
+
+    a {
+        color: #fff;
+    }
+
+    label{
+        color: #fff;
+        font-size: 25px;
+    }
+
+</style>
+
+
+
+
+<form method="post" class="register-form" action="/register">
+    <h1 id="title">Sign Up</h1>
     <table align="center">
-    {% for field in form.visible_fields %}
-    <tr>
-      <td>{{field.label_tag}}</td>
-      <td>{{field}}</td>
-      <td style="color: red">{{field.errors}}</td>
-    </tr>
-    {% endfor %}
+        <tr>
+            <td><label for="id_username"  >Username:</label></td>
+            <td><input id="id_username" size="100" class="form-control" name="username" type="email" /></td>
+            <td style="color: red"></td>
+        </tr>
+
+        <tr>
+            <td><label for="id_email">Email:</label></td>
+            <td><input id="id_email" size="100" class="form-control" name="email" type="email" /></td>
+            <td style="color: red"></td>
+        </tr>
+
+        <tr>
+            <td><label for="id_password1">Password:</label></td>
+            <td><input id="id_password1" size="100" class="form-control" maxlength="200" name="password1" type="password" /></td>
+            <td style="color: red"></td>
+        </tr>
+
+        <tr>
+            <td><label for="id_password2">Confirm:</label></td>
+            <td><input id="id_password2" size="100" class="form-control" maxlength="200" name="password2" type="password" /></td>
+            <td style="color: red"></td>
+        </tr>
+
+        <tr>
+            <td><label for="id_firstname">firstname:</label></td>
+            <td><input id="id_firstname" size="100" class="form-control" maxlength="200" name="firstname" type="text" /></td>
+            <td style="color: red"></td>
+        </tr>
+
+        <tr>
+            <td><label for="id_lastname">lastname:</label></td>
+            <td><input id="id_lastname" size="100" class="form-control" maxlength="200" name="lastname" type="text" /></td>
+            <td style="color: red"></td>
+        </tr>
     </table>
+    <p></p>
     {% for field in form.hidden_fields %}
       {{field}}
     {% endfor %}
     {% csrf_token %}
-    <input class="btn btn-success" type="submit" value="Register" />
+    <p>
+        <input class="btn btn-default btn-lg" type="submit" value="Sign up  for Code Challenge!" />
+    </p>
     <input type="hidden" name="next" value="{{ next }}" />
-  </form>
+    <p>
+        <a id="forgot-password-btn" href="/">Back to login</a>
+    </p>
+</form>
+
+
+
+
 {% endblock %}
