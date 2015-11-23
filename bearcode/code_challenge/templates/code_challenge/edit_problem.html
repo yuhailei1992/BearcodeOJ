@@ -55,7 +55,19 @@ $(document).ready(function() {
     java_tests.getSession().setMode("ace/mode/java");
     python_default.getSession().setMode("ace/mode/python");
     python_tests.getSession().setMode("ace/mode/python");
+
+    $("form").submit(function(){
+        //alert(java_default.getValue());
+        $("#java_default").append("<textarea id='id_java_default' name='java_default'>"+java_default.getValue()+"</textarea>");
+        //alert(java_tests.getValue());
+        $("#python_default").append("<textarea id='id_python_default' name='python_default'>"+python_default.getValue()+"</textarea>");
+        //alert(python_default.getValue());
+        $("#java_tests").append("<textarea id='id_java_tests' name='java_tests'>"+java_tests.getValue()+"</textarea>");
+        //alert(python_tests.getValue());
+        $("#python_tests").append("<textarea id='id_python_tests' name='python_tests'>"+python_tests.getValue()+"</textarea>");
+    });
 });
+
 </script>
     <div class="container" align="center">
 
@@ -66,6 +78,7 @@ $(document).ready(function() {
                 <div class="col-md-10">
                     <h1>Edit Problem</h1>
                   <br><br>
+
                   <form method="post" action="{% url 'editproblem' problem.id %}">
                     <table align="center">
                     <tr>
