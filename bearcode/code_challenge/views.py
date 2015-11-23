@@ -243,25 +243,21 @@ def try_submit(request):
     curr_problem = Problem.objects.get(id=problemid)
 
     submit_content = request.POST['codecontent']
-    java_tests_content = curr_problem.java_tests
 
-    print "Submit content is: "
-    print submit_content
-    print "Java Tests content is: "
-    print java_tests_content
-    print "problem tle is:" + str(curr_problem.tle_limit)
     submit_lang = request.POST['language']
-    print "selected language is: "+submit_lang
+    print "selected language is: " + submit_lang
 
-    # context = run_code(java_tests_content, submit_content, curr_problem.tle_limit)
-    values = {'user_code' : submit_content,
-              'test_code': java_tests_content,
+    # The parameters to be sent to docker.
+    values = {'user_code': submit_content,
               'tle': curr_problem.tle_limit}
-
     if submit_lang == 'java':
         values['language'] = 'Java'
+        values['test_code'] = curr_problem.java_tests
     else:
         values['language'] = 'Python'
+        values['test_code'] = curr_problem.python_tests
+
+    print values
 
     data = urllib.urlencode(values)
     u = urllib.urlopen("http://52.26.238.153/worker/judge/?%s" % data)
