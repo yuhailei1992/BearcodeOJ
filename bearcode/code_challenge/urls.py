@@ -23,7 +23,8 @@ urlpatterns = [
     # Route to logout a user and send them back to the login page
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     url(r'^register$', 'code_challenge.views.register', name='regitser'),
-    url(r'^add_problem$', 'code_challenge.views.add_problem', name='addproblem'),
+    # url(r'^add_problem$', 'code_challenge.views.add_problem', name='addproblem'),
+    url(r'^add_problem$', 'code_challenge.views_problem.add_problem', name='addproblem'),
     url(r'^trysubmit$', 'code_challenge.views.try_submit', name='trysubmit'),
 
     url(r'^profile/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.profile', name='profile'),
