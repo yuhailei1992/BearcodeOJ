@@ -11,6 +11,12 @@ urlpatterns = [
     url(r'^submit_history/(?P<problemid>\d+)/$', 'code_challenge.views.submit_history', name='submit_history'),
     url(r'^submit_details/(?P<historyid>\d+)/$', 'code_challenge.views.submit_details', name='submit_details'),
 
+    # problem management related actions
+    url(r'^add_problem$', 'code_challenge.views_problem.add_problem', name='addproblem'),
+    url(r'^edit_problem/(?P<problemid>\d+)/$', 'code_challenge.views_problem.edit_problem', name='editproblem'),
+    url(r'^delete_problem/(?P<problemid>\d+)/$', 'code_challenge.views_problem.delete_problem', name='deleteproblem'),
+    url(r'^manage_problem$', 'code_challenge.views_problem.manage_problem', name='manageproblem'),
+
     url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'template_name': 'code_challenge/password_reset_form.html'}, name='reset_password_reset1'),
     url(r'^password_reset/done/$', 'django.contrib.auth.views.password_reset_done', {'template_name': 'code_challenge/password_reset_done.html'}, name='password_reset_done'),
     url(r'^(?P<uidb64>[0-9A-Za-z]+)/(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', {'template_name': 'code_challenge/password_reset_confirm.html'} , name='password_reset_confirm'),
@@ -24,7 +30,7 @@ urlpatterns = [
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     url(r'^register$', 'code_challenge.views.register', name='regitser'),
     # url(r'^add_problem$', 'code_challenge.views.add_problem', name='addproblem'),
-    url(r'^add_problem$', 'code_challenge.views_problem.add_problem', name='addproblem'),
+
     url(r'^trysubmit$', 'code_challenge.views.try_submit', name='trysubmit'),
 
     url(r'^profile/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.profile', name='profile'),
