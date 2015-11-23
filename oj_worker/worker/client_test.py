@@ -51,7 +51,7 @@ values = {'user_code' : py_usercode,
 # the_page = response.read()
 # print the_page
 
-req = urllib2.Request(url)
+# req = urllib2.Request(url)
 
 data = urllib.urlencode(values)
 u = urllib.urlopen("http://localhost:8000/worker/judge/?%s" % data)
