@@ -5,8 +5,8 @@ from exec_py_file import run_py_code
 
 @csrf_exempt
 def judge(request):
-    if request.method == 'POST':
-        dict = request.POST
+    if request.method == 'GET':
+        dict = request.GET
         print dict
         user_code = dict['user_code']
         test_code = dict['test_code']

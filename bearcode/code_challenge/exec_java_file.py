@@ -61,14 +61,14 @@ def run_code(test_code, user_code, timeout):
     try:
         subp = subprocess.Popen(run_command, shell=True)
         time.sleep(timeout)
-        if subp.poll() is None:  # Still running.
+        if subp.poll() is None: # Still running.
             print 'Still running.'
-            subp.kill()
+            subp.kill() # Kill the subprocess.
             os.system(clean_cmd)
             return {'status': 'Time Limit Exceeded', 'message': 'Be careful of the time complexity'}
 
         else:
-            # print 'The return code is ' + str(subp.returncode)
+            print 'The return code is ' + str(subp.returncode)
             ret_code = subp.returncode
 
     except CalledProcessError:

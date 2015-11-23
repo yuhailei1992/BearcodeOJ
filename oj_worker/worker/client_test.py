@@ -39,14 +39,22 @@ if returnFalse() == False:
 sys.exit(ret)
 '''
 
-url = 'http://localhost:8000/worker/judge'
+url = 'http://52.26.238.153/worker/judge'
 values = {'user_code' : py_usercode,
           'test_code': py_testcode,
           'tle': tle,
           'language': 'Python'}
 
+# data = urllib.urlencode(values)
+# req = urllib2.Request(url, data)
+# response = urllib2.urlopen(req)
+# the_page = response.read()
+# print the_page
+
+req = urllib2.Request(url)
+
 data = urllib.urlencode(values)
-req = urllib2.Request(url, data)
-response = urllib2.urlopen(req)
-the_page = response.read()
-print the_page
+u = urllib.urlopen("http://localhost:8000/worker/judge/?%s" % data)
+print u.read()
+
+
