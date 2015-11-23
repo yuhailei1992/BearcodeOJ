@@ -3,9 +3,14 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
+import urllib
+import json
 
 from exec_java_file import *
 from code_challenge.forms import *
+
+
+worker_url = 'http://52.26.238.153/worker/judge'
 
 
 @login_required
@@ -248,8 +253,24 @@ def try_submit(request):
     submit_lang = request.POST['language']
     print "selected language is: "+submit_lang
 
-    context = run_code(java_tests_content, submit_content, curr_problem.tle_limit)
+    # context = run_code(java_tests_content, submit_content, curr_problem.tle_limit)
+    values = {'user_code' : submit_content,
+              'test_code': java_tests_content,
+              'tle': curr_problem.tle_limit}
 
+    if submit_lang == 'java':
+        values['language'] = 'Java'
+    else:
+        values['language'] = 'Python'
+
+    data = urllib.urlencode(values)
+    u = urllib.urlopen("http://52.26.238.153/worker/judge/?%s" % data)
+    print 'results from docker'
+    u_str = str(u.read())
+    print u_str
+
+    context = json.loads(u_str)
+    print context
     # save to history
     new_history = SubmitHistory(text=submit_content, user=request.user, problem=curr_problem,
                                 result=context['status'])

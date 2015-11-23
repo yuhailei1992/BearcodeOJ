@@ -54,7 +54,8 @@ values = {'user_code' : py_usercode,
 # req = urllib2.Request(url)
 
 data = urllib.urlencode(values)
-u = urllib.urlopen("http://localhost:8000/worker/judge/?%s" % data)
+# u = urllib.urlopen("http://192.168.99.100:55555/worker/judge/?%s" % data)
+u = urllib.urlopen("http://52.26.238.153/worker/judge/?%s" % data)
 print u.read()
 
 
