@@ -1,0 +1,119 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+<!--<script>-->
+      <!--$(document).ready(function() {-->
+        <!--$('#problems').DataTable( {-->
+            <!--"pagingType": "full_numbers",-->
+            <!--"ordering": false,-->
+             <!--"lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],-->
+             <!--"iDisplayLength": 10-->
+        <!--} );-->
+      <!--});-->
+
+<!--</script>-->
+<link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
+<style>
+    table{
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      border-top: 1px solid lightgrey;
+    }
+    tr {
+        border-bottom: 1px solid lightgrey;
+    }
+    td, th {
+        padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    td.pid,th.pid {
+        text-align: left;
+        width: 5%;
+    }
+    td.pname,th.pname {
+        text-align: left;
+        width: 75%;
+    }
+    td.pacceptance,th.pacceptance {
+        width: 10%;
+    }
+    td.pdifficulty,th.pdifficulty {
+        width: 10%;
+    }
+    td.pacceptance, td.pdifficulty {
+        font-weight: normal;
+    }
+    label{
+        font-size: 16px;
+    }
+    .sponsor {
+        border-left: thick double grey;
+    }
+</style>
+{% endblock %}
+
+{% block title %}Problem Management Dashboard{% endblock %}
+
+{% block mainbody %}
+  
+  <!-- problems go here -->
+    <div class="container" align="center">
+
+        <div class="container">
+          <!-- Example row of columns -->
+          <div class="row">
+
+            <div class="col-md-10">
+                <h1>Problem Management Dashboard</h1>
+              <br><br>
+              <table id="problems" class="compact hover row-border" cellspacing="0">
+              <thead>
+                <tr>
+                    <th class="pid"> # </th>
+                    <th class="pname"> Problem </th>
+                    <th class="pacceptance"> Edit </th>
+                    <th class="pdifficulty"> Delete </th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for problem in problems %}
+                <tr>
+                  <td class="pid">
+                      {{problem.id}}
+                  </td>
+                  <td class="pname">
+                      {{problem.name}}
+                  </td>
+                  <td class="edit">
+                      <a href="{% url 'editproblem' problem.id %}">edit</a>
+                  </td>
+                  <td class="delete">
+                      <a href="{% url 'deleteproblem' problem.id %}">delete</a>
+                  </td>
+                </tr>
+                  {% endfor %}
+              </tbody>
+              </table>
+                <p></p>
+                <a class="btn btn-success btn-lg " id="sign-up-btn" href="{% url 'addproblem' %}">Add a Problem</a>
+            </div>
+
+            <div class="col-md-2 sponsor">
+              <h2>SPONSERED</h2>
+              <p>Definitly come to 15637! A rly COOOOOOOOOOOOOL course.</p>
+              <p>
+                <a class="btn btn-default" href="https://piazza.com/cmu/fall2015/1543715637/home" target="_blank" role="button">View details &raquo;</a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+        <table>
+
+        </table>
+    </div>
+
+{% endblock %}
