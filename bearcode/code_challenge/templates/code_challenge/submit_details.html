@@ -29,14 +29,27 @@
       border: 1px solid #888;
     }
 </style>
+    <div class="container" align="center">
 
-  <!-- Discussion body goes here -->
-  <h3>Back to problem: <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h3>
-  <h2>Submission Details: </h2><hr>
-  <h3 id="status">status: {{history.result}}</h3> 
-  <h3 id="time">submitted at: {{history.created_at}}</h3><hr>
-  <h3>submitted code: </h3>
-<div id="code">
-  {{history.text|linebreaksbr}}
-</div>
+        <div class="container">
+          <!-- Example row of columns -->
+          <div class="row">
+
+            <div class="col-md-10">
+              <br><br>
+              <!-- Discussion body goes here -->
+              <h3>Back to problem: <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h3>
+              <h2>Submission Details: </h2><hr>
+              <h3 id="status">status: {{history.result}}</h3>
+              <h3 id="time">submitted at: {{history.created_at}}</h3><hr>
+              <h3>submitted code: </h3>
+            <div id="code">
+              {{history.text|linebreaksbr}}
+            </div>
+            </div>
+          </div>
+
+        </div>
+
+    </div>
 {% endblock %}
