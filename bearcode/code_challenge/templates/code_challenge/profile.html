@@ -40,9 +40,8 @@
               <p></p>
               <p>
                 <ol class="posts">
-                {% for post in posts %}
-                  <ol>{{post}} <a href="{% url 'profile' post.user.username %}">{{post.user.username}}</a></ol>
-                  <ol>{{post.createdAt}}</ol><br>
+                {% for problem in problems %}
+                  <ol><a href="{% url 'problem' problem.id %}">{{problem.name}}</a></ol>
                 {% endfor %}
                 </ol>
               </p>
