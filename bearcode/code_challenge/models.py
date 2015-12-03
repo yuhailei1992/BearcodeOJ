@@ -12,8 +12,9 @@ class UserProfile(models.Model):
 	bio = models.CharField(max_length=420, default="", blank=True, null=True)
 	image = models.ImageField(upload_to='/', default = '/static/photos/none_photo.jpg', null=True, blank=True)
 	following = models.ManyToManyField(User, related_name='following_list')
+	ranking_score = models.PositiveIntegerField(default=0)
+	success_rate = models.FloatField(default=0.0)
 
-	# Returns all comments associated with a specific post id
 	@staticmethod
 	def get_profile(user_profile_id=-1):
 		return UserProfile.objects.get(user_id=user_profile_id)

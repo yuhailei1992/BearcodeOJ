@@ -20,3 +20,12 @@ def random_pick(request):
         return render(request, 'code_challenge/global_stream.html', {'problems': problems, 'currentuser': user})
     context = {'problem': random_problem, 'currentuser': request.user}
     return render(request, 'code_challenge/problem.html', context)
+
+@transaction.atomic
+@login_required
+def search_discussion_page(request):
+    print "Search Discussion"
+    user = request.user
+    # context['currentuser'] = user
+
+    return render(request, 'code_challenge/search_discussion.html', {'currentuser': user})
