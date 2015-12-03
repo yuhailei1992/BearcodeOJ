@@ -1,16 +1,18 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import json
+import os
+import time
+import urllib
+
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
-import urllib
-import json
+from django.shortcuts import render, redirect, get_object_or_404
 
-from exec_java_file import *
 from code_challenge.forms import *
 
-
-worker_url = 'http://52.26.238.153/worker/judge'
+# Allowed languages.
+allowed_languages = ['python', 'java']
 
 
 @login_required
@@ -239,13 +241,37 @@ def problem(request, problemid):
 @transaction.atomic
 def try_submit(request):
     print "in try_submit!!!!"
-    problemid = request.POST['problemid']
-    curr_problem = Problem.objects.get(id=problemid)
-
     submit_content = request.POST['codecontent']
-
+    print 'submitted content is: ' + submit_content
     submit_lang = request.POST['language']
     print "selected language is: " + submit_lang
+
+    # Check for submit_lang. The submit_lang must be in allowed_languages.
+    if submit_lang not in allowed_languages:
+        print 'Invalid language choice'
+        context = {'status': 'Rejected', 'message': 'Invalid programming language choice'}
+        return render(request, 'code_challenge/result.json', context,
+                      content_type="application/json")
+
+    # Analyze submitted code. If considered dangerous, the code will be rejected.
+    if not submit_content or len(submit_content) == 0:
+        print 'Null or void submitted content'
+        context = {'status': 'Rejected', 'message': 'Null or void submitted content'}
+        return render(request, 'code_challenge/result.json', context,
+                      content_type="application/json")
+
+    import views_code_analysis
+    check_result = views_code_analysis.check_code(submit_content, submit_lang)
+    print check_result
+    if check_result['status'] == 'False':
+        msg = format('The code should not contain such substring: %s' % check_result['message'])
+        context = {'status': 'Rejected', 'message': msg}
+        return render(request, 'code_challenge/result.json', context,
+                      content_type="application/json")
+
+    # After all the security checks, submit user code to oj_worker.
+    problemid = request.POST['problemid']
+    curr_problem = Problem.objects.get(id=problemid)
 
     # The parameters to be sent to docker.
     values = {'user_code': submit_content,
@@ -309,9 +335,9 @@ def submit_details(request, historyid):
 
 
 def handle_uploaded_file(f):
-    if f != False:
-        fileName, fileExtension = os.path.splitext(f.name)
-        url = '/static/photos/{}{}'.format(time.time(), fileExtension)
+    if f:
+        file_name, file_extension = os.path.splitext(f.name)
+        url = '/static/photos/{}{}'.format(time.time(), file_extension)
         with open('./code_challenge' + url, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
