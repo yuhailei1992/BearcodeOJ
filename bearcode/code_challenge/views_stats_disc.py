@@ -26,6 +26,12 @@ def random_pick(request):
 def search_discussion_page(request):
     print "Search Discussion"
     user = request.user
-    # context['currentuser'] = user
+    discussions = Discussion.objects.all().order_by('-created_at')    
 
-    return render(request, 'code_challenge/search_discussion.html', {'currentuser': user})
+    return render(request, 'code_challenge/search_discussion.html', {'currentuser': user, 'discussions': discussions})
+
+@transaction.atomic
+@login_required
+def search_discussion(request):
+    context = {}
+    return render(request, 'code_challenge/search_discussion.html', context)

@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^submit_details/(?P<historyid>\d+)/$', 'code_challenge.views.submit_details', name='submit_details'),
     url(r'^random_pick', 'code_challenge.views_stats_disc.random_pick', name='random_pick'),
     url(r'^search_discussion_page', 'code_challenge.views_stats_disc.search_discussion_page', name='search_discussion_page'),
+    url(r'^search_discussion', 'code_challenge.views_stats_disc.search_discussion', name='search_discussion'),
 
     # problem management related actions
     url(r'^add_problem$', 'code_challenge.views_problem.add_problem', name='addproblem'),

@@ -6,54 +6,43 @@
 {% block title %}Search_Discussion{% endblock %}
 
 {% block mainbody %}
-
 <style type="text/css" media="screen">
-    #dicussionbody {
-        display: block;
-        color: #B40431;
-        text-align:left;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin: auto;
-        width: 40%;
-        border: 1px solid #888;
+    .searchBox {
+      border-radius: 10px;
+      padding: 10px;
+      margin: auto;
+      width: 70%;
     }
-    #commentsSection {
-        display: block;
-        margin: auto;
-        text-align: left;
-        padding-left: 40%;
+    #searchBtn {
+      background-color: #73AD21;
     }
 </style>
   <!-- Discussion body goes here -->
   <div class="container" align="center">
-  <h2>Current Discussion: </h2>
-  <div id="dicussionbody">
-    <!-- {% if discussion %}
-    <h3>{{discussion.title}}</h3>
-    <p style="color:black; font-size: 18px;">{{discussion.text}}</p><br>
-    <p style="text-align:right"><a href="{% url 'profile' discussion.user.username %}">{{discussion.user.username}}</a></p>
-    <p style="color:black; text-align:right">{{discussion.created_at}}</p>
-    {% endif %} -->
-  </div>
-
-  <!-- divider line -->
-  <div class="container" align="center">
-<!--     <hr style="height: 1px;/* font-weight: 100; */background-color: #000;">
- -->  </div>
-
-  <!-- add comment for the discussion here -->
-  <div class="container" align="center">
-      <!-- <form action="/add-comment/{{discussion.id}}/" method="post">
-        <textarea style="width:30%" class="input-large" name="commenttext" rows="2"></textarea><br>
-        <button class="btn btn-success" type="submit">Add new Discussion</button>
+    <h2> Welcome, {{ request.user }}! </h2><br>
+  <!-- <h2>Current Discussion: </h2> -->
+    <div class="searchBox">
+      <form method="get" action="{% url 'search_discussion' %}">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="searchBtn">
+              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+          </span>
+        </div>
         <input type="hidden" name="next" value="{{ next }}" />
         {% csrf_token %}
-      </form> -->
-  </div>
+      </form>
+    </div>
 
-  <!-- comments go here -->
-  <div class="container" align="center">
+  <!-- Recent discussions -->
+    <div class="container" align="center">
+      
+    </div>
+
+  <!-- Information about this discussion page -->
+    <div class="container" align="center">
     <!--
     <p>
       <ol id="commentsSection">
@@ -64,7 +53,7 @@
         {% endfor %}      
       </ol>
     </p> -->
-  </div>
+    </div>
   </div>
 
 {% endblock %}
