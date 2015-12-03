@@ -24,9 +24,9 @@
     <div class="searchBox">
       <form method="get" action="{% url 'search_discussion' %}">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search for...">
+          <input type="text" class="form-control" name="userInput" placeholder="Search for...">
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button" id="searchBtn">
+            <button class="btn btn-default" type="submit" id="searchBtn">
               <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </button>
           </span>
@@ -35,7 +35,15 @@
         {% csrf_token %}
       </form>
     </div>
-
+    <div>
+      {% for item in discussions %}
+        <ol id="eachtitle"><a href="{% url 'each_discussion' item.id %}">{{item.title}}</a></ol>
+<!--         <ol id="eachtext">{{item.text}} </ol>
+ -->        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
+        <ol id="time">{{item.created_at}}</ol>
+        <ol><a class="btn btn-info" href="{% url 'each_discussion' item.id %}">Get more info</a></ol></br>
+      {% endfor %}
+    </div>
   <!-- Recent discussions -->
     <div class="container" align="center">
       

@@ -24,14 +24,34 @@ def random_pick(request):
 @transaction.atomic
 @login_required
 def search_discussion_page(request):
-    print "Search Discussion"
     user = request.user
     discussions = Discussion.objects.all().order_by('-created_at')    
-
+    # print 'Discussions' + str(discussions)
     return render(request, 'code_challenge/search_discussion.html', {'currentuser': user, 'discussions': discussions})
 
 @transaction.atomic
 @login_required
 def search_discussion(request):
+    print "In Search Discussion"
     context = {}
+    if request.method == 'POST':
+        print 'search method set to post'
+        # show all the discussions
+        discussions = Discussion.objects.all().order_by('-created_at')    
+        return render(request, 'code_challenge/search_discussion.html', context)
+    
+    userInput = request.GET['userInput'].lower()
+    print userInput
+    # get all the discussions and search for the input
+    candidates = Discussion.objects.all().order_by('-created_at')    
+    discussions = set()
+    for discussion in candidates:
+        print discussion
+        if userInput in discussion.title.lower() or userInput in discussion.text.lower():
+            discussions.add(discussion)
+
+    context['discussions'] = discussions
+    context['currentuser'] = request.user
     return render(request, 'code_challenge/search_discussion.html', context)
+
+
