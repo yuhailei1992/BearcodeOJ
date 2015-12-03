@@ -43,9 +43,12 @@
         "Search Topic">
         </div>
         <button type="submit" class=
-        "button-search">Go!
-        </button>
+        "button-search">Go!</button>
         </form>
+        <ul class="nav navbar-nav navbar-left">
+            <li><a href="{% url 'random_pick' %}">Pick One!</a></li>
+            <li><a href="{% url 'search_discussion_page' %}">Discuss</a></li>            
+        </ul>
         <ul class="nav navbar-nav navbar-right">
         <li><a href="{% url 'profile' request.user.username %}">View My Profile</a></li>
 

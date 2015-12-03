@@ -1,0 +1,59 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}Search_Discussion{% endblock %}
+
+{% block mainbody %}
+<style type="text/css" media="screen">
+    .searchBox {
+      border-radius: 10px;
+      padding: 10px;
+      margin: auto;
+      width: 70%;
+    }
+    #searchBtn {
+      background-color: #73AD21;
+    }
+</style>
+  <!-- Discussion body goes here -->
+  <div class="container" align="center">
+    <h2> Welcome, {{ request.user }}! </h2><br>
+  <!-- <h2>Current Discussion: </h2> -->
+    <div class="searchBox">
+      <form method="get" action="{% url 'search_discussion' %}">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="searchBtn">
+              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+            </button>
+          </span>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% csrf_token %}
+      </form>
+    </div>
+
+  <!-- Recent discussions -->
+    <div class="container" align="center">
+      
+    </div>
+
+  <!-- Information about this discussion page -->
+    <div class="container" align="center">
+    <!--
+    <p>
+      <ol id="commentsSection">
+        {% for item in comments %}
+        <ol id="eachtext">{{item.text}} </ol>
+        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
+        <ol id="time">{{item.created_at}}</ol><br>
+        {% endfor %}      
+      </ol>
+    </p> -->
+    </div>
+  </div>
+
+{% endblock %}

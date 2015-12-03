@@ -8,6 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.db.models import Count
+
+import urllib
+import json
 
 from code_challenge.forms import *
 
@@ -150,19 +156,19 @@ def get_comments(request):
 @login_required
 @transaction.atomic
 def profile(request, username):
-    # Show the profile page with the matching id
     user = get_object_or_404(User, username=username)
-    # the profile of the user with matching id
     userprofile = get_object_or_404(UserProfile, user=user)
-    # users that the current user is following
     currentuser = request.user
-    currentuserprofile = get_object_or_404(UserProfile, user=currentuser)
-    following = currentuserprofile.following.all()
-    print following
-    posts = Post.objects.filter(user=user).order_by('-created_at')
 
-    context = {'user': user, 'posts': posts, 'userprofile': userprofile, 'currentuser': currentuser,
-               'following': following}
+    candidates = SubmitHistory.objects.filter(user=user).order_by('-created_at')
+    problems = set()
+    for submission in candidates:
+        if submission.problem not in problems:
+            problems.add(submission.problem)
+
+    currentuserprofile = get_object_or_404(UserProfile, user=currentuser)
+
+    context = {'user': user, 'problems': problems, 'userprofile': userprofile, 'currentuser': currentuser}
     return render(request, 'code_challenge/profile.html', context)
 
 
