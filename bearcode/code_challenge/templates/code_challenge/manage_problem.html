@@ -35,15 +35,19 @@
     }
     td.pname,th.pname {
         text-align: left;
-        width: 75%;
+        width: 60%;
     }
-    td.pacceptance,th.pacceptance {
+    td.visible,th.visible {
+        text-align: left;
+        width: 15%;
+    }
+    td.edit,th.edit {
         width: 10%;
     }
-    td.pdifficulty,th.pdifficulty {
+    td.delete,th.delete {
         width: 10%;
     }
-    td.pacceptance, td.pdifficulty {
+    td.edit, td.delete, td.visible {
         font-weight: normal;
     }
     label{
@@ -74,8 +78,9 @@
                 <tr>
                     <th class="pid"> # </th>
                     <th class="pname"> Problem </th>
-                    <th class="pacceptance"> Edit </th>
-                    <th class="pdifficulty"> Delete </th>
+                    <th class="visible"> Visibility </th>
+                    <th class="edit"> Edit </th>
+                    <th class="delete"> Delete </th>
                 </tr>
               </thead>
               <tbody>
@@ -86,6 +91,13 @@
                   </td>
                   <td class="pname">
                       {{problem.name}}
+                  </td>
+                  <td class="visible">
+                      {% if problem.visible == False %}
+                        No =>set visible!
+                      {% else %}
+                        Yes =>set invisible!
+                      {% endif %}
                   </td>
                   <td class="edit">
                       <a href="{% url 'editproblem' problem.id %}">edit</a>

@@ -23,17 +23,48 @@ class UserProfile(models.Model):
 
 
 class Problem(models.Model):
+    DIFFICULTY_EASY = 1
+    DIFFICULTY_MIDD = 2
+    DIFFICULTY_HARD = 3
+    DIFFICULTY_CHOICES = [(DIFFICULTY_EASY, 'Easy'),
+                      (DIFFICULTY_MIDD, 'Medium'),
+                       (DIFFICULTY_HARD, 'Hard')]
+
+    CATEGORY_GENERAL = 'General'
+    CATEGORY_ARRAY = 'Array'
+    CATEGORY_STRING = 'String'
+    CATEGORY_DP = 'Dynamic Programing'
+    CATEGORY_GREEDY = 'Greedy'
+    CATEGORY_SORT = 'Sort'
+    CATEGORY_MATH = 'Math'
+    CATEGORY_STACK = 'Stack'
+    CATEGORY_HEAP = 'Heap'
+    CATEGORY_CHOICES = [(CATEGORY_GENERAL, 'General'),
+                      (CATEGORY_ARRAY, 'Array'),
+                      (CATEGORY_STRING, 'String'),
+                      (CATEGORY_DP, 'Dynamic Programing'),
+                      (CATEGORY_GREEDY, 'Greedy'),
+                      (CATEGORY_SORT, 'Sort'),
+                      (CATEGORY_MATH, 'Math'),
+                      (CATEGORY_STACK, 'Stack'),
+                      (CATEGORY_HEAP, 'Heap')]
+
     name = models.CharField(max_length=50, default="newproblem")
     description = models.TextField(max_length=420, default="", blank=True)
     example = models.TextField(max_length=420, default="", blank=True)
+    difficulty = models.PositiveSmallIntegerField(choices=DIFFICULTY_CHOICES, default=DIFFICULTY_EASY)
+    category = models.CharField(choices=CATEGORY_CHOICES, default=CATEGORY_GENERAL, max_length=30)
+
     java_default = models.TextField(max_length=420, default="", blank=True)
     python_default = models.TextField(max_length=420, default="", blank=True)
     tle_limit = models.PositiveIntegerField(default=1)
     mle_limit = models.PositiveIntegerField(default=500)
     java_tests = models.TextField(max_length=1000, default="", blank=True)
     python_tests = models.TextField(max_length=1000, default="", blank=True)
+    visible = models.BooleanField(default=False)
     def __unicode__(self):
         return self.name
+
 
 class Discussion(models.Model):
 	title = models.CharField(max_length=30)

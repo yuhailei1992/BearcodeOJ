@@ -79,7 +79,7 @@ class ProblemForm(forms.ModelForm):
     class Meta:
         model = Problem
         exclude = {}
-        field = ('name', 'description', 'example', 'java_default','python_default', 'tle_limit', 'mle_limit','javaTests','pythonTests')
+        field = ('name', 'description', 'example', 'difficulty', 'java_default','python_default', 'tle_limit', 'mle_limit','javaTests','pythonTests')
 
 class DiscussionForm(forms.ModelForm):
     class Meta:

@@ -104,7 +104,57 @@ $(document).ready(function() {
                       </td>
                       <td style="color: red"></td>
                     </tr>
+                    <!--<tr>-->
+                        <!--<td><label for="id_difficulty">Difficulty:</label></td>-->
+                        <!--<td>-->
+                            <!--<select id="id_difficulty" name="difficulty" class="form-control">-->
+                                <!--<option value="1">Easy</option>-->
+                                <!--<option value="2">Medium</option>-->
+                                <!--<option value="3">Hard</option>-->
+                            <!--</select>-->
+                        <!--</td>-->
+                        <!--<td style="color: red"></td>-->
+                    <!--</tr>-->
 
+                        <!--<tr>-->
+                            <!--<td></td>-->
+                            <!--<td>-->
+                    <!--{% for field in form.visible_fields %}-->
+
+                        <!--"{{field.label_tag}}",-->
+
+                    <!--{% endfor %}-->
+                            <!--</td>-->
+                            <!--<td></td>-->
+                        <!--</tr>-->
+                    {% for field in form.visible_fields %}
+                        {% if field.label_tag == "Difficulty:" %}
+                    <tr>
+                        <td>{{field.label_tag}}</td>
+                        <td>{{field}}</td>
+                        <td style="color: red">{{field.errors}}</td>
+                    </tr>
+                        {% endif %}
+                    {% endfor %}
+
+
+                    <tr>
+                        <td><label for="id_category">Category:</label></td>
+                        <td>
+                            <select id="id_category" name="category" class="form-control">
+                                <option value="General">General</option>
+                                <option value="Array">Array</option>
+                                <option value="String">String</option>
+                                <option value="Dynamic Programing">Dynamic Programing</option>
+                                <option value="Greedy">Greedy</option>
+                                <option value="Sort">Sort</option>
+                                <option value="Math">Math</option>
+                                <option value="Stack">Stack</option>
+                                <option value="Heap">Heap</option>
+                            </select>
+                        </td>
+                        <td style="color: red"></td>
+                    </tr>
                     <tr>
                       <td class="plabel"><label>Java default:</label></td>
                       <td class="pcontent">
@@ -149,7 +199,21 @@ $(document).ready(function() {
                       <td style="color: red"></td>
                     </tr>
                     </table>
-
+                    <!--<table>-->
+                        <!--{% for field in form.visible_fields %}-->
+                        <!--<tr>-->
+                            <!--<td>{{field.label_tag}}</td>-->
+                            <!--<td>{{field}}</td>-->
+                            <!--<td style="color: red">{{field.errors}}</td>-->
+                        <!--</tr>-->
+                        <!--{% endfor %}-->
+                        <!--<tr>-->
+                            <!--<td></td>-->
+                            <!--<td id="button">-->
+                                <!--<input type="submit" class="btn btn-lg btn-default" value="Register" />-->
+                            <!--</td>-->
+                        <!--</tr>-->
+                    <!--</table>-->
                     {% for field in form.hidden_fields %}
                       {{field}}
                     {% endfor %}
