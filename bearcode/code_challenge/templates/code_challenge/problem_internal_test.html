@@ -1,0 +1,183 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+
+{% block title %}Problem Internal Test{% endblock %}
+
+{% block mainbody %}
+
+<script src="/static/ace-builds/src-noconflict/ace.js" type="text/javascript"
+        charset="utf-8"></script>
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="/static/ace-builds/src-noconflict/theme-github.js" type="text/javascript"
+        charset="utf-8"></script>
+
+<style type="text/css" media="screen">
+
+    #editor_div {
+        display: block;
+        margin: auto;
+        width: 100%;
+        height: 350px;
+        border: 1px solid #888;
+    }
+    .ace_editor {
+        font-size: 16px;
+    }
+    select{
+        font-size:18px;
+    }
+</style>
+
+<script>
+$(document).ready(function() {
+    var java_default = $("#java_default").val();
+    var python_default = $("#python_default").val();
+    var default_lang = $("#default_lang");
+    var editor = ace.edit("editor_div");
+
+    console.log("java:");
+    console.log(java_default);
+    console.log("python");
+    console.log(python_default);
+    var editor_div = $("editor_div");
+    $("#language").on("change", function() {
+        console.log(this.value);
+        var choice = this.value;
+        switch (choice) {
+            case "Java":
+                console.log("You choose java!");
+                default_lang.val("java");
+                //editor_div.text(java_default);
+                editor.setValue(java_default,1);
+                editor.getSession().setMode("ace/mode/java");
+                break;
+            case "Python":
+                console.log("You choose python!");
+                default_lang.val("python");
+                //editor_div.text(python_default);
+                editor.setValue(python_default,1);
+                editor.getSession().setMode("ace/mode/python");
+                break;
+        }
+    });
+
+    $("#restore").on("click", function(){
+        var default_lang = $("#default_lang").val();
+        if(default_lang=='java'){
+            editor.setValue(java_default,1);
+            editor.getSession().setMode("ace/mode/java");
+        }
+        else{
+            editor.setValue(python_default,1);
+            editor.getSession().setMode("ace/mode/python");
+        }
+    });
+
+    var textarea = $('textarea[name="editor"]');
+    textarea.hide();
+    var editor = ace.edit("editor_div");
+    editor.setTheme("ace/theme/default");
+    editor.getSession().setMode("ace/mode/java");
+    $('#submitbtn').on('click', function() {
+        submitCode(editor.getValue());
+    });
+
+  // CSRF set-up copied from Django docs
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+  var csrftoken = getCookie('csrftoken');
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    }
+  });
+
+});
+
+function submitCode(code_content){
+    var problemid = $("#problemid").val();
+    var submit_url = "/testsubmit";
+    var textarea = $('textarea[name="editor"]');
+    textarea.hide();
+    var editor = ace.edit("editor_div");
+    var language = $('#default_lang').val();
+    console.log("url is:"+submit_url+", problem id is:"+problemid);
+    console.log("submitted content is:"+code_content);
+
+    $.ajax({
+        url : submit_url,
+        dataType: "json",
+        method: "POST",
+        data: {problemid:problemid,codecontent:code_content,language:language}
+    })
+    .done(function(result) {
+        console.log("successfully submitted, get result"+result.status);
+        var resultstatus = result.status;
+        var statusPanel = $("#status")
+        var msgPanel = $("#message")
+        if(resultstatus=="Accepted"){
+            statusPanel.css("color","green");
+            statusPanel.text(result.status);
+        }
+        else{
+            statusPanel.css("color","red");
+            statusPanel.text(result.status);
+            msgPanel.text(result.message);
+        }
+    });
+}
+</script>
+
+<div style="text-align:left">
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+
+        <div class="col-md-10">
+            <a class="btn btn-default" href="{% url 'manageproblem' %}">
+                <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                Back to Dashboard
+            </a>
+            <h1>{{problem.name}} - Internal Test Page</h1>
+
+            <p>Description: {{problem.description}}</p>
+
+            <p>{{problem.example}}</p>
+            <select id="language" name="language">
+                <option value="Java">Java</option>
+                <option value="Python">Python</option>
+            </select>
+
+            <button id="restore" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+            </button>
+            <p></p>
+            <div id="editor_div">{{problem.java_default}}</div>
+            <br>
+            <input type="hidden" id="problemid" value="{{problem.id}}">
+
+            <button id="submitbtn" class="btn btn-success btn-lg">Submit Code</button>
+            <div id="status"></div>
+            <div id="message"></div>
+
+            <input type="hidden" id="default_lang" value="java"/>
+            <input type="hidden" id="java_default" value="{{problem.java_default}}"/>
+            <input type="hidden" id="python_default" value="{{problem.python_default}}"/>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </div>
+</div>
+{% endblock %}

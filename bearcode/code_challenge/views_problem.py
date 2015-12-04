@@ -7,6 +7,11 @@ from django.contrib.auth import login, authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from code_challenge.forms import *
 
+import urllib
+import json
+
+allowed_languages = ['python', 'java']
+
 @transaction.atomic
 def add_problem(request):
     print "add_problem"
@@ -99,3 +104,67 @@ def disable_problem(request,problemid):
     problems = Problem.objects.all()
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
+
+@transaction.atomic
+def test_problem(request,problemid):
+    curr_problem = Problem.objects.get(id=problemid)
+    context = {'problem': curr_problem}
+    return render(request, 'code_challenge/problem_internal_test.html', context)
+
+@transaction.atomic
+def test_submit(request):
+    print "in test_submit!!!!"
+    submit_content = request.POST['codecontent']
+    print 'submitted content is: ' + submit_content
+    submit_lang = request.POST['language']
+    print "selected language is: " + submit_lang
+
+    # Check for submit_lang. The submit_lang must be in allowed_languages.
+    if submit_lang not in allowed_languages:
+        print 'Invalid language choice'
+        context = {'status': 'Rejected', 'message': 'Invalid programming language choice'}
+        return render(request, 'code_challenge/result.json', context,
+                      content_type="application/json")
+
+    # Analyze submitted code. If considered dangerous, the code will be rejected.
+    if not submit_content or len(submit_content) == 0:
+        print 'Null or void submitted content'
+        context = {'status': 'Rejected', 'message': 'Null or void submitted content'}
+        return render(request, 'code_challenge/result.json', context,
+                      content_type="application/json")
+
+    import views_code_analysis
+    check_result = views_code_analysis.check_code(submit_content, submit_lang)
+    print check_result
+    if check_result['status'] == 'False':
+        msg = format('The code should not contain such substring: %s' % check_result['message'])
+        context = {'status': 'Rejected', 'message': msg}
+        return render(request, 'code_challenge/result.json', context,
+                      content_type="application/json")
+
+    # After all the security checks, submit user code to oj_worker.
+    problemid = request.POST['problemid']
+    curr_problem = Problem.objects.get(id=problemid)
+
+    # The parameters to be sent to docker.
+    values = {'user_code': submit_content,
+              'tle': curr_problem.tle_limit}
+    if submit_lang == 'java':
+        values['language'] = 'Java'
+        values['test_code'] = curr_problem.java_tests
+    else:
+        values['language'] = 'Python'
+        values['test_code'] = curr_problem.python_tests
+
+    print values
+
+    data = urllib.urlencode(values)
+    u = urllib.urlopen("http://52.26.238.153/worker/judge/?%s" % data)
+    print 'results from docker'
+    u_str = str(u.read())
+    print u_str
+
+    context = json.loads(u_str)
+
+    print context
+    return render(request, 'code_challenge/result.json', context, content_type="application/json")
