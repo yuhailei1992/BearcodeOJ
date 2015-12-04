@@ -87,10 +87,10 @@
                       <a href="{% url 'problem' problem.id %}">{{problem.name}}</a>
                   </td>
                   <td class="pacceptance">
-                      25%
+                      {{problem.success_rate}}
                   </td>
                   <td class="pdifficulty">
-                      Easy
+                      {{problem.difficulty}}
                   </td>
                 </tr>
                   {% endfor %}

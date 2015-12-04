@@ -10,7 +10,7 @@ from code_challenge.forms import *
 import urllib
 import json
 
-allowed_languages = ['python', 'java']
+allowed_languages = ['Python', 'Java']
 
 @transaction.atomic
 def add_problem(request):

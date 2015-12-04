@@ -45,14 +45,14 @@ $(document).ready(function() {
         switch (choice) {
             case "Java":
                 console.log("You choose java!");
-                default_lang.val("java");
+                default_lang.val("Java");
                 //editor_div.text(java_default);
                 editor.setValue(java_default,1);
                 editor.getSession().setMode("ace/mode/java");
                 break;
             case "Python":
                 console.log("You choose python!");
-                default_lang.val("python");
+                default_lang.val("Python");
                 //editor_div.text(python_default);
                 editor.setValue(python_default,1);
                 editor.getSession().setMode("ace/mode/python");
@@ -62,7 +62,7 @@ $(document).ready(function() {
 
     $("#restore").on("click", function(){
         var default_lang = $("#default_lang").val();
-        if(default_lang=='java'){
+        if(default_lang=='Java'){
             editor.setValue(java_default,1);
             editor.getSession().setMode("ace/mode/java");
         }
@@ -107,6 +107,11 @@ $(document).ready(function() {
 });
 
 function submitCode(code_content){
+    var statusPanel = $("#status");
+    var msgPanel = $("#message");
+    statusPanel.text("");
+    msgPanel.text("");
+
     var problemid = $("#problemid").val();
     var submit_url = "/testsubmit";
     var textarea = $('textarea[name="editor"]');
@@ -125,8 +130,7 @@ function submitCode(code_content){
     .done(function(result) {
         console.log("successfully submitted, get result"+result.status);
         var resultstatus = result.status;
-        var statusPanel = $("#status")
-        var msgPanel = $("#message")
+
         if(resultstatus=="Accepted"){
             statusPanel.css("color","green");
             statusPanel.text(result.status);
@@ -172,7 +176,7 @@ function submitCode(code_content){
             <div id="status"></div>
             <div id="message"></div>
 
-            <input type="hidden" id="default_lang" value="java"/>
+            <input type="hidden" id="default_lang" value="Java"/>
             <input type="hidden" id="java_default" value="{{problem.java_default}}"/>
             <input type="hidden" id="python_default" value="{{problem.python_default}}"/>
         </div>
