@@ -77,3 +77,25 @@ def delete_problem(request,problemid):
     problems = Problem.objects.all()
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
+
+@transaction.atomic
+def enable_problem(request,problemid):
+    problem_to_enable = get_object_or_404(Problem, id=problemid)
+    problem_to_enable.visible = True
+    problem_to_enable.save()
+
+    context = {}
+    problems = Problem.objects.all()
+    context['problems'] = problems
+    return render(request, 'code_challenge/manage_problem.html', context)
+
+@transaction.atomic
+def disable_problem(request,problemid):
+    problem_to_enable = get_object_or_404(Problem, id=problemid)
+    problem_to_enable.visible = False
+    problem_to_enable.save()
+
+    context = {}
+    problems = Problem.objects.all()
+    context['problems'] = problems
+    return render(request, 'code_challenge/manage_problem.html', context)

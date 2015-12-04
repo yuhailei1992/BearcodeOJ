@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^add_problem$', 'code_challenge.views_problem.add_problem', name='addproblem'),
     url(r'^edit_problem/(?P<problemid>\d+)/$', 'code_challenge.views_problem.edit_problem', name='editproblem'),
     url(r'^delete_problem/(?P<problemid>\d+)/$', 'code_challenge.views_problem.delete_problem', name='deleteproblem'),
+    url(r'^enable_problem/(?P<problemid>\d+)/$', 'code_challenge.views_problem.enable_problem', name='enableproblem'),
+    url(r'^disable_problem/(?P<problemid>\d+)/$', 'code_challenge.views_problem.disable_problem', name='disableproblem'),
     url(r'^manage_problem$', 'code_challenge.views_problem.manage_problem', name='manageproblem'),
 
     url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'template_name': 'code_challenge/password_reset_form.html'}, name='reset_password_reset1'),
