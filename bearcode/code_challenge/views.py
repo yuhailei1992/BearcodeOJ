@@ -312,9 +312,10 @@ def try_submit(request):
                     # print 'IN TRY SUBMIT SUBMISSION PROBLEM ACCEPT' + str(accepted)
                     accepted = accepted + 1
 
-            success_rate_prob = float(accepted) / len(submissions_prob)
+            success_rate_prob = float(accepted) / len(submissions_prob) * 100
+            success_rate_prob = round(success_rate_prob, 2)
             # print success_rate_prob
-            curr_problem.success_rate = success_rate_prob
+            curr_problem.success_rate = str(success_rate_prob) + '%'
             curr_problem.save()
         submissions_user = SubmitHistory.objects.filter(problem=curr_problem)
         if len(submissions_user) != 0:
@@ -326,9 +327,10 @@ def try_submit(request):
                     # print 'IN TRY SUBMIT SUBMISSION USER ACCEPT' + str(accepted)
                     accepted = accepted + 1
                
-            success_rate_user = float(accepted) / len(submissions_user)
+            success_rate_user = float(accepted) / len(submissions_user) * 100
+            success_rate_user = round(success_rate_user, 2)
             # print success_rate_user
-            profile_to_edit.success_rate = success_rate_user
+            profile_to_edit.success_rate = str(success_rate_user) + '%'
             profile_to_edit.save()
 
 
