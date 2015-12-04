@@ -12,7 +12,7 @@ class UserProfile(models.Model):
 	bio = models.CharField(max_length=420, default="", blank=True, null=True)
 	image = models.ImageField(upload_to='/', default = '/static/photos/none_photo.jpg', null=True, blank=True)
 	following = models.ManyToManyField(User, related_name='following_list')
-	ranking_score = models.PositiveIntegerField(default=0)
+	# ranking_score = models.PositiveIntegerField(default=0)
 	success_rate = models.FloatField(default=0.0)
 
 	@staticmethod
@@ -63,6 +63,7 @@ class Problem(models.Model):
     java_tests = models.TextField(max_length=1000, default="", blank=True)
     python_tests = models.TextField(max_length=1000, default="", blank=True)
     visible = models.BooleanField(default=False)
+    success_rate = models.FloatField(default=0.0)
     def __unicode__(self):
         return self.name
 
