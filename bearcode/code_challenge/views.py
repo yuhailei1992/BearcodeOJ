@@ -10,7 +10,7 @@ from django.contrib.auth import login, authenticate
 from code_challenge.forms import *
 
 # Allowed languages.
-allowed_languages = ['python', 'java']
+allowed_languages = ['Python', 'Java']
 # The worker url.
 worker_url = "http://52.26.238.153/worker/judge/?%s"
 
@@ -276,7 +276,7 @@ def try_submit(request):
     # The parameters to be sent to docker.
     values = {'user_code': submit_content,
               'tle': curr_problem.tle_limit}
-    if submit_lang == 'java':
+    if submit_lang == 'Java':
         values['language'] = 'Java'
         values['test_code'] = curr_problem.java_tests
     else:
