@@ -54,4 +54,9 @@ def search_discussion(request):
     context['currentuser'] = request.user
     return render(request, 'code_challenge/search_discussion.html', context)
 
+@transaction.atomic
+@login_required
+def ranking_board(request):
+    context = {}
+    return render(request, 'code_challenge/ranking_board.html', context)
 
