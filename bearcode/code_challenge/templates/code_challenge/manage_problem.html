@@ -28,24 +28,29 @@
         padding: 10px;
         font-size: 18px;
         font-weight: bold;
+        text-align: center;
     }
     td.pid,th.pid {
         text-align: left;
-        width: 5%;
+        width: 10%;
     }
     td.pname,th.pname {
         text-align: left;
-        width: 60%;
+        width: 30%;
+    }
+    td.test,th.test {
+
+        width: 15%;
     }
     td.visible,th.visible {
-        text-align: left;
+
         width: 15%;
     }
     td.edit,th.edit {
-        width: 10%;
+        width: 15%;
     }
     td.delete,th.delete {
-        width: 10%;
+        width: 15%;
     }
     td.edit, td.delete, td.visible {
         font-weight: normal;
@@ -77,9 +82,10 @@
               <thead>
                 <tr>
                     <th class="pid"> # </th>
-                    <th class="pname"> Problem </th>
+                    <th class="pname"> Name </th>
+                    <th class="edit"> Edit Problem</th>
+                    <th class="test"> Internal Test</th>
                     <th class="visible"> Open to User? </th>
-                    <th class="edit"> Edit </th>
                     <th class="delete"> Delete </th>
                 </tr>
               </thead>
@@ -92,6 +98,16 @@
                   <td class="pname">
                       {{problem.name}}
                   </td>
+                  <td class="edit">
+                      <a href="{% url 'editproblem' problem.id %}">
+                          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                      </a>
+                  </td>
+                  <td class="test">
+                      <a href="{% url 'testproblem' problem.id %}">
+                          <span class="glyphicon glyphicon-console" aria-hidden="true" style="color:green"></span>
+                      </a>
+                  </td>
                   <td class="visible">
                       {% if problem.visible == False %}
                         <span class="glyphicon glyphicon-minus" aria-hidden="true" style="color:grey"></span>
@@ -102,11 +118,7 @@
                           <a href="{% url 'disableproblem' problem.id %}">disable</a>
                       {% endif %}
                   </td>
-                  <td class="edit">
-                      <a href="{% url 'editproblem' problem.id %}">
-                          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                      </a>
-                  </td>
+
                   <td class="delete">
                       <a href="{% url 'deleteproblem' problem.id %}">
                           <span class="glyphicon glyphicon-trash" aria-hidden="true" style="color:red"></span>
