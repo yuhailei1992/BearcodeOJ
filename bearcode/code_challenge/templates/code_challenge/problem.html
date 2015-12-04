@@ -139,7 +139,7 @@ function submitCode(code_content){
         else{
             statusPanel.css("color","red");
             statusPanel.text(result.status);
-            msgPanel.text(result.message);
+            msgPanel.html("<pre>"+result.message+"</pre>");
         }
     });
 }

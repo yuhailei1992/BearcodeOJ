@@ -17,10 +17,8 @@
       background-color: #73AD21;
     }
 </style>
-  <!-- Discussion body goes here -->
   <div class="container" align="center">
     <h2> Welcome, {{ request.user }}! </h2><br>
-  <!-- <h2>Current Discussion: </h2> -->
     <div class="searchBox">
       <form method="get" action="{% url 'search_discussion' %}">
         <div class="input-group">
@@ -38,29 +36,10 @@
     <div>
       {% for item in discussions %}
         <ol id="eachtitle"><a href="{% url 'each_discussion' item.id %}">{{item.title}}</a></ol>
-<!--         <ol id="eachtext">{{item.text}} </ol>
- -->        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
+        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
         <ol id="time">{{item.created_at}}</ol>
         <ol><a class="btn btn-info" href="{% url 'each_discussion' item.id %}">Get more info</a></ol></br>
       {% endfor %}
-    </div>
-  <!-- Recent discussions -->
-    <div class="container" align="center">
-      
-    </div>
-
-  <!-- Information about this discussion page -->
-    <div class="container" align="center">
-    <!--
-    <p>
-      <ol id="commentsSection">
-        {% for item in comments %}
-        <ol id="eachtext">{{item.text}} </ol>
-        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
-        <ol id="time">{{item.created_at}}</ol><br>
-        {% endfor %}      
-      </ol>
-    </p> -->
     </div>
   </div>
 
