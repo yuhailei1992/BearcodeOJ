@@ -1,24 +1,18 @@
-import json
 import os
 import time
 import urllib
-
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.decorators import login_required
+import json
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
-from django.db.models import Count
-
-import urllib
-import json
-
 from code_challenge.forms import *
 
 # Allowed languages.
 allowed_languages = ['python', 'java']
+# The worker url.
+worker_url = "http://52.26.238.153/worker/judge/?%s"
 
 
 @login_required
@@ -292,7 +286,7 @@ def try_submit(request):
     print values
 
     data = urllib.urlencode(values)
-    u = urllib.urlopen("http://52.26.238.153/worker/judge/?%s" % data)
+    u = urllib.urlopen(worker_url % data)
     print 'results from docker'
     u_str = str(u.read())
     print u_str
