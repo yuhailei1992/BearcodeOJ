@@ -3,66 +3,44 @@
 <script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
 {% endblock %}
 
-{% block title %}Discussion_board{% endblock %}
+{% block title %}Ranking_score{% endblock %}
 
 {% block mainbody %}
-
 <style type="text/css" media="screen">
-    #dicussionbody {
-        display: block;
-        color: #B40431;
+    #rankTable {
         text-align:left;
         padding-left: 10px;
         padding-right: 10px;
         margin: auto;
-        width: 40%;
-        border: 1px solid #888;
-    }
-    #commentsSection {
-        display: block;
-        margin: auto;
-        text-align: left;
-        padding-left: 40%;
+        width: 70%;
     }
 </style>
-  <!-- Discussion body goes here -->
-  <h2>Current Discussion: </h2>
-  <div id="dicussionbody">
-    {% if discussion %}
-    <h3>{{discussion.title}}</h3>
-    <p style="color:black; font-size: 18px;">{{discussion.text}}</p><br>
-    <p style="text-align:right"><a href="{% url 'profile' discussion.user.username %}">{{discussion.user.username}}</a></p>
-    <p style="color:black; text-align:right">{{discussion.created_at}}</p>
-    {% endif %}
-  </div>
 
-  <!-- divider line -->
   <div class="container" align="center">
-    <hr style="height: 1px;/* font-weight: 100; */background-color: #000;">
-  </div>
+    <h2 class="text-primary">Honor List: </h2><hr>
 
-  <!-- add comment for the discussion here -->
-  <div class="container" align="center">
-      <form action="/add-comment/{{discussion.id}}/" method="post">
-        <textarea style="width:30%" class="input-large" name="commenttext" rows="2"></textarea><br>
-        <button class="btn btn-success" type="submit">Add new Discussion</button>
-        <input type="hidden" name="next" value="{{ next }}" />
-        {% csrf_token %}
-      </form>
+    <!-- <div class="container" align="center">
+      <hr style="height: 1px;/* font-weight: 100; */background-color: #000;">
+    </div> -->
+    <div class="container" align="center">
+      <table class="table" id="rankTable">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>User Name</th>
+        <th>Score</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for item in userprofiles %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
+          <td>{{item.success_rate}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+    </div>
   </div>
-
-  <!-- comments go here -->
-  <div class="container" align="center">
-    <h3> Existing comments for discussion: <a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h3><br>
-    <p>
-      <ol id="commentsSection">
-        {% for item in comments %}
-        <ol id="eachtext">{{item.text}} </ol>
-        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
-        <ol id="time">{{item.created_at}}</ol><br>
-        {% endfor %}      
-      </ol>
-    </p>
-  </div>
-
 {% endblock %}

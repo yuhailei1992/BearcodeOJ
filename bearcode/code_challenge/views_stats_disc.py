@@ -11,9 +11,9 @@ import random
 @transaction.atomic
 @login_required
 def random_pick(request):
-    print "Here random pick"
+    # print "Here random pick"
     random_problem = Problem.objects.order_by('?').first()
-    print random_problem
+    # print random_problem
     if not random_problem:
         user = request.user
         problems = Problem.objects.all()
@@ -32,21 +32,21 @@ def search_discussion_page(request):
 @transaction.atomic
 @login_required
 def search_discussion(request):
-    print "In Search Discussion"
+    # print "In Search Discussion"
     context = {}
     if request.method == 'POST':
-        print 'search method set to post'
+        # print 'search method set to post'
         # show all the discussions
         discussions = Discussion.objects.all().order_by('-created_at')    
         return render(request, 'code_challenge/search_discussion.html', context)
     
     userInput = request.GET['userInput'].lower()
-    print userInput
+    # print userInput
     # get all the discussions and search for the input
     candidates = Discussion.objects.all().order_by('-created_at')    
     discussions = set()
     for discussion in candidates:
-        print discussion
+        # print discussion
         if userInput in discussion.title.lower() or userInput in discussion.text.lower():
             discussions.add(discussion)
 
@@ -58,5 +58,11 @@ def search_discussion(request):
 @login_required
 def ranking_board(request):
     context = {}
+    context['currentuser'] = request.user
+
+    userprofiles = UserProfile.objects.all().order_by('-success_rate')
+    context['userprofiles'] = userprofiles
+    print userprofiles
+
     return render(request, 'code_challenge/ranking_board.html', context)
 
