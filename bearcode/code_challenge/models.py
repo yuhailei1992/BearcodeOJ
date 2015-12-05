@@ -13,7 +13,7 @@ class UserProfile(models.Model):
 	image = models.ImageField(upload_to='/', default = '/static/photos/none_photo.jpg', null=True, blank=True)
 	following = models.ManyToManyField(User, related_name='following_list')
 	# ranking_score = models.PositiveIntegerField(default=0)
-	success_rate = models.FloatField(default=0.0)
+	success_rate = models.CharField(max_length=10, default="0.00%")
 
 	@staticmethod
 	def get_profile(user_profile_id=-1):
@@ -24,9 +24,9 @@ class UserProfile(models.Model):
 
 
 class Problem(models.Model):
-    DIFFICULTY_EASY = 1
-    DIFFICULTY_MIDD = 2
-    DIFFICULTY_HARD = 3
+    DIFFICULTY_EASY = 'Easy'
+    DIFFICULTY_MIDD = 'Medium'
+    DIFFICULTY_HARD = 'Hard'
     DIFFICULTY_CHOICES = [(DIFFICULTY_EASY, 'Easy'),
                       (DIFFICULTY_MIDD, 'Medium'),
                        (DIFFICULTY_HARD, 'Hard')]
@@ -53,7 +53,7 @@ class Problem(models.Model):
     name = models.CharField(max_length=50, default="newproblem")
     description = models.TextField(max_length=420, default="", blank=True)
     example = models.TextField(max_length=420, default="", blank=True)
-    difficulty = models.PositiveSmallIntegerField(choices=DIFFICULTY_CHOICES, default=DIFFICULTY_EASY)
+    difficulty = models.CharField(choices=DIFFICULTY_CHOICES, default=DIFFICULTY_EASY, max_length=30)
     category = models.CharField(choices=CATEGORY_CHOICES, default=CATEGORY_GENERAL, max_length=30)
 
     java_default = models.TextField(max_length=420, default="", blank=True)
@@ -63,7 +63,7 @@ class Problem(models.Model):
     java_tests = models.TextField(max_length=1000, default="", blank=True)
     python_tests = models.TextField(max_length=1000, default="", blank=True)
     visible = models.BooleanField(default=False)
-    success_rate = models.FloatField(default=0.0)
+    success_rate = models.CharField(max_length=10, default="0.00%")
     def __unicode__(self):
         return self.name
 
