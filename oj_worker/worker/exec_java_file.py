@@ -3,10 +3,12 @@ from subprocess import CalledProcessError
 import random
 import os
 import time
+import re
+
 
 COMPILE = 'javac %s 2> %s'
 # Need to cd to the working directory, then call java to execute the .class file.
-RUN = 'cd %s && exec java %s 2> %s'
+RUN = 'cd %s && exec java %s 2> %s > %s'
 RAND_RANGE = 100000000
 CLEAN = 'rm -r %s'
 COMP_ERR_ANCHOR = 'Solution.java:'
@@ -44,6 +46,35 @@ def add_line_number_offset(line, offset):
         return line
     old_line_num = int(line[:semicolon_index])
     return str(old_line_num - int(offset)) + line[semicolon_index:]
+
+
+def process_java_run_err(test_code, run_err):
+    """
+    Process java runtime error message, so that the user can get the error's accurate line number.
+    :param test_code:
+    :param run_err:
+    :return:
+    """
+
+    # find the offset
+    insertion_index = find_nth(test_code, '%s', 2)
+    lines_offset = test_code[:insertion_index].count('\n')  # n lines with n - 1 newline chars.
+    print 'lines_offset: ' + str(lines_offset)
+
+    # we are only displaying the first two lines
+    lines = run_err.splitlines()
+    new_run_err = lines[0] + '\n' + lines[1]
+
+    places = re.findall(r'Solution.java:\d+', run_err)
+
+    # replace the line numbers with offseted line numbers
+    for subs in reversed(places):
+        semicolon_index = subs.find(':')
+        old_num = subs[(semicolon_index + 1):]
+        new_subs = subs[:semicolon_index + 1] + str(int(old_num) - lines_offset)
+        new_run_err = new_run_err.replace(subs, new_subs)
+
+    return new_run_err
 
 
 def process_java_comp_err(test_code, comp_err):
@@ -134,8 +165,9 @@ def run_java_code(test_code, user_code, timeout):
 
     # If the file compiles successfully, attempt to run it.
     run_err_file_path = child_dir + 'run_err'
+    run_output_path = child_dir + 'run_output'
     run_target = rand_dir + '.Solution'
-    run_command = format(RUN % (curr_dir, run_target, run_err_file_path))
+    run_command = format(RUN % (curr_dir, run_target, run_err_file_path, run_output_path))
     # Run the command. Upon timeout, kill the subprocess and return an error code.
     try:
         subp = subprocess.Popen(run_command, shell=True)
@@ -149,14 +181,14 @@ def run_java_code(test_code, user_code, timeout):
         else:
             ret_code = subp.returncode
             runtime_error = open(run_err_file_path, 'r').read()
-            print runtime_error
+            runtime_output = 'Failed this testcase:\n' + open(run_output_path, 'r').read()
 
     except CalledProcessError:
         print 'Error running'
         print 'Trying to get err msg from ' + run_err_file_path
-        msg = open(run_err_file_path, 'r').read()
+        call_error = open(run_err_file_path, 'r').read()
         os.system(clean_cmd)
-        return {'status': 'Runtime error', 'message': msg}
+        return {'status': 'Runtime error', 'message': call_error}
 
     # Return accepted or wrong answer.
     os.system(clean_cmd)
@@ -165,6 +197,7 @@ def run_java_code(test_code, user_code, timeout):
         return {'status': 'Accepted', 'message': 'Congrats'}
     else:
         if len(runtime_error) > 0 and runtime_error.startswith('Exception'):
-            return {'status': 'Runtime error', 'message': runtime_error}
+            return {'status': 'Runtime error',
+                    'message': process_java_run_err(test_code, runtime_error)}
         else:
-            return {'status': 'Wrong answer', 'message': 'Please try again'}
+            return {'status': 'Wrong answer', 'message': runtime_output}
