@@ -30,82 +30,78 @@
     }
     h1 {
         font-size: 36px;
-        font-family: "Fantasy",Helvetica,Arial,sans-serif;
+        font-family: "Fantasy",Consolas,sans-serif;
         font-weight: 700;
-        color: #fff;
-        padding: 20px;
+        color: #000;
     }
     td {
         padding: 5px;
     }
 
-    a {
-        color: #fff;
-    }
-
     label{
-        color: #fff;
+        color: #000;
         font-size: 25px;
     }
 
 </style>
 
 
+<div class="col-md-1"></div>
+    <div class="col-md-6">
 
+        <form method="post" class="register-form" action="/register">
+            <h1 id="title">Sign Up</h1>
+            <table align="center">
+                <tr>
+                    <td><label for="id_username"  >Username:</label></td>
+                    <td><input id="id_username" size="100" class="form-control" name="username" type="email" /></td>
+                    <td style="color: red"></td>
+                </tr>
 
-<form method="post" class="register-form" action="/register">
-    <h1 id="title">Sign Up</h1>
-    <table align="center">
-        <tr>
-            <td><label for="id_username"  >Username:</label></td>
-            <td><input id="id_username" size="100" class="form-control" name="username" type="email" /></td>
-            <td style="color: red"></td>
-        </tr>
+                <tr>
+                    <td><label for="id_email">Email:</label></td>
+                    <td><input id="id_email" size="100" class="form-control" name="email" type="email" /></td>
+                    <td style="color: red"></td>
+                </tr>
 
-        <tr>
-            <td><label for="id_email">Email:</label></td>
-            <td><input id="id_email" size="100" class="form-control" name="email" type="email" /></td>
-            <td style="color: red"></td>
-        </tr>
+                <tr>
+                    <td><label for="id_password1">Password:</label></td>
+                    <td><input id="id_password1" size="100" class="form-control" maxlength="200" name="password1" type="password" /></td>
+                    <td style="color: red"></td>
+                </tr>
 
-        <tr>
-            <td><label for="id_password1">Password:</label></td>
-            <td><input id="id_password1" size="100" class="form-control" maxlength="200" name="password1" type="password" /></td>
-            <td style="color: red"></td>
-        </tr>
+                <tr>
+                    <td><label for="id_password2">Confirm:</label></td>
+                    <td><input id="id_password2" size="100" class="form-control" maxlength="200" name="password2" type="password" /></td>
+                    <td style="color: red"></td>
+                </tr>
 
-        <tr>
-            <td><label for="id_password2">Confirm:</label></td>
-            <td><input id="id_password2" size="100" class="form-control" maxlength="200" name="password2" type="password" /></td>
-            <td style="color: red"></td>
-        </tr>
+                <tr>
+                    <td><label for="id_firstname">firstname:</label></td>
+                    <td><input id="id_firstname" size="100" class="form-control" maxlength="200" name="firstname" type="text" /></td>
+                    <td style="color: red"></td>
+                </tr>
 
-        <tr>
-            <td><label for="id_firstname">firstname:</label></td>
-            <td><input id="id_firstname" size="100" class="form-control" maxlength="200" name="firstname" type="text" /></td>
-            <td style="color: red"></td>
-        </tr>
+                <tr>
+                    <td><label for="id_lastname">lastname:</label></td>
+                    <td><input id="id_lastname" size="100" class="form-control" maxlength="200" name="lastname" type="text" /></td>
+                    <td style="color: red"></td>
+                </tr>
+            </table>
+            <p></p>
+            {% for field in form.hidden_fields %}
+              {{field}}
+            {% endfor %}
+            {% csrf_token %}
+            <p>
+                <input class="btn btn-default btn-lg" type="submit" value="Sign Up!" />
+            </p>
+            <input type="hidden" name="next" value="{{ next }}" />
 
-        <tr>
-            <td><label for="id_lastname">lastname:</label></td>
-            <td><input id="id_lastname" size="100" class="form-control" maxlength="200" name="lastname" type="text" /></td>
-            <td style="color: red"></td>
-        </tr>
-    </table>
-    <p></p>
-    {% for field in form.hidden_fields %}
-      {{field}}
-    {% endfor %}
-    {% csrf_token %}
-    <p>
-        <input class="btn btn-default btn-lg" type="submit" value="Sign up  for Code Challenge!" />
-    </p>
-    <input type="hidden" name="next" value="{{ next }}" />
-    <p>
-        <a id="forgot-password-btn" href="/">Back to login</a>
-    </p>
-</form>
+        </form>
+    </div>
 
+<div class="col-md-2"></div>
 
 
 

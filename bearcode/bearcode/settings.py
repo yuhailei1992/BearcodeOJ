@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'code_challenge',
 )
 
-LOGIN_URL = '/login'
+LOGIN_URL = '/home'
 
 # let the system know where to get media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/photos')

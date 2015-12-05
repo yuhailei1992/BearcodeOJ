@@ -17,13 +17,23 @@
 
     <body>
         <style>
+            body{
+
+            }
             nav {
-                background-image:url('/static/binary1.jpg');
+                font-family: "Fantasy",Consolas,sans-serif;
+                background-color:#ffcc00;
+            }
+
+            li > a {
+                color: #000;
             }
             .navbar-brand{
                 color: #fff;
                 font-size: 25px;
                 font-weight: bolder;
+                padding-top:6px;
+                padding-left:20px;
             }
         </style>
         <div>
@@ -32,19 +42,16 @@
         <div class="container">
         <div class="navbar-header">
         <!-- The mobile navbar-toggle button can be safely removed since you do not need it in a non-responsive implementation -->
-        <a class="navbar-brand" href="{% url 'home' %}">Code Challenge!</a>
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <a class="navbar-brand" href="/">
+              <img src="{% static "/static/logo.ico" %}" width="36" height="36" alt="grumblr_logo">
+          </a>
+        </a>
         </div>
         <!-- Note that the .navbar-collapse and .collapse classes have been removed from the #navbar -->
         {% if currentuser %}
         <div id="navbar">
-        <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-        <input type="text" class="form-control" placeholder=
-        "Search Topic">
-        </div>
-        <button type="submit" class=
-        "button-search">Go!</button>
-        </form>
+
         <ul class="nav navbar-nav navbar-left">
             <li><a href="{% url 'random_pick' %}">Pick One!</a></li>
             <li><a href="{% url 'search_discussion_page' %}">Discuss</a></li>    

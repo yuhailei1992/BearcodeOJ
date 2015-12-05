@@ -38,6 +38,8 @@ urlpatterns = [
     # Route to logout a user and send them back to the login page
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     url(r'^register$', 'code_challenge.views.register', name='regitser'),
+    url(r'^home$', 'code_challenge.views.welcome', name='home'),
+    url(r'^about$', 'code_challenge.views.about', name='about'),
     # url(r'^add_problem$', 'code_challenge.views.add_problem', name='addproblem'),
 
     url(r'^trysubmit$', 'code_challenge.views.try_submit', name='trysubmit'),
