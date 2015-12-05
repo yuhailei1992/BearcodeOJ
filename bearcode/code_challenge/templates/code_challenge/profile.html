@@ -23,14 +23,6 @@
                 {% ifequal currentuser.username user.username %}
                   <p><a class="btn btn-success" href="/edit_profile">Edit My Profile</a></p>
                   <p><a class="btn btn-primary" href="/change_password">Change My Password</a></p>
-                {% else %}
-
-                  {% if not user in following %}
-                    <a class="btn btn-success" href="{% url 'follow' user.username %}">Follow!</a>
-                  {% else %}
-                    <a class="btn btn-primary" href="{% url 'unfollow' user.username %}">Unfollow</a>
-                  {% endif %}
-
                 {% endifequal %}
             </div>
 
