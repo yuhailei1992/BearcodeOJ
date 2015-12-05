@@ -9,7 +9,8 @@
 {% endif %}
 
 {% block mainbody %}
-<!--the background image is specific to login page.-->
+
+
 <style>
     body {
         height: 100%;
@@ -30,27 +31,52 @@
     }
     h1 {
         font-size: 36px;
-        font-family: "Fantasy",Helvetica,Arial,sans-serif;
+        font-family: "Fantasy",Consolas,sans-serif;
         font-weight: 700;
         color: #000;
-        padding: 20px;
+
     }
     td {
         padding: 5px;
     }
 
-    a {
-        color: #fff;
-    }
+
 
     .btn {
         font-weight: bolder;
     }
+
+    .typed-cursor{
+        font-size: 36px;
+        font-family: "Fantasy",Helvetica,Arial,sans-serif;
+        font-weight: 700;
+        color: #000;
+
+        opacity: 1;
+        -webkit-animation: blink 0.7s infinite;
+        -moz-animation: blink 0.7s infinite;
+        animation: blink 0.7s infinite;
+    }
+    @keyframes blink{
+        0% { opacity:1; }
+        50% { opacity:0; }
+        100% { opacity:1; }
+    }
+    @-webkit-keyframes blink{
+        0% { opacity:1; }
+        50% { opacity:0; }
+        100% { opacity:1; }
+    }
+    @-moz-keyframes blink{
+        0% { opacity:1; }
+        50% { opacity:0; }
+        100% { opacity:1; }
+    }
 </style>
 
 
-
-
+<div class="col-md-1"></div>
+    <div class="col-md-6">
         <form class="form-horizontal login-form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
             <!--<table align="center">-->
                 <!--<tr>-->
@@ -62,7 +88,7 @@
                     <!--<td>{{ form.password }}</td>-->
                 <!--</tr>-->
                 <!--</table>-->
-            <h1 id="title">Code Challenge</h1>
+            <h1>Sign In</h1>
             <table align="center">
                 <tr>
                     <td><input id="id_username" maxlength="254" size="100" class="form-control" name="username" type="text" placeholder="username"/></td>
@@ -84,8 +110,8 @@
             {% csrf_token %}
         </form>
         <div>Add Problem: <a href="{% url 'manageproblem' %}">Manage Problems</a></div>
+    </div>
 
-
-
+<div class="col-md-2"></div>
 
 {% endblock %}

@@ -24,6 +24,11 @@ def home(request):
     return render(request, 'code_challenge/global_stream.html',
                   {'problems': problems, 'currentuser': user})
 
+def welcome(request):
+    return render(request, 'code_challenge/welcome.html',{})
+
+def about(request):
+    return render(request, 'code_challenge/about.html',{})
 
 @login_required
 @transaction.atomic

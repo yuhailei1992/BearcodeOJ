@@ -1,0 +1,53 @@
+{% extends "code_challenge/base_welcome.html" %}
+
+{% block title %}About{% endblock %}
+
+
+{% block mainbody %}
+
+<!--
+
+    $("#title").typed({
+        strings: ["First sentence.", "Second sentence."],
+        typeSpeed: 0
+    });
+-->
+
+<style>
+
+    .about-pos {
+        width: 100%;
+        text-align: left;
+        position: relative;
+        fond-size: 30px;
+        padding-top: 150px;
+    }
+
+    #title{
+        position: relative;
+        padding-top: 150px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #000;
+        tab-size:4;
+    }
+
+</style>
+<div class="col-md-8">
+    <div class="about-pos">
+
+    <span id="title" style="white-space:pre">
+        {
+          "Team": 142,
+          "Name": "Code Challenge!",
+          "Committers": ["Jiaxi","Jing","Hailei"],
+          "Copyright": "&copy2015 Bearcode lnc."
+        }
+    </span>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
