@@ -12,8 +12,8 @@ from code_challenge.forms import *
 # Allowed languages.
 allowed_languages = ['Python', 'Java']
 # The worker url.
-# worker_url = "http://52.26.238.153/worker/judge/?%s"
-worker_url = "http://localhost:8001/worker/judge/?%s"
+worker_url = "http://52.26.238.153/worker/judge/?%s"
+# worker_url = "http://localhost:8001/worker/judge/?%s"
 
 @login_required
 def home(request):
