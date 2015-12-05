@@ -1,19 +1,27 @@
+import json
+import logging
 import os
 import time
 import urllib
-import json
+
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
+
 from code_challenge.forms import *
+
+logger = logging.getLogger(__name__)
 
 # Allowed languages.
 allowed_languages = ['Python', 'Java']
 # The worker url.
 worker_url = "http://52.26.238.153/worker/judge/?%s"
+
+
 # worker_url = "http://localhost:8001/worker/judge/?%s"
+
 
 @login_required
 def home(request):
@@ -24,11 +32,14 @@ def home(request):
     return render(request, 'code_challenge/global_stream.html',
                   {'problems': problems, 'currentuser': user})
 
+
 def welcome(request):
-    return render(request, 'code_challenge/welcome.html',{})
+    return render(request, 'code_challenge/welcome.html', {})
+
 
 def about(request):
-    return render(request, 'code_challenge/about.html',{})
+    return render(request, 'code_challenge/about.html', {})
+
 
 @login_required
 @transaction.atomic
@@ -156,8 +167,8 @@ def get_comments(request):
 @transaction.atomic
 def profile(request, username):
     user = get_object_or_404(User, username=username)
-    userprofile = get_object_or_404(UserProfile, user=user)
-    currentuser = request.user
+    user_profile = get_object_or_404(UserProfile, user=user)
+    current_user = request.user
 
     candidates = SubmitHistory.objects.filter(user=user).order_by('-created_at')
     problems = set()
@@ -165,9 +176,8 @@ def profile(request, username):
         if submission.problem not in problems:
             problems.add(submission.problem)
 
-    currentuserprofile = get_object_or_404(UserProfile, user=currentuser)
-
-    context = {'user': user, 'problems': problems, 'userprofile': userprofile, 'currentuser': currentuser}
+    context = {'user': user, 'problems': problems, 'userprofile': user_profile,
+               'currentuser': current_user}
     return render(request, 'code_challenge/profile.html', context)
 
 
@@ -245,7 +255,7 @@ def problem(request, problemid):
 @login_required
 @transaction.atomic
 def try_submit(request):
-    print "in try_submit!!!!"
+    logger.debug("Executing try_submit")
     submit_content = request.POST['codecontent']
     # print 'submitted content is: ' + submit_content
     submit_lang = request.POST['language']
@@ -314,8 +324,7 @@ def try_submit(request):
             accepted = 0
             for submission in submissions_prob:
                 if 'Accept' in submission.result:
-                    # print 'IN TRY SUBMIT SUBMISSION PROBLEM ACCEPT' + str(accepted)
-                    accepted = accepted + 1
+                    accepted += 1
 
             success_rate_prob = float(accepted) / len(submissions_prob) * 100
             success_rate_prob = round(success_rate_prob, 2)
@@ -326,18 +335,16 @@ def try_submit(request):
         if len(submissions_user) != 0:
             # print 'IN TRY SUBMIT SUBMISSION USER'
             accepted = 0
-            exist = 0
             for submission in submissions_user:
                 if 'Accept' in submission.result:
                     # print 'IN TRY SUBMIT SUBMISSION USER ACCEPT' + str(accepted)
-                    accepted = accepted + 1
-               
+                    accepted += 1
+
             success_rate_user = float(accepted) / len(submissions_user) * 100
             success_rate_user = round(success_rate_user, 2)
             # print success_rate_user
             profile_to_edit.success_rate = str(success_rate_user) + '%'
             profile_to_edit.save()
-
 
         return render(request, 'code_challenge/result.json', context,
                       content_type="application/json")
@@ -345,7 +352,6 @@ def try_submit(request):
     context['form'] = new_history_form
     new_history.save()
     new_history_form.save()
-    # print "history saved" + str(new_history)
 
     # change the success rates for problem and userprofile
     # change the ranking score for userprofile if necessary
@@ -358,7 +364,7 @@ def try_submit(request):
         for submission in submissions_prob:
             if 'Accept' in submission.result:
                 print 'IN TRY SUBMIT SUBMISSION PROBLEM ACCEPT' + str(accepted)
-                accepted = accepted + 1
+                accepted += 1
         success_rate_prob = accepted / len(submissions_prob)
         print success_rate_prob
         curr_problem.success_rate = success_rate_prob
@@ -367,12 +373,11 @@ def try_submit(request):
     if len(submissions_user) != 0:
         print 'IN TRY SUBMIT SUBMISSION USER'
         accepted = 0
-        exist = 0
         for submission in submissions_user:
             if 'Accept' in submission.result:
                 print 'IN TRY SUBMIT SUBMISSION USER ACCEPT' + str(accepted)
-                accepted = accepted + 1
-               
+                accepted += 1
+
         success_rate_user = accepted / len(submissions_user)
         print success_rate_user
         profile_to_edit.success_rate = success_rate_user
