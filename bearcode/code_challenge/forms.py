@@ -83,8 +83,8 @@ class ProblemForm(forms.ModelForm):
 
 class DiscussionForm(forms.Form):
 
-    discussiontitle = forms.CharField(max_length=30)
-    discussiontext = forms.CharField(max_length=100)
+    discussiontitle = forms.CharField(max_length=50)
+    discussiontext = forms.CharField(max_length=1000)
 
     def clean(self):
         cleaned_data = super(DiscussionForm,self).clean()
@@ -97,9 +97,9 @@ class CommentForm(forms.Form):
         cleaned_data = super(CommentForm,self).clean()
         return cleaned_data
 
-class HistoryForm(forms.ModelForm):
-    class Meta:
-        model = SubmitHistory
-        exclude = {}
-        field = ('text', 'user', 'problem', 'created_at', 'result', 'runtime')
-        
+class HistoryForm(forms.Form):
+    codecontent = forms.CharField(max_length=10000)
+
+    def clean(self):
+        cleaned_data = super(HistoryForm,self).clean()
+        return cleaned_data

@@ -71,8 +71,8 @@ class Problem(models.Model):
 
 
 class Discussion(models.Model):
-    title = models.CharField(max_length=30)
-    text = models.CharField(max_length=100)
+    title = models.CharField(max_length=50)
+    text = models.CharField(max_length=1000)
     user = models.ForeignKey(User)
     problem = models.ForeignKey(Problem)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -101,7 +101,7 @@ class Comment(models.Model):
 
 
 class SubmitHistory(models.Model):
-    text = models.CharField(max_length=400)
+    text = models.CharField(max_length=10000)
     user = models.ForeignKey(User)
     problem = models.ForeignKey(Problem)
     created_at = models.DateTimeField(auto_now_add=True)

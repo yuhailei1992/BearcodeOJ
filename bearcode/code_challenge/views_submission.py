@@ -81,76 +81,54 @@ def try_submit(request):
     u_str = str(u.read())
 
     judge_result = json.loads(u_str)
-
+    print "until here in try submit"
     # Save the submission result to user's submission history.
-    new_history = SubmitHistory(text=submit_content, user=request.user, problem=curr_problem,
-                                result=judge_result['status'])
-    new_history_form = HistoryForm(request.POST, instance=new_history)
-    if not new_history_form.is_valid():
-        context['form'] = new_history_form
-        new_history.save()
-
-        profile_to_edit = get_object_or_404(UserProfile, user=request.user)
-        submissions_prob = SubmitHistory.objects.filter(problem=curr_problem)
-        if len(submissions_prob) != 0:
-            accepted = 0
-            for submission in submissions_prob:
-                if 'Accept' in submission.result:
-                    accepted += 1
-
-            # Calculate acceptance rate.
-            success_rate_prob = float(accepted) / len(submissions_prob) * 100
-            success_rate_prob = round(success_rate_prob, 2)
-            curr_problem.success_rate = str(success_rate_prob) + '%'
-            curr_problem.save()
-
-        submissions_user = SubmitHistory.objects.filter(problem=curr_problem)
-        if len(submissions_user) != 0:
-            accepted = 0
-            for submission in submissions_user:
-                if 'Accept' in submission.result:
-                    accepted += 1
-
-            success_rate_user = float(accepted) / len(submissions_user) * 100
-            success_rate_user = round(success_rate_user, 2)
-            # print success_rate_user
-            profile_to_edit.success_rate = str(success_rate_user) + '%'
-            profile_to_edit.save()
+    form = HistoryForm(request.POST)
+    # new_history_form = HistoryForm(request.POST, instance=new_history)
+    if not form.is_valid():
+        print "try submit form is not valid ____________"
 
         return render(request, 'code_challenge/result.json', context,
                       content_type="application/json")
+    
+    print "IN TRY SUBMIT FORM IS VALID"
+    new_history = SubmitHistory(text=form.cleaned_data['codecontent'], user=request.user, problem=curr_problem,
+                                result=judge_result['status'])
 
-    context['form'] = new_history_form
+    # context['form'] = new_history_form
     new_history.save()
-    new_history_form.save()
-
+    # new_history_form.save()
+    # print "IN TRY SUBMIT BEFORE GET PROFILE TO EDIT"
     profile_to_edit = get_object_or_404(UserProfile, user=request.user)
+    # print "IN TRY SUBMIT PROFILE TO EDIT GOT"
     submissions_prob = SubmitHistory.objects.filter(problem=curr_problem)
-    if len(submissions_prob) != 0:
-        print 'IN TRY SUBMIT SUBMISSION PROBLEM'
+    if len(submissions_prob) != 0:        
         accepted = 0
         for submission in submissions_prob:
             if 'Accept' in submission.result:
-                print 'IN TRY SUBMIT SUBMISSION PROBLEM ACCEPT' + str(accepted)
                 accepted += 1
-        success_rate_prob = accepted / len(submissions_prob)
-        print success_rate_prob
-        curr_problem.success_rate = success_rate_prob
+
+        # Calculate acceptance rate.
+        success_rate_prob = float(accepted) / len(submissions_prob) * 100
+        success_rate_prob = round(success_rate_prob, 2)
+        curr_problem.success_rate = str(success_rate_prob) + '%'
         curr_problem.save()
-    submissions_user = SubmitHistory.objects.filter(problem=curr_problem)
+
+    submissions_user = SubmitHistory.objects.filter(user=request.user)
     if len(submissions_user) != 0:
-        print 'IN TRY SUBMIT SUBMISSION USER'
+        print len(submissions_user)
+
         accepted = 0
         for submission in submissions_user:
             if 'Accept' in submission.result:
-                print 'IN TRY SUBMIT SUBMISSION USER ACCEPT' + str(accepted)
                 accepted += 1
 
-        success_rate_user = accepted / len(submissions_user)
-        print success_rate_user
-        profile_to_edit.success_rate = success_rate_user
+        success_rate_user = float(accepted) / len(submissions_user) * 100
+        success_rate_user = round(success_rate_user, 2)
+        # print success_rate_user
+        profile_to_edit.success_rate = str(success_rate_user) + '%'
         profile_to_edit.save()
-
+        print profile_to_edit.success_rate
     print context
     return render(request, 'code_challenge/result.json', context, content_type="application/json")
 
