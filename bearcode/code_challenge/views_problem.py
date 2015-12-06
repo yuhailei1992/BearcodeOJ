@@ -73,7 +73,7 @@ def edit_problem(request, problemid):
 def delete_problem(request, problemid):
     # Deletes item if the logged-in user has an item matching the id.
     try:
-        problem_to_delete = Problem.objects.get(id=problemid)
+        problem_to_delete = get_object_or_404(Problem, id=problemid)
         problem_to_delete.delete()
     except ObjectDoesNotExist:
         print 'Trying to delete a nonexistent problem.'

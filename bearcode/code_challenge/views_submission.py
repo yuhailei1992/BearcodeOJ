@@ -62,7 +62,7 @@ def try_submit(request):
 
     # After all the security checks, submit user code to oj_worker.
     context = {}
-    curr_problem = Problem.objects.get(id=problemid)
+    curr_problem = get_object_or_404(Problem, id=problemid)
 
     # The parameters to be sent to docker.
     values = {'user_code': submit_content,
@@ -93,7 +93,7 @@ def try_submit(request):
                                 result=judge_result['status'])
 
     new_history.save()
-    profile_to_edit = get_object_or_404(UserProfile, user=request.user)
+
     submissions_prob = SubmitHistory.objects.filter(problem=curr_problem)
     if len(submissions_prob) != 0:
         accepted = 0
@@ -101,12 +101,12 @@ def try_submit(request):
             if 'Accept' in submission.result:
                 accepted += 1
 
-        # Calculate acceptance rate.
         success_rate_prob = float(accepted) / len(submissions_prob) * 100
         success_rate_prob = round(success_rate_prob, 2)
         curr_problem.success_rate = str(success_rate_prob) + '%'
         curr_problem.save()
 
+    profile_to_edit = get_object_or_404(UserProfile, user=request.user)
     submissions_user = SubmitHistory.objects.filter(user=request.user)
     if len(submissions_user) != 0:
         accepted = 0

@@ -3,8 +3,7 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.shortcuts import render, redirect
-
+from django.shortcuts import render, redirect, get_object_or_404
 from code_challenge.models import *
 
 logger = logging.getLogger(__name__)
@@ -28,7 +27,7 @@ def home(request):
 @login_required
 @transaction.atomic
 def problem(request, problemid):
-    curr_problem = Problem.objects.get(id=problemid)
+    curr_problem = get_object_or_404(Problem, id=problemid)
     context = {'problem': curr_problem}
     return render(request, 'code_challenge/problem.html', context)
 

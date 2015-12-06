@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^each_discussion/(?P<discussionid>\d+)/$',
         'code_challenge.views_discussion.each_discussion',
         name='each_discussion'),
-    url(r'^get_comments/$', 'code_challenge.views_discussion.get_comments', name='get-comments'),
+    # url(r'^get_comments/$', 'code_challenge.views_discussion.get_comments', name='get-comments'),
 
     # Submission.
     url(r'^submit_history/(?P<problemid>\d+)/$', 'code_challenge.views_submission.submit_history',

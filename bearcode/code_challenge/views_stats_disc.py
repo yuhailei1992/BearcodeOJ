@@ -15,19 +15,18 @@ def random_pick(request):
     random_problem = Problem.objects.order_by('?').first()
     # print random_problem
     if not random_problem:
-        user = request.user
+        # user = request.user
         problems = Problem.objects.all()
-        return render(request, 'code_challenge/global_stream.html', {'problems': problems, 'currentuser': user})
+        return render(request, 'code_challenge/global_stream.html', {'problems': problems, 'currentuser': request.user})
     context = {'problem': random_problem}
     return render(request, 'code_challenge/problem.html', context)
 
 @transaction.atomic
 @login_required
 def search_discussion_page(request):
-    user = request.user
     discussions = Discussion.objects.all().order_by('-created_at')    
     # print 'Discussions' + str(discussions)
-    return render(request, 'code_challenge/search_discussion.html', {'discussions': discussions})
+    return render(request, 'code_challenge/search_discussion.html', {'discussions': discussions, 'currentuser': request.user})
 
 @transaction.atomic
 @login_required
@@ -51,6 +50,7 @@ def search_discussion(request):
             discussions.add(discussion)
 
     context['discussions'] = discussions
+    print discussions
     return render(request, 'code_challenge/search_discussion.html', context)
 
 @transaction.atomic
@@ -61,7 +61,6 @@ def ranking_board(request):
     userprofiles = UserProfile.objects.filter(role="nuser").order_by('-success_rate')
 
     context['userprofiles'] = userprofiles
-    print userprofiles
 
     return render(request, 'code_challenge/ranking_board.html', context)
 
