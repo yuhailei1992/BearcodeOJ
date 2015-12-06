@@ -6,14 +6,14 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     # Discussion.
-    url(r'^discussion/(?P<problemid>\d+)/$', 'code_challenge.views.discussion', name='discussion'),
-    url(r'^add-discussion/(?P<problemid>\d+)/$', 'code_challenge.views.add_discussion',
+    url(r'^discussion/(?P<problemid>\d+)/$', 'code_challenge.views_discussion.discussion', name='discussion'),
+    url(r'^add-discussion/(?P<problemid>\d+)/$', 'code_challenge.views_discussion.add_discussion',
         name='add-discussion'),
-    url(r'^add-comment/(?P<discussionid>\d+)/$', 'code_challenge.views.add_comment',
+    url(r'^add-comment/(?P<discussionid>\d+)/$', 'code_challenge.views_discussion.add_comment',
         name='add_comment'),
-    url(r'^each_discussion/(?P<discussionid>\d+)/$', 'code_challenge.views.each_discussion',
+    url(r'^each_discussion/(?P<discussionid>\d+)/$', 'code_challenge.views_discussion.each_discussion',
         name='each_discussion'),
-    url(r'^get_comments/$', 'code_challenge.views.get_comments', name='get-comments'),
+    url(r'^get_comments/$', 'code_challenge.views_discussion.get_comments', name='get-comments'),
 
     # Submission.
     url(r'^submit_history/(?P<problemid>\d+)/$', 'code_challenge.views_submission.submit_history',
