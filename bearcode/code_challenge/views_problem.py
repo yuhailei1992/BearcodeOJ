@@ -60,6 +60,7 @@ def edit_problem(request, problemid):
     """
     Edit problem by admin user
     :param request: the content of the problem to edit
+    :param problemid: the id of the problem to edit
     :return: a dict containing the status and the message
     """
     context = {}
@@ -94,6 +95,7 @@ def delete_problem(request, problemid):
     """
     Delete problem by admin user
     :param request: the content of the problem to delete
+    :param problemid: the id of the problem to edit
     :return: a dict containing the status and the message
     """
     # Deletes item if the logged-in user has an item matching the id.
@@ -116,6 +118,7 @@ def enable_problem(request, problemid):
     """
     Enable problem to be visible by admin user
     :param request: the content of the problem to manipulate
+    :param problemid: the id of the problem to edit
     :return: a dict containing the status and the message
     """
     problem_to_enable = get_object_or_404(Problem, id=problemid)
@@ -135,6 +138,7 @@ def disable_problem(request, problemid):
     """
     Disable the problem to be invisible by admin user
     :param request: the content of the problem to manipulate
+    :param problemid: the id of the problem to edit
     :return: a dict containing the status and the message
     """
     problem_to_enable = get_object_or_404(Problem, id=problemid)
@@ -154,6 +158,7 @@ def test_problem(request, problemid):
     """
     Test problem internally by admin user
     :param request: the content of the problem to test
+    :param problemid: the id of the problem to edit
     :return: a dict containing the status and the message
     """
     curr_problem = get_object_or_404(Problem, id=problemid)
