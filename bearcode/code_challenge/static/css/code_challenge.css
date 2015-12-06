@@ -1,0 +1,70 @@
+.eachPost {
+	font-size: 20px;
+	float: left;
+	padding: 20px 20px;
+	line-height: 20px;
+	border-radius: 10px;
+}
+
+.form-register {
+	text-align: center;
+	position: relative;
+	left: -10px;
+	width: 120px
+}
+
+#log-in-btn, #sign-up-btn, #regitser-btn {
+	width: 300px;
+}
+
+#mainbody {
+	text-align: left;
+	padding-top: 70px;
+	padding-bottom: 80px;
+}
+
+#postT {
+	margin-bottom: 15px;
+	width: 400px;
+}
+.profileInfo {
+	padding-top: 13px;
+	font-size: 20px;
+	color: #800000;
+	text-align: left;
+}
+.posts {
+	padding-top: 5px;
+	font-size: 15px;
+}
+
+.image {
+	width: 200px;
+	height: 200px;
+}
+#edit_form {
+	padding-top: 10px;
+	text-align: left;
+}
+
+#codecontent {
+ 	font-family: Consolas, monaco, monospace;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+li > a {
+    color: #000;
+    font-weight:bolder;
+    font-size: 20px;
+}
+.navbar-brand{
+    color: #fff;
+    font-size: 25px;
+    font-weight: bolder;
+    padding-top:6px;
+    padding-left:20px;
+}

@@ -11,6 +11,7 @@ td, th {
     padding: 5px;
     font-size: 18px;
     font-weight: normal;
+    text-align:left;
 }
 td.plabel {
     text-align: left;
@@ -28,12 +29,7 @@ td.pcontent {
     border: 1px solid #888;
 }
 
-td, th {
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-}
+
 td.pid,th.pid {
     text-align: left;
     width: 10%;

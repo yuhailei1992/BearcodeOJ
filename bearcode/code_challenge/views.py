@@ -24,8 +24,8 @@ def home(request):
     if user.username == admin_username:
         return redirect(reverse('manageproblem'))
 
-    problems = Problem.objects.all()
-
+    #problems = Problem.objects.all()
+    problems = Problem.objects.filter(visible=True)
     return render(request, 'code_challenge/global_stream.html', {'problems': problems})
 
 
