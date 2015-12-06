@@ -53,25 +53,42 @@ def add_discussion(request, problemid):
     if request.method == 'GET':
         return render(request, 'code_challenge/discussion.html', {'form': DiscussionForm()})
 
+    form = DiscussionForm(request.POST)
+    if not form.is_valid():
+        print "add discussion: form not valid"
+        return render(request, 'code_challenge/discussion.html', {'form': form})
+
+    print "add discussion: valid form!"
+
     curr_problem = Problem.objects.get(id=problemid)
-    context = {'problem': curr_problem}
-
-    new_discussion = Discussion(title=request.POST['discussiontitle'],
-                                text=request.POST['discussiontext'], user=request.user,
+    new_discussion = Discussion(title=form.cleaned_data['discussiontitle'],
+                                text=form.cleaned_data['discussiontext'], user=request.user,
                                 problem=curr_problem)
-    new_discussion_form = DiscussionForm(request.POST, instance=new_discussion)
-    if not new_discussion_form.is_valid():
-        context['form'] = new_discussion_form
-        context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by(
-            '-created_at')
-        new_discussion.save()
-        return redirect(reverse('discussion', kwargs={'problemid': problemid}))
-
-    context['form'] = new_discussion_form
-    context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by('-created_at')
     new_discussion.save()
-    new_discussion_form.save()
+    context = {'problem': curr_problem}
+    context['form'] = form
+    context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by('-created_at')
     return redirect(reverse('discussion', kwargs={'problemid': problemid}))
+
+    # curr_problem = Problem.objects.get(id=problemid)
+    # context = {'problem': curr_problem}
+    #
+    # new_discussion = Discussion(title=request.POST['discussiontitle'],
+    #                             text=request.POST['discussiontext'], user=request.user,
+    #                             problem=curr_problem)
+    # new_discussion_form = DiscussionForm(request.POST, instance=new_discussion)
+    # if not new_discussion_form.is_valid():
+    #     context['form'] = new_discussion_form
+    #     context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by(
+    #         '-created_at')
+    #     new_discussion.save()
+    #     return redirect(reverse('discussion', kwargs={'problemid': problemid}))
+    #
+    # context['form'] = new_discussion_form
+    # context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by('-created_at')
+    # new_discussion.save()
+    # new_discussion_form.save()
+    # return redirect(reverse('discussion', kwargs={'problemid': problemid}))
 
 
 @login_required

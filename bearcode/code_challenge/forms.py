@@ -81,11 +81,14 @@ class ProblemForm(forms.ModelForm):
         exclude = {'visible', 'success_rate'}
         field = ('name', 'description', 'example', 'difficulty', 'java_default','python_default', 'tle_limit', 'mle_limit','java_tests','python_tests')
 
-class DiscussionForm(forms.ModelForm):
-    class Meta:
-        model = Discussion
-        exclude = {}
-        field = ('title', 'text', 'user', 'problem', 'created_at')
+class DiscussionForm(forms.Form):
+
+    discussiontitle = forms.CharField(max_length=30)
+    discussiontext = forms.CharField(max_length=100)
+
+    def clean(self):
+        cleaned_data = super(DiscussionForm,self).clean()
+        return cleaned_data
 
 class CommentForm(forms.ModelForm):
     class Meta:
