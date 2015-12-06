@@ -103,7 +103,7 @@
                 <textarea class="input-large form-control" placeholder="comment here! " name="commenttext" rows="2"></textarea>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-warning btn-lg" type="submit">Add Discussion</button>
+                <button class="btn btn-warning btn-lg" type="submit">Add Comment</button>
             </div>
             <input type="hidden" name="next" value="{{ next }}" />
             {% csrf_token %}
@@ -115,7 +115,8 @@
       <!-- comments go here -->
         <div class="col-md-2"></div>
         <div class="col-md-8">
-        <h2> Existing comments for discussion: <a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h2><br>
+        <h2> Existing comments for discussion:</h2>
+        <h2><a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h2><br>
 
         <!--<p>-->
           <!--<ol id="commentsSection">-->

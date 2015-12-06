@@ -91,7 +91,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    text = models.CharField(max_length=42)
+    text = models.CharField(max_length=100)
     user = models.ForeignKey(User)
     discussion = models.ForeignKey(Discussion)
     created_at = models.DateTimeField(auto_now_add=True)

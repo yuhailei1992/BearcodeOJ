@@ -50,46 +50,26 @@ def discussion(request, problemid):
 @login_required
 @transaction.atomic
 def add_discussion(request, problemid):
+    curr_problem = Problem.objects.get(id=problemid)
+    context = {'problem': curr_problem}
+    context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by('-created_at')
     if request.method == 'GET':
         return render(request, 'code_challenge/discussion.html', {'form': DiscussionForm()})
 
     form = DiscussionForm(request.POST)
     if not form.is_valid():
         print "add discussion: form not valid"
-        return render(request, 'code_challenge/discussion.html', {'form': form})
+        context['form'] = form
+        return render(request, 'code_challenge/discussion.html', context)
 
     print "add discussion: valid form!"
 
-    curr_problem = Problem.objects.get(id=problemid)
     new_discussion = Discussion(title=form.cleaned_data['discussiontitle'],
                                 text=form.cleaned_data['discussiontext'], user=request.user,
                                 problem=curr_problem)
     new_discussion.save()
-    context = {'problem': curr_problem}
     context['form'] = form
-    context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by('-created_at')
     return redirect(reverse('discussion', kwargs={'problemid': problemid}))
-
-    # curr_problem = Problem.objects.get(id=problemid)
-    # context = {'problem': curr_problem}
-    #
-    # new_discussion = Discussion(title=request.POST['discussiontitle'],
-    #                             text=request.POST['discussiontext'], user=request.user,
-    #                             problem=curr_problem)
-    # new_discussion_form = DiscussionForm(request.POST, instance=new_discussion)
-    # if not new_discussion_form.is_valid():
-    #     context['form'] = new_discussion_form
-    #     context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by(
-    #         '-created_at')
-    #     new_discussion.save()
-    #     return redirect(reverse('discussion', kwargs={'problemid': problemid}))
-    #
-    # context['form'] = new_discussion_form
-    # context['discussions'] = Discussion.objects.filter(problem=curr_problem).order_by('-created_at')
-    # new_discussion.save()
-    # new_discussion_form.save()
-    # return redirect(reverse('discussion', kwargs={'problemid': problemid}))
-
 
 @login_required
 @transaction.atomic
@@ -113,22 +93,20 @@ def add_comment(request, discussionid):
         context['form'] = CommentForm()
         return render(request, 'code_challenge/each_discussion.html', context)
 
-    new_comment = Comment(text=request.POST['commenttext'], user=request.user,
+    form = CommentForm(request.POST)
+    if not form.is_valid():
+        print "add comment: form is not valid"
+        context['form'] = CommentForm()
+        redirect(reverse('each_discussion', kwargs={'discussionid': discussionid}))
+
+    print "add comment: valid form"
+    new_comment = Comment(text=form.cleaned_data['commenttext'], user=request.user,
                           discussion=curr_discussion)
-    new_comment_form = CommentForm(request.POST, instance=new_comment)
-    if not new_comment_form.is_valid():
-        context['form'] = new_comment_form
-        context['comments'] = Comment.objects.filter(discussion=curr_discussion).order_by(
-            '-created_at')
-        new_comment.save()
-        return redirect(reverse('each_discussion', kwargs={'discussionid': discussionid}))
-
-    context['form'] = new_comment_form
-    context['comments'] = Comment.objects.filter(discussion=curr_discussion).order_by('-created_at')
     new_comment.save()
-    new_comment_form.save()
+    context['comments'] = Comment.objects.filter(discussion=curr_discussion).order_by(
+            '-created_at')
+    
     return redirect(reverse('each_discussion', kwargs={'discussionid': discussionid}))
-
 
 @login_required
 @transaction.atomic

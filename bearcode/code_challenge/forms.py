@@ -90,11 +90,12 @@ class DiscussionForm(forms.Form):
         cleaned_data = super(DiscussionForm,self).clean()
         return cleaned_data
 
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        exclude = {}
-        field = ('text', 'user', 'discussion', 'created_at')
+class CommentForm(forms.Form):
+    commenttext = forms.CharField(max_length=100)
+
+    def clean(self):
+        cleaned_data = super(CommentForm,self).clean()
+        return cleaned_data
 
 class HistoryForm(forms.ModelForm):
     class Meta:
