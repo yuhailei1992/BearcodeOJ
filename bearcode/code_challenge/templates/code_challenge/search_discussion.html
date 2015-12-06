@@ -13,18 +13,18 @@
       margin: auto;
       width: 70%;
     }
-    #searchBtn {
-      background-color: #73AD21;
-    }
+    <!--#searchBtn {-->
+      <!--background-color: #73AD21;-->
+    <!--}-->
 </style>
   <div class="container" align="center">
-    <h2> Welcome, {{ request.user }}! </h2><br>
+
     <div class="searchBox">
       <form method="get" action="{% url 'search_discussion' %}">
         <div class="input-group">
           <input type="text" class="form-control" name="userInput" placeholder="Search for...">
           <span class="input-group-btn">
-            <button class="btn btn-default" type="submit" id="searchBtn">
+            <button class="btn btn-warning" type="submit" id="searchBtn">
               <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
             </button>
           </span>

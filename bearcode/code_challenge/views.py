@@ -12,6 +12,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from code_challenge.forms import *
 
+from code_challenge.models import Problem
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+
 logger = logging.getLogger(__name__)
 
 # Allowed languages.
@@ -19,7 +23,7 @@ allowed_languages = ['Python', 'Java']
 # The worker url.
 worker_url = "http://52.26.238.153/worker/judge/?%s"
 
-
+admin_username = "bearcode2015@gmail.com"
 # worker_url = "http://localhost:8001/worker/judge/?%s"
 
 
@@ -27,10 +31,14 @@ worker_url = "http://52.26.238.153/worker/judge/?%s"
 def home(request):
     # Sets up list of just the logged-in user's (request.user's) items
     user = request.user
+
+    if user.username == admin_username:
+        return redirect(reverse('manageproblem'))
+
     problems = Problem.objects.all()
-    print "There are " + str(len(problems)) + " problems in the list"
+
     return render(request, 'code_challenge/global_stream.html',
-                  {'problems': problems, 'currentuser': user})
+                  {'problems': problems})
 
 
 def welcome(request):
@@ -45,8 +53,7 @@ def about(request):
 @transaction.atomic
 def discussion(request, problemid):
     curr_problem = Problem.objects.get(id=problemid)
-    context = {'currentuser': request.user,
-               'problem': curr_problem,
+    context = {'problem': curr_problem,
                'discussions': Discussion.objects.filter(problem=curr_problem)}
     return render(request, 'code_challenge/discussion.html', context)
 
@@ -55,8 +62,7 @@ def discussion(request, problemid):
 @transaction.atomic
 def add_discussion(request, problemid):
     curr_problem = Problem.objects.get(id=problemid)
-    context = {'currentuser': request.user,
-               'problem': curr_problem}
+    context = {'problem': curr_problem}
 
     if request.method == 'GET':
         print "come into get"
@@ -85,8 +91,7 @@ def add_discussion(request, problemid):
 @transaction.atomic
 def each_discussion(request, discussionid):
     curr_discussion = Discussion.objects.get(id=discussionid)
-    context = {'currentuser': request.user,
-               'discussion': Discussion.objects.get(id=discussionid),
+    context = {'discussion': Discussion.objects.get(id=discussionid),
                'comments': Comment.objects.filter(discussion=curr_discussion).order_by(
                    '-created_at')}
 
@@ -98,8 +103,7 @@ def each_discussion(request, discussionid):
 def add_comment(request, discussionid):
     curr_discussion = Discussion.objects.get(id=discussionid)
 
-    context = {'currentuser': request.user,
-               'discussion': curr_discussion}
+    context = { 'discussion': curr_discussion}
     if request.method == 'GET':
         print "come into get"
         context['form'] = CommentForm()
@@ -168,7 +172,6 @@ def get_comments(request):
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     user_profile = get_object_or_404(UserProfile, user=user)
-    current_user = request.user
 
     candidates = SubmitHistory.objects.filter(user=user).order_by('-created_at')
     problems = set()
@@ -176,22 +179,8 @@ def profile(request, username):
         if submission.problem not in problems:
             problems.add(submission.problem)
 
-    context = {'user': user, 'problems': problems, 'userprofile': user_profile,
-               'currentuser': current_user}
+    context = {'user': user, 'problems': problems, 'userprofile': user_profile}
     return render(request, 'code_challenge/profile.html', context)
-
-
-@login_required
-@transaction.atomic
-def follower_stream(request):
-    user = request.user
-    userprofile = get_object_or_404(UserProfile, user=user)
-    following = userprofile.following.all()
-    posts = Post.objects.filter(user__in=following).order_by('-created_at')
-
-    context = {'userprofile': userprofile, 'posts': posts, 'currentuser': user}
-    print len(posts)
-    return render(request, 'code_challenge/follower_stream.html', context)
 
 
 @login_required
@@ -201,7 +190,7 @@ def edit_profile(request):
 
     if request.method == 'GET':
         form = ProfileForm(instance=profile_to_edit)  # Creates form
-        context = {'form': form, 'currentuser': request.user}
+        context = {'form': form}
         print "We are here at GET in edit_profile"
         return render(request, 'code_challenge/edit_profile.html', context)
 
@@ -219,36 +208,15 @@ def edit_profile(request):
     posts = Post.objects.filter(user=request.user).order_by('created_at').reverse()
 
     return render(request, 'code_challenge/profile.html',
-                  {'form': form, 'userprofile': userprofile, 'currentuser': request.user,
-                   'posts': posts})
+                  {'form': form, 'userprofile': userprofile, 'posts': posts})
 
-
-@transaction.atomic
-def add_problem(request):
-    print "add_problem"
-    context = {}
-    if request.method == 'GET':
-        print "add_problem in GET, should not be here"
-        context['form'] = ProblemForm()
-        return render(request, 'code_challenge/add_problem.html', context)
-
-    # if method is POST, get form data to update the model
-    form = ProblemForm(request.POST, request.FILES)
-    context['form'] = form
-
-    if not form.is_valid():
-        print "An invalid form!"
-        return render(request, 'code_challenge/add_problem.html', context)
-
-    form.save()
-    return redirect(reverse('home'))
 
 
 @login_required
 @transaction.atomic
 def problem(request, problemid):
     curr_problem = Problem.objects.get(id=problemid)
-    context = {'problem': curr_problem, 'currentuser': request.user}
+    context = {'problem': curr_problem}
     return render(request, 'code_challenge/problem.html', context)
 
 
@@ -392,8 +360,7 @@ def try_submit(request):
 def submit_history(request, problemid):
     curr_problem = get_object_or_404(Problem, id=problemid)
     histories = SubmitHistory.objects.filter(problem=curr_problem).order_by('-created_at')
-    context = {'currentuser': request.user,
-               'problem': curr_problem,
+    context = { 'problem': curr_problem,
                'histories': histories}
     return render(request, 'code_challenge/submit_history.html', context)
 
@@ -403,8 +370,7 @@ def submit_history(request, problemid):
 def submit_details(request, historyid):
     history = get_object_or_404(SubmitHistory, id=historyid)
     curr_problem = history.problem
-    context = {'currentuser': request.user,
-               'history': history,
+    context = {'history': history,
                'problem': curr_problem}
     return render(request, 'code_challenge/submit_details.html', context)
 
@@ -422,9 +388,8 @@ def handle_uploaded_file(f):
 @login_required
 @transaction.atomic
 def change_password(request):
-    return render(request, 'code_challenge/password_change_form.html',
-                  {'currentuser': request.user})
-
+    print "change password!"
+    return render(request, 'code_challenge/password_change_form.html',{'resetpassword':'reset_password'})
 
 @transaction.atomic
 def register(request):
@@ -455,6 +420,7 @@ def register(request):
                                         email=username)
     new_user.save()
 
+
     # Logs in the new user and redirects to global stream
     new_user = authenticate(username=username,
                             password=password)
@@ -464,6 +430,21 @@ def register(request):
                               first_name=firstname,
                               last_name=lastname)
     new_profile.save()
+    print "User role is "+new_profile.role
+    if username == admin_username:
+        print "Create Admin User"
+        content_type = ContentType.objects.get_for_model(Problem)
+        admin_permission = Permission.objects.create(codename="problem_mgmt",
+                                                     name="Can manage problems",
+                                                     content_type = content_type)
+        new_user.user_permissions.add(admin_permission)
+        new_profile.role = "admin"
+        new_profile.save()
+        if new_user.has_perm("code_challenge.problem_mgmt"):
+            print "Successfully grant admin permission to user "+username
+            print "Now User role is "+new_profile.role
+        else:
+            print "Grant Failure"
 
     login(request, new_user)
     return redirect(reverse('home'))

@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^test_problem/(?P<problemid>\d+)/$', 'code_challenge.views_problem.test_problem', name='testproblem'),
     url(r'^manage_problem$', 'code_challenge.views_problem.manage_problem', name='manageproblem'),
     url(r'^testsubmit$', 'code_challenge.views_problem.test_submit', name='testsubmit'),
+    url(r'^permission_denied$', 'code_challenge.views_problem.permission_denied', name='permission403'),
 
     url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'template_name': 'code_challenge/password_reset_form.html'}, name='reset_password_reset1'),
     url(r'^password_reset/done/$', 'django.contrib.auth.views.password_reset_done', {'template_name': 'code_challenge/password_reset_done.html'}, name='password_reset_done'),
@@ -38,7 +39,7 @@ urlpatterns = [
     # Route to logout a user and send them back to the login page
     url(r'^logout$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     url(r'^register$', 'code_challenge.views.register', name='regitser'),
-    url(r'^home$', 'code_challenge.views.welcome', name='home'),
+    url(r'^welcome$', 'code_challenge.views.welcome', name='welcome'),
     url(r'^about$', 'code_challenge.views.about', name='about'),
     # url(r'^add_problem$', 'code_challenge.views.add_problem', name='addproblem'),
 
@@ -48,6 +49,5 @@ urlpatterns = [
     url(r'^edit_profile$', 'code_challenge.views.edit_profile', name='edit'),
     url(r'^change_password$', 'django.contrib.auth.views.password_change', {'template_name': 'code_challenge/password_change_form.html'}, name='password_change'),
     url(r'^change_password/done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'code_challenge/password_change_done.html'}, name='password_change_done'),
-    url(r'^follower_stream$', 'code_challenge.views.follower_stream', name='follower_stream'),
     url(r'^get_comments/$', 'code_challenge.views.get_comments', name='get-comments'),
 ]
