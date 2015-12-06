@@ -201,7 +201,7 @@ def test_submit(request):
     # The parameters to be sent to docker.
     values = {'user_code': submit_content,
               'tle': curr_problem.tle_limit}
-    if submit_lang == 'java':
+    if submit_lang == 'Java':
         values['language'] = 'Java'
         values['test_code'] = curr_problem.java_tests
     else:
