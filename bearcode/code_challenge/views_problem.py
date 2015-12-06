@@ -1,25 +1,23 @@
-__author__ = 'jiaxix'
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.urlresolvers import reverse
-from django.db import transaction
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
-from django.core.exceptions import ObjectDoesNotExist
-from code_challenge.forms import *
-from django.contrib.auth.decorators import permission_required
 import urllib
 import json
 
+from django.shortcuts import render, get_object_or_404
+from django.db import transaction
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from code_challenge.forms import *
+from django.contrib.auth.decorators import permission_required
+
+
 allowed_languages = ['Python', 'Java']
+
 
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def add_problem(request):
-    print "add_problem"
     context = {}
     if request.method == 'GET':
-        print "add_problem in GET, should not be here"
         context['form'] = ProblemForm()
         return render(request, 'code_challenge/add_problem.html', context)
 
@@ -36,9 +34,11 @@ def add_problem(request):
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
 
+
 def permission_denied(request):
     print "Admin permission denied!"
     return render(request, 'code_challenge/permission_denied.html', {})
+
 
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
@@ -48,11 +48,11 @@ def manage_problem(request):
     print "There are " + str(len(problems)) + " problems in the list"
     return render(request, 'code_challenge/manage_problem.html',{'problems': problems})
 
+
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def edit_problem(request, problemid):
-    #return redirect(reverse('home'))
     context = {}
     problem_to_edit = get_object_or_404(Problem, id=problemid)
     context['problem'] = problem_to_edit
@@ -76,6 +76,7 @@ def edit_problem(request, problemid):
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
 
+
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
@@ -94,6 +95,7 @@ def delete_problem(request,problemid):
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
 
+
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
@@ -106,6 +108,7 @@ def enable_problem(request,problemid):
     problems = Problem.objects.all()
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
+
 
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
@@ -120,6 +123,7 @@ def disable_problem(request,problemid):
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
 
+
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
@@ -127,6 +131,7 @@ def test_problem(request,problemid):
     curr_problem = Problem.objects.get(id=problemid)
     context = {'problem': curr_problem}
     return render(request, 'code_challenge/problem_internal_test.html', context)
+
 
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
