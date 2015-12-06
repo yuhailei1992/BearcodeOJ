@@ -8,8 +8,14 @@
     <meta name="description" content="">
     <meta name="author" content="jiaxix">
 
+      <script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
       {% load staticfiles %}
     <link rel="icon" href="{% static "/static/logo.ico" %}">
+    {% block js %}
+
+    {% endblock %}
+
+
 
     <title>{% block title %}base{% endblock %}</title>
 

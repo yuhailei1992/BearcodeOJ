@@ -14,7 +14,7 @@ class RegistrationForm(forms.Form):
                                 label='Password',
                                 widget=forms.PasswordInput())
     password2 = forms.CharField(max_length=200,
-                                label='Confirm password',
+                                label='Confirm',
                                 widget=forms.PasswordInput())
     firstname = forms.CharField(max_length=200,
                                 label='firstname')

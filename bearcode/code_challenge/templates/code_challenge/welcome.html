@@ -1,87 +1,19 @@
 {% extends "code_challenge/base_welcome.html" %}
 
+{% block js %}
+<script src="/static/js/typed.js" type="text/javascript"></script>
+<script src="/static/js/welcome.js" type="text/javascript"></script>
+{% endblock %}
+
 {% block title %}Home{% endblock %}
 
 
 {% block mainbody %}
 <!--the background image is specific to login page.-->
-<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
-<script src="/static/js/typed.js" type="text/javascript"></script>
-<script>
-
-$(document).ready( function(){
-    var codestr = "from django.shortcuts import render\n\n^1000"+
-                "def welcome(request):^500\n"+
-                "\tprint 'Welcome to Code Challenge!'^500\n"+
-                "\tprint 'A platform to prepare for technical interviews'^500\n"+
-                "\tprint 'We support Python and Java'^500\n"+
-                "\tprint 'Try it NOW!'\n"+
-                "\treturn render(request, 'code_challenge/welcome.html', {})"
-    console.log(codestr);
-    $("#title").typed({ strings: [codestr] });
-});
-</script>
-
-<!--
-
-    $("#title").typed({
-        strings: ["First sentence.", "Second sentence."],
-        typeSpeed: 0
-    });
--->
-
-<style>
-
-    .welcome-pos {
-        width: 100%;
-        text-align: left;
-        position: relative;
-        fond-size: 30px;
-        padding-top: 150px;
-    }
-    .form-control {
-        height: 36px;
-        font-size: 20px;
-    }
-    #title{
-        position: relative;
-        padding-top: 150px;
-        font-size: 24px;
-        font-family: "Fantasy",Consolas,sans-serif;
-        font-weight: 700;
-        color: #000;
-        tab-size:4;
-    }
 
 
+<link rel="stylesheet" href="/static/css/welcome.css">
 
-    .typed-cursor{
-        font-size: 24px;
-        font-family: "Fantasy",Consolas,sans-serif;
-        font-weight: 700;
-        color: #000;
-
-        opacity: 1;
-        -webkit-animation: blink 0.7s infinite;
-        -moz-animation: blink 0.7s infinite;
-        animation: blink 0.7s infinite;
-    }
-    @keyframes blink{
-        0% { opacity:1; }
-        50% { opacity:0; }
-        100% { opacity:1; }
-    }
-    @-webkit-keyframes blink{
-        0% { opacity:1; }
-        50% { opacity:0; }
-        100% { opacity:1; }
-    }
-    @-moz-keyframes blink{
-        0% { opacity:1; }
-        50% { opacity:0; }
-        100% { opacity:1; }
-    }
-</style>
 <div class="col-md-8">
 <div class="welcome-pos">
 

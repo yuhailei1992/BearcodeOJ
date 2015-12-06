@@ -6,41 +6,11 @@
 {% block title %}Search_Discussion{% endblock %}
 
 {% block mainbody %}
-<style type="text/css" media="screen">
-    .searchBox {
-      border-radius: 10px;
-      padding: 10px;
-      margin: auto;
-      width: 70%;
-    }
-    table{
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-
-    }
-    tr {
-    border-bottom: 1px solid lightgrey;
-    }
-    td, th {
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    }
-    th.title, td.title{
-        width: 40%;
-    }
-    th.author, td.author{
-        width: 35%;
-    }
-    th.time, td.time{
-        width: 35%;
-    }
-</style>
+<link rel="stylesheet" href="/static/css/global.css">
 
   <div class="container" align="center">
 
-    <div class="searchBox">
+    <div class="searchBox row">
       <form method="get" action="{% url 'search_discussion' %}">
         <div class="input-group">
           <input type="text" class="form-control" name="userInput" placeholder="Search for...">
@@ -54,21 +24,25 @@
         {% csrf_token %}
       </form>
     </div>
-    <div>
-        <table>
-            <tr>
-                <th class="title">Title</th>
-                <th class="author">Author</th>
-                <th class="time">Time</th>
-            </tr>
-            {% for item in discussions %}
-            <tr>
-                <td class="title"><a  href="{% url 'each_discussion' item.id %}">{{item.title}}</a></td>
-                <td class="author">by <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
-                <td class="time">at {{item.created_at}}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <table>
+                <tr>
+                    <th class="title">Title</th>
+                    <th class="author">Author</th>
+                    <th class="time">Time</th>
+                </tr>
+                {% for item in discussions %}
+                <tr>
+                    <td class="title"><a  href="{% url 'each_discussion' item.id %}">{{item.title}}</a></td>
+                    <td class="author">by <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
+                    <td class="time">at {{item.created_at}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md-1"></div>
     </div>
   </div>
 

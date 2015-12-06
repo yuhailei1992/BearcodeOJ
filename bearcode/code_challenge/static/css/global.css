@@ -1,0 +1,112 @@
+    table{
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      border-top: 1px solid lightgrey;
+    }
+    tr {
+        border-bottom: 1px solid lightgrey;
+    }
+    tr.discuss {
+        border-bottom: none;
+    }
+    td, th {
+        padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    td.pid,th.pid {
+        text-align: left;
+        width: 5%;
+    }
+    td.pname,th.pname {
+        text-align: left;
+        width: 55%;
+    }
+    td.pacceptance,th.pacceptance {
+        width: 20%;
+    }
+    td.pdifficulty,th.pdifficulty {
+        width: 20%;
+    }
+    td.pacceptance, td.pdifficulty {
+        font-weight: normal;
+    }
+    th.title, td.title{
+        width: 40%;
+    }
+    th.author, td.author{
+        width: 35%;
+    }
+    th.time, td.time{
+        width: 35%;
+    }
+    label{
+        font-size: 16px;
+    }
+    .sponsor {
+        border-left: thick double grey;
+    }
+    .testbtn {
+    padding-top: 10px;
+    }
+    #rankTable {
+        text-align:left;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: auto;
+        width: 70%;
+    }
+    .searchBox {
+      border-radius: 10px;
+      padding: 10px;
+      margin: auto;
+      width: 70%;
+    }
+    #submitHistory {
+        text-align: center;
+    }
+    #header {
+      font-size: 17px;
+      color: #0B0B3B;
+    }
+    h3 {
+      text-align: left;
+      padding-left: 10%;
+      font-size: 17px;
+    }
+    #status {
+      color: #08088A;
+    }
+    #time {
+      color: #08088A;
+    }
+    #code {
+      display: block;
+      text-align:left;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin: auto;
+      width: 80%;
+      height: 500px;
+      border: 1px solid #888;
+    }
+    #dicussionbody {
+        display: block;
+        text-align:left;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: auto;
+        width: 90%;
+        border: 1px solid lightgrey;
+    }
+    #commentsSection {
+        display: block;
+        margin: auto;
+        text-align: left;
+        padding-left: 40%;
+    }
+    #wrap{
+        word-wrap: break-word;
+        word-break: break-all;
+    }
