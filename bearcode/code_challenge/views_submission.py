@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404
 
 from code_challenge.forms import *
 from code_challenge.models import *
+
 # from views import logger
 
 # Allowed languages.
@@ -22,7 +23,8 @@ context_empty_content = {'status': 'Rejected', 'message': 'Null or void submitte
 @transaction.atomic
 def try_submit(request):
     """
-    Main logic method to submit code for online judge, submission history record, and success rate computation
+    Main logic method to submit code for online judge, submission history record, and success rate
+    computation
     :param request: the content of the submission to be processed
     :return: a dict containing the status and the message
     """
@@ -81,12 +83,15 @@ def try_submit(request):
 
     # Prepare a request.
     data = urllib.urlencode(values)
-
+    print 'The values are:'
+    print values
     # Send request to oj_worker.
     u = urllib.urlopen(worker_url % data)
     u_str = str(u.read())
 
     judge_result = json.loads(u_str)
+    print 'Got results from docker: '
+    print judge_result
     # Save the submission result to user's submission history.
     form = HistoryForm(request.POST)
     if not form.is_valid():
@@ -150,7 +155,7 @@ def submit_details(request, historyid):
     """
     display the submission details for a specific submission
     :param request: the request to obtain the submission details
-    :param problemid: the id of the specific submission history
+    :param historyid: the id of the specific submission history
     :return: a dict containing the status and the message
     """
     history = get_object_or_404(SubmitHistory, id=historyid)
