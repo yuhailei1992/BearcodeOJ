@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 
 from code_challenge.forms import *
 from code_challenge.models import *
-from views import logger
+# from views import logger
 
 # Allowed languages.
 allowed_languages = ['Python', 'Java']
@@ -26,7 +26,7 @@ def try_submit(request):
     :param request: the content of the submission to be processed
     :return: a dict containing the status and the message
     """
-    logger.debug('>> try_submit')
+    # logger.debug('>> try_submit')
     if request.method == 'GET':
         return render(request, 'code_challenge/result.json', context_require_post,
                       content_type="application/json")

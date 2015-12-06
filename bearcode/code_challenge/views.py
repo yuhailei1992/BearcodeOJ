@@ -1,4 +1,4 @@
-import logging
+# import logging
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -6,7 +6,7 @@ from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
 from code_challenge.models import *
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
 admin_username = "bearcode2015@gmail.com"
 
