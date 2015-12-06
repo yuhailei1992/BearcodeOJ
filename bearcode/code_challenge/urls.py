@@ -9,8 +9,8 @@ urlpatterns = [
     url(r'^add-discussion/(?P<problemid>\d+)/$', 'code_challenge.views.add_discussion', name='add-discussion'),
     url(r'^add-comment/(?P<discussionid>\d+)/$', 'code_challenge.views.add_comment', name='add_comment'),    
     url(r'^each_discussion/(?P<discussionid>\d+)/$', 'code_challenge.views.each_discussion', name='each_discussion'),
-    url(r'^submit_history/(?P<problemid>\d+)/$', 'code_challenge.views.submit_history', name='submit_history'),
-    url(r'^submit_details/(?P<historyid>\d+)/$', 'code_challenge.views.submit_details', name='submit_details'),
+    url(r'^submit_history/(?P<problemid>\d+)/$', 'code_challenge.views_submission.submit_history', name='submit_history'),
+    url(r'^submit_details/(?P<historyid>\d+)/$', 'code_challenge.views_submission.submit_details', name='submit_details'),
     url(r'^random_pick', 'code_challenge.views_stats_disc.random_pick', name='random_pick'),
     url(r'^search_discussion_page', 'code_challenge.views_stats_disc.search_discussion_page', name='search_discussion_page'),
     url(r'^search_discussion', 'code_challenge.views_stats_disc.search_discussion', name='search_discussion'),
@@ -43,7 +43,7 @@ urlpatterns = [
     url(r'^about$', 'code_challenge.views.about', name='about'),
     # url(r'^add_problem$', 'code_challenge.views.add_problem', name='addproblem'),
 
-    url(r'^trysubmit$', 'code_challenge.views.try_submit', name='trysubmit'),
+    url(r'^trysubmit$', 'code_challenge.views_submission.try_submit', name='trysubmit'),
 
     url(r'^profile/(?P<username>[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4})$', 'code_challenge.views.profile', name='profile'),
     url(r'^edit_profile$', 'code_challenge.views.edit_profile', name='edit'),
