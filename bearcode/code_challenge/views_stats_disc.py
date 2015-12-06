@@ -37,7 +37,7 @@ def search_discussion(request):
     if request.method == 'POST':
         # print 'search method set to post'
         # show all the discussions
-        discussions = Discussion.objects.all().order_by('-created_at')    
+        #discussions = Discussion.objects.all().order_by('-created_at')
         return render(request, 'code_challenge/search_discussion.html', context)
     
     userInput = request.GET['userInput'].lower()

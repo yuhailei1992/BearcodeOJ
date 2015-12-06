@@ -16,23 +16,31 @@
     }
 </style>
 
-  <!-- Discussion body goes here -->
-  <h2>You submission history for <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h2><hr>
-<div class="container" stype="text-align:right">
-  <!-- history table goes here -->
-  <table style="width:90%;" id="submitHistory">
-  <tr id="header">
-    <td>Submit Time</td>
-    <td>Status</td>    
-    <td>Source code</td>
-  </tr>
-  {% for history in histories %}
-  <tr>
-    <td>{{history.created_at}}</td>
-    <td>{{history.result}}</td>    
-    <td><a href="{% url 'submit_details' history.id %}">code available</a></td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+
+    <div class="col-md-10">
+          <!-- Discussion body goes here -->
+          <h2>You submission history for <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h2><hr>
+        <div class="container" stype="text-align:right">
+          <!-- history table goes here -->
+          <table style="width:90%;" id="submitHistory">
+          <tr id="header">
+            <td>Submit Time</td>
+            <td>Status</td>
+            <td>Source code</td>
+          </tr>
+          {% for history in histories %}
+          <tr>
+            <td>{{history.created_at}}</td>
+            <td>{{history.result}}</td>
+            <td><a href="{% url 'submit_details' history.id %}">code available</a></td>
+          </tr>
+          {% endfor %}
+        </table>
+        </div>
+      </div>
+    </div>
 </div>
 {% endblock %}
