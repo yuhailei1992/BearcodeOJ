@@ -12,31 +12,47 @@ from views import logger
 allowed_languages = ['Python', 'Java']
 # The worker url.
 worker_url = "http://52.26.238.153/worker/judge/?%s"
+context_require_post = {'status': 'Internal Error', 'message': 'Please send POST requests.'}
+context_invalid_language = {'status': 'Rejected', 'message': 'Invalid programming language choice'}
+context_empty_content = {'status': 'Rejected', 'message': 'Null or void submitted content'}
 
 
 @login_required
 @transaction.atomic
 def try_submit(request):
     logger.debug('>> try_submit')
-    submit_content = request.POST['codecontent']
-    submit_lang = request.POST['language']
+    if request.method == 'GET':
+        return render(request, 'code_challenge/result.json', context_require_post,
+                      content_type="application/json")
+
+    # Check request.POST.
+    params = request.POST
+    if params is None:
+        return render(request, 'code_challenge/result.json', context_empty_content,
+                      content_type="application/json")
+
+    if 'codecontent' not in params or 'language' not in params or 'problemid' not in params:
+        return render(request, 'code_challenge/result.json', context_empty_content,
+                      content_type="application/json")
+
+    # Get all the parameters from request.POST
+    submit_content = params['codecontent']
+    submit_lang = params['language']
+    problemid = params['problemid']
 
     # Check for submit_lang. The submit_lang must be in allowed_languages.
     if submit_lang not in allowed_languages:
-        context = {'status': 'Rejected', 'message': 'Invalid programming language choice'}
-        return render(request, 'code_challenge/result.json', context,
+        return render(request, 'code_challenge/result.json', context_invalid_language,
                       content_type="application/json")
 
     # Analyze submitted code. If considered dangerous, the code will be rejected.
     if not submit_content or len(submit_content) == 0:
-        # print 'Null or void submitted content'
-        context = {'status': 'Rejected', 'message': 'Null or void submitted content'}
-        return render(request, 'code_challenge/result.json', context,
+        return render(request, 'code_challenge/result.json', context_empty_content,
                       content_type="application/json")
 
     import views_code_analysis
     check_result = views_code_analysis.check_code(submit_content, submit_lang)
-    # print check_result
+
     if check_result['status'] == 'False':
         msg = format('The code should not contain such substring: %s' % check_result['message'])
         context = {'status': 'Rejected', 'message': msg}
@@ -44,7 +60,7 @@ def try_submit(request):
                       content_type="application/json")
 
     # After all the security checks, submit user code to oj_worker.
-    problemid = request.POST['problemid']
+    context = {}
     curr_problem = Problem.objects.get(id=problemid)
 
     # The parameters to be sent to docker.
@@ -57,46 +73,42 @@ def try_submit(request):
         values['language'] = 'Python'
         values['test_code'] = curr_problem.python_tests
 
-    # print values
-
+    # Prepare a request.
     data = urllib.urlencode(values)
-    u = urllib.urlopen(worker_url % data)
-    # print 'results from docker'
-    u_str = str(u.read())
-    # print u_str
 
-    context = json.loads(u_str)
-    # print context
-    # save to history
+    # Send request to oj_worker.
+    u = urllib.urlopen(worker_url % data)
+    u_str = str(u.read())
+
+    judge_result = json.loads(u_str)
+
+    # Save the submission result to user's submission history.
     new_history = SubmitHistory(text=submit_content, user=request.user, problem=curr_problem,
-                                result=context['status'])
+                                result=judge_result['status'])
     new_history_form = HistoryForm(request.POST, instance=new_history)
     if not new_history_form.is_valid():
-        # print 'history is invalid'
         context['form'] = new_history_form
         new_history.save()
 
         profile_to_edit = get_object_or_404(UserProfile, user=request.user)
         submissions_prob = SubmitHistory.objects.filter(problem=curr_problem)
         if len(submissions_prob) != 0:
-            # print 'IN TRY SUBMIT SUBMISSION PROBLEM'
             accepted = 0
             for submission in submissions_prob:
                 if 'Accept' in submission.result:
                     accepted += 1
 
+            # Calculate acceptance rate.
             success_rate_prob = float(accepted) / len(submissions_prob) * 100
             success_rate_prob = round(success_rate_prob, 2)
-            # print success_rate_prob
             curr_problem.success_rate = str(success_rate_prob) + '%'
             curr_problem.save()
+
         submissions_user = SubmitHistory.objects.filter(problem=curr_problem)
         if len(submissions_user) != 0:
-            # print 'IN TRY SUBMIT SUBMISSION USER'
             accepted = 0
             for submission in submissions_user:
                 if 'Accept' in submission.result:
-                    # print 'IN TRY SUBMIT SUBMISSION USER ACCEPT' + str(accepted)
                     accepted += 1
 
             success_rate_user = float(accepted) / len(submissions_user) * 100
@@ -112,9 +124,6 @@ def try_submit(request):
     new_history.save()
     new_history_form.save()
 
-    # change the success rates for problem and userprofile
-    # change the ranking score for userprofile if necessary
-    # user_to_edit = get_object_or_404(UserProfile, user=request.user)
     profile_to_edit = get_object_or_404(UserProfile, user=request.user)
     submissions_prob = SubmitHistory.objects.filter(problem=curr_problem)
     if len(submissions_prob) != 0:
