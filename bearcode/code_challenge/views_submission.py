@@ -84,14 +84,10 @@ def try_submit(request):
     judge_result = json.loads(u_str)
     # Save the submission result to user's submission history.
     form = HistoryForm(request.POST)
-    # new_history_form = HistoryForm(request.POST, instance=new_history)
     if not form.is_valid():
-        print "try submit form is not valid ____________"
-
         return render(request, 'code_challenge/result.json', context,
                       content_type="application/json")
 
-    print "IN TRY SUBMIT FORM IS VALID"
     new_history = SubmitHistory(text=form.cleaned_data['codecontent'], user=request.user,
                                 problem=curr_problem,
                                 result=judge_result['status'])
@@ -113,8 +109,6 @@ def try_submit(request):
 
     submissions_user = SubmitHistory.objects.filter(user=request.user)
     if len(submissions_user) != 0:
-        print len(submissions_user)
-
         accepted = 0
         for submission in submissions_user:
             if 'Accept' in submission.result:
@@ -122,11 +116,9 @@ def try_submit(request):
 
         success_rate_user = float(accepted) / len(submissions_user) * 100
         success_rate_user = round(success_rate_user, 2)
-        # print success_rate_user
         profile_to_edit.success_rate = str(success_rate_user) + '%'
         profile_to_edit.save()
-        print profile_to_edit.success_rate
-    print judge_result
+
     return render(request, 'code_challenge/result.json', judge_result,
                   content_type="application/json")
 
