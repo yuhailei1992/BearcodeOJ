@@ -1,15 +1,7 @@
-import urllib
-import json
-
-from django.shortcuts import render, get_object_or_404
-from django.db import transaction
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from code_challenge.forms import *
 from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import ObjectDoesNotExist
 
-
-allowed_languages = ['Python', 'Java']
+from views_submission import *
 
 
 @login_required
@@ -21,12 +13,11 @@ def add_problem(request):
         context['form'] = ProblemForm()
         return render(request, 'code_challenge/add_problem.html', context)
 
-    # if method is POST, get form data to update the model
+    # If method is POST, get form data to update the model.
     form = ProblemForm(request.POST, request.FILES)
     context['form'] = form
 
     if not form.is_valid():
-        print "An invalid form!"
         return render(request, 'code_challenge/add_problem.html', context)
 
     form.save()
@@ -36,7 +27,6 @@ def add_problem(request):
 
 
 def permission_denied(request):
-    print "Admin permission denied!"
     return render(request, 'code_challenge/permission_denied.html', {})
 
 
@@ -45,8 +35,7 @@ def permission_denied(request):
 @transaction.atomic
 def manage_problem(request):
     problems = Problem.objects.all()
-    print "There are " + str(len(problems)) + " problems in the list"
-    return render(request, 'code_challenge/manage_problem.html',{'problems': problems})
+    return render(request, 'code_challenge/manage_problem.html', {'problems': problems})
 
 
 @login_required
@@ -57,21 +46,22 @@ def edit_problem(request, problemid):
     problem_to_edit = get_object_or_404(Problem, id=problemid)
     context['problem'] = problem_to_edit
 
+    # For GET requests, return the existing problem to edit.
     if request.method == 'GET':
         form = ProblemForm(instance=problem_to_edit)
-        context['form']=form
+        context['form'] = form
         return render(request, 'code_challenge/edit_problem.html', context)
 
+    # For POST requests, add a new problem.
     form = ProblemForm(request.POST, request.FILES, instance=problem_to_edit)
 
     if not form.is_valid():
-        print "edit-problem: form not valid"
-        context['form']=form
+        context['form'] = form
         return render(request, 'grumblr/edit_problem.html', context)
 
-    print "valid update problem form, to save..."
     form.save()
 
+    # Load a new manage_problem page.
     problems = Problem.objects.all()
     context['problems'] = problems
     return render(request, 'code_challenge/manage_problem.html', context)
@@ -80,15 +70,13 @@ def edit_problem(request, problemid):
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
-def delete_problem(request,problemid):
-    errors = []
-
-    # Deletes item if the logged-in user has an item matching the id
+def delete_problem(request, problemid):
+    # Deletes item if the logged-in user has an item matching the id.
     try:
         problem_to_delete = Problem.objects.get(id=problemid)
         problem_to_delete.delete()
     except ObjectDoesNotExist:
-        errors.append('The post does not exist in the whole database')
+        print 'Trying to delete a nonexistent problem.'
 
     context = {}
     problems = Problem.objects.all()
@@ -99,7 +87,7 @@ def delete_problem(request,problemid):
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
-def enable_problem(request,problemid):
+def enable_problem(request, problemid):
     problem_to_enable = get_object_or_404(Problem, id=problemid)
     problem_to_enable.visible = True
     problem_to_enable.save()
@@ -113,7 +101,7 @@ def enable_problem(request,problemid):
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
-def disable_problem(request,problemid):
+def disable_problem(request, problemid):
     problem_to_enable = get_object_or_404(Problem, id=problemid)
     problem_to_enable.visible = False
     problem_to_enable.save()
@@ -127,8 +115,8 @@ def disable_problem(request,problemid):
 @login_required
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
-def test_problem(request,problemid):
-    curr_problem = Problem.objects.get(id=problemid)
+def test_problem(request, problemid):
+    curr_problem = get_object_or_404(Problem, id=problemid)
     context = {'problem': curr_problem}
     return render(request, 'code_challenge/problem_internal_test.html', context)
 
@@ -137,24 +125,20 @@ def test_problem(request,problemid):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def test_submit(request):
-    print "in test_submit!!!!"
     submit_content = request.POST['codecontent']
-    print 'submitted content is: ' + submit_content
     submit_lang = request.POST['language']
-    print "selected language is: " + submit_lang
+    problemid = request.POST['problemid']
 
-    # Check for submit_lang. The submit_lang must be in allowed_languages.
+    # Check submit_lang. The submit_lang must be in allowed_languages.
     if submit_lang not in allowed_languages:
         print 'Invalid language choice'
-        context = {'status': 'Rejected', 'message': 'Invalid programming language choice'}
-        return render(request, 'code_challenge/result.json', context,
+        return render(request, 'code_challenge/result.json', context_invalid_language,
                       content_type="application/json")
 
     # Analyze submitted code. If considered dangerous, the code will be rejected.
     if not submit_content or len(submit_content) == 0:
         print 'Null or void submitted content'
-        context = {'status': 'Rejected', 'message': 'Null or void submitted content'}
-        return render(request, 'code_challenge/result.json', context,
+        return render(request, 'code_challenge/result.json', context_empty_content,
                       content_type="application/json")
 
     import views_code_analysis
@@ -167,8 +151,7 @@ def test_submit(request):
                       content_type="application/json")
 
     # After all the security checks, submit user code to oj_worker.
-    problemid = request.POST['problemid']
-    curr_problem = Problem.objects.get(id=problemid)
+    curr_problem = get_object_or_404(Problem, id=problemid)
 
     # The parameters to be sent to docker.
     values = {'user_code': submit_content,
@@ -180,15 +163,13 @@ def test_submit(request):
         values['language'] = 'Python'
         values['test_code'] = curr_problem.python_tests
 
-    print values
-
+    # Construct a request to the remote executor.
     data = urllib.urlencode(values)
-    u = urllib.urlopen("http://52.26.238.153/worker/judge/?%s" % data)
-    print 'results from docker'
+    u = urllib.urlopen(worker_url % data)
+
+    # Get the judge results and parse to a json object.
     u_str = str(u.read())
-    print u_str
+    judge_result = json.loads(u_str)
 
-    context = json.loads(u_str)
-
-    print context
-    return render(request, 'code_challenge/result.json', context, content_type="application/json")
+    return render(request, 'code_challenge/result.json', judge_result,
+                  content_type="application/json")
