@@ -119,14 +119,19 @@ def try_submit(request):
     profile_to_edit = get_object_or_404(UserProfile, user=request.user)
     submissions_user = SubmitHistory.objects.filter(user=request.user)
     if len(submissions_user) != 0:
+        print len(submissions_user)
         accepted = 0
         for submission in submissions_user:
             if 'Accept' in submission.result:
                 accepted += 1
+        print accepted
+        if accepted == 0:
+            profile_to_edit.success_rate = '0.00%'
+        else:
+            success_rate_user = float(accepted) / len(submissions_user) * 100
+            success_rate_user = round(success_rate_user, 2)
+            profile_to_edit.success_rate = str(success_rate_user) + '%'
 
-        success_rate_user = float(accepted) / len(submissions_user) * 100
-        success_rate_user = round(success_rate_user, 2)
-        profile_to_edit.success_rate = str(success_rate_user) + '%'
         profile_to_edit.save()
 
     return render(request, 'code_challenge/result.json', judge_result,

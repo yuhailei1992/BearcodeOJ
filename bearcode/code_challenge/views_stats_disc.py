@@ -16,11 +16,13 @@ def random_pick(request):
     :param request: the request to pick random problem
     :return: a dict containing the status and the message
     """
-    random_problem = Problem.objects.order_by('?').first()
-    if not random_problem:
+    shuffle_problems = Problem.objects.filter(visible=True).order_by('?')
+    if not shuffle_problems:
         problems = Problem.objects.all()
         return render(request, 'code_challenge/global_stream.html', {'problems': problems, 'currentuser': request.user})
-    context = {'problem': random_problem}
+
+    print "random pick, get "+str(len(shuffle_problems))+" problems here"
+    context = {'problem': shuffle_problems[0]}
     return render(request, 'code_challenge/problem.html', context)
 
 @transaction.atomic
