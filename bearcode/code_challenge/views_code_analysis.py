@@ -2,8 +2,8 @@
 import re
 
 # forbid all the os, io, import functionalities.
-python_keywords = ['import', 'sys', 'os', 'open', 'close', 'write', 'process', 'print', 'file', 'exec',
-                   'reload', 'compile']
+python_keywords = ['import', 'sys', 'os', 'open', 'close', 'write', 'process', 'print', 'file',
+                   'exec', 'reload', 'compile']
 
 # java. is for preventing using external module without importing: java.util.List for example.
 java_keywords = ['System', 'import', 'java.', 'org.', 'com.', '.io.', '.net.']
@@ -38,7 +38,7 @@ def check_java_code(user_code):
 
 
 def check_code(user_code, language):
-    if language == 'python':
+    if language == 'Python':
         return check_python_code(user_code)
     else:
         return check_java_code(user_code)
