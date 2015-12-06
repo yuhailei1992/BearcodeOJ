@@ -6,38 +6,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from code_challenge.forms import *
 from code_challenge.models import *
 
-
-# @login_required
-# @transaction.atomic
-# def get_comments(request):
-#     comments_set = Comment.get_comments(int(request.GET['post_id']))
-#     comments = []
-#     comments_iter = comments_set.iterator()
-#     # Peek at the first item in the iterator.
-#     try:
-#         first_item = next(comments_iter)
-#     except StopIteration:
-#         # No rows were found, so do nothing.
-#         context = {'size': 0, 'items': None}
-#         return render(request, 'code_challenge/comments.json', context,
-#                       content_type='application/json')
-#     else:
-#         # At least one row was found, so iterate over
-#         # all the rows, including the first one.
-#         from itertools import chain
-
-#         for comment in chain([first_item], comments_iter):
-#             profile_img = UserProfile.get_profile(comment.user.user.id).image
-
-#             item = {'comment_user': comment.user.username, 'user_photo': profile_img,
-#                     'created_at': comment.created_at, 'comment_text': comment.text}
-#             print item
-#             comments.append(item)
-
-#     context = {'size': len(comments), 'comments': comments}
-#     return render(request, 'code_challenge/comments.json', context, content_type='application/json')
-
-
 @login_required
 @transaction.atomic
 def add_comment(request, discussionid):
