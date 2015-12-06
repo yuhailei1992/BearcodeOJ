@@ -55,11 +55,11 @@ class RegistrationForm(forms.Form):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ('user', 'username', 'following', 'ranking_score', 'success_rate')
+        exclude = ('user', 'username', 'following', 'ranking_score', 'success_rate','role', 'image')
         widgets = {
             'description': Textarea(attrs={'cols': 80, 'rows': 50}),
         }
-        field = ('firstname', 'lastname', 'age', 'bio', 'image')
+        field = ('firstname', 'lastname', 'age', 'bio')
     
 class PostForm(forms.ModelForm):
     class Meta:
