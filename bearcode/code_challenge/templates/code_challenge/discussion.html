@@ -6,37 +6,97 @@
 {% block title %}Discussion_board{% endblock %}
 
 {% block mainbody %}
-  
+    <style>
+        .testbtn {
+        padding-top: 10px;
+        }
+        table{
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+
+        }
+        tr {
+        border-bottom: 1px solid lightgrey;
+        }
+        td, th {
+        padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        }
+        th.title, td.title{
+            width: 40%;
+        }
+        th.author, td.author{
+            width: 35%;
+        }
+        th.time, td.time{
+            width: 35%;
+        }
+    </style>
   <div class="container" align="center">
+
       <form action="/add-discussion/{{problem.id}}/" method="post">
-        <textarea class="input-large" id="postT" name="discussiontitle" rows="1"></textarea><br>
-        <textarea class="input-large" id="postT" name="discussiontext" rows="3"></textarea><br>
-        <button class="btn btn-success" type="submit">Add new Discussion</button>
+          <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <textarea class="input-large form-control" name="discussiontitle" maxlength="30" placeholder="title" rows="1"></textarea>
+                </div>
+                <div class="col-md-1"></div>
+          </div>
+          <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <textarea class="input-large form-control" name="discussiontext" maxlength="100" placeholder="content" rows="3"></textarea>
+                </div>
+                <div class="col-md-1"></div>
+          </div>
+          <div class="row testbtn">
+                <div class="col-md-9"></div>
+                <div class="col-md-2">
+                    <button class="btn btn-warning" type="submit">Add new Discussion</button>
+                </div>
+                <div class="col-md-1"></div>
+          </div>
         <input type="hidden" name="next" value="{{ next }}" />
         {% csrf_token %}
       </form>
-  </div>
-
-  <!-- divider line -->
-  <div class="container" align="center">
-    <hr style="height: 1px;/* font-weight: 100; */background-color: #000;">
-  </div>
+        <hr>
 
   <!-- posts go here -->
-  <div class="container" align="center">
+
     <h2> Discussion for problem: <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h2><br>
-    <p>
-      <ol id="discussions" class="discussions">
-        {% for item in discussions %}
-        <ol id="eachtitle">{{item.title}}</ol>
-        <ol id="eachtext">{{item.text}} </ol>
-        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
-        <ol id="time">{{item.created_at}}</ol>
-        <ol><a class="btn btn-info" href="{% url 'each_discussion' item.id %}">Get more info</a></ol></br>
-        {% endfor %}
-      
-      </ol>
-    </p>
+
+      <!--<ul id="discussions" class="discussions">-->
+        <!--{% for item in discussions %}-->
+        <!--<li id="eachtitle">{{item.title}}</li>-->
+        <!--<li id="eachtext">{{item.text}} </li>-->
+        <!--<li><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></li>-->
+        <!--<li id="time">{{item.created_at}}</li>-->
+        <!--<li><a class="btn btn-info" href="{% url 'each_discussion' item.id %}">Get more info</a></li>-->
+        <!--{% endfor %}-->
+      <!---->
+      <!--</ul>-->
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <table>
+                <tr>
+                    <th class="title">Title</th>
+                    <th class="author">Author</th>
+                    <th class="time">Time</th>
+                </tr>
+                {% for item in discussions %}
+                <tr>
+                    <td class="title"><a  href="{% url 'each_discussion' item.id %}">{{item.title}}</a></td>
+                    <td class="author">by <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
+                    <td class="time">at {{item.created_at}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
   </div>
 
 {% endblock %}

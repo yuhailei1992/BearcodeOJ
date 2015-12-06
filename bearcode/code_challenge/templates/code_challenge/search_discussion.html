@@ -13,10 +13,31 @@
       margin: auto;
       width: 70%;
     }
-    <!--#searchBtn {-->
-      <!--background-color: #73AD21;-->
-    <!--}-->
+    table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+    }
+    tr {
+    border-bottom: 1px solid lightgrey;
+    }
+    td, th {
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    }
+    th.title, td.title{
+        width: 40%;
+    }
+    th.author, td.author{
+        width: 35%;
+    }
+    th.time, td.time{
+        width: 35%;
+    }
 </style>
+
   <div class="container" align="center">
 
     <div class="searchBox">
@@ -34,12 +55,20 @@
       </form>
     </div>
     <div>
-      {% for item in discussions %}
-        <ol id="eachtitle"><a href="{% url 'each_discussion' item.id %}">{{item.title}}</a></ol>
-        <ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>
-        <ol id="time">{{item.created_at}}</ol>
-        <ol><a class="btn btn-info" href="{% url 'each_discussion' item.id %}">Get more info</a></ol></br>
-      {% endfor %}
+        <table>
+            <tr>
+                <th class="title">Title</th>
+                <th class="author">Author</th>
+                <th class="time">Time</th>
+            </tr>
+            {% for item in discussions %}
+            <tr>
+                <td class="title"><a  href="{% url 'each_discussion' item.id %}">{{item.title}}</a></td>
+                <td class="author">by <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
+                <td class="time">at {{item.created_at}}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
   </div>
 
