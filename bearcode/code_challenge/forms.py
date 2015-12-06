@@ -5,6 +5,9 @@ from models import *
 
 
 class RegistrationForm(forms.Form):
+    """
+    the form for the user registration
+    """
     username = forms.EmailField()
     email = forms.EmailField()
     password1 = forms.CharField(max_length=200,
@@ -46,6 +49,9 @@ class RegistrationForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
+    """
+    the form for the user profile
+    """
     class Meta:
         model = UserProfile
         exclude = (
@@ -55,18 +61,10 @@ class ProfileForm(forms.ModelForm):
         }
         field = ('firstname', 'lastname', 'age', 'bio')
 
-
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        exclude = {'user', }
-
-    def clean(self):
-        cleaned_data = super(PostForm, self).clean()
-        return cleaned_data
-
-
 class ProblemForm(forms.ModelForm):
+    """
+    the form for the problem addition
+    """
     class Meta:
         model = Problem
         exclude = {'visible', 'success_rate'}
@@ -75,6 +73,9 @@ class ProblemForm(forms.ModelForm):
 
 
 class DiscussionForm(forms.Form):
+    """
+    the form for the discussion addition
+    """
     discussiontitle = forms.CharField(max_length=50)
     discussiontext = forms.CharField(max_length=1000)
 
@@ -84,14 +85,19 @@ class DiscussionForm(forms.Form):
 
 
 class CommentForm(forms.Form):
+    """
+    the form for the comment addition
+    """
     commenttext = forms.CharField(max_length=100)
 
     def clean(self):
         cleaned_data = super(CommentForm, self).clean()
         return cleaned_data
 
-
 class HistoryForm(forms.Form):
+    """
+    the form for the submission history addition
+    """
     codecontent = forms.CharField(max_length=10000)
 
     def clean(self):

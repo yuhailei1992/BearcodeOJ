@@ -15,6 +15,11 @@ from views import admin_username
 
 
 def handle_uploaded_file(f):
+    """
+    Upload file to server
+    :param request: the file to upload
+    :return: a url of the uploaded file
+    """
     if f:
         file_name, file_extension = os.path.splitext(f.name)
         url = '/static/photos/{}{}'.format(time.time(), file_extension)
@@ -27,6 +32,11 @@ def handle_uploaded_file(f):
 @login_required
 @transaction.atomic
 def edit_profile(request):
+    """
+    Edit profile by the user if requested
+    :param request: the request to edit the profile information
+    :return: a dict containing the status and the message
+    """
     profile_to_edit = get_object_or_404(UserProfile, user=request.user)
 
     if request.method == 'GET':
@@ -55,6 +65,12 @@ def edit_profile(request):
 @login_required
 @transaction.atomic
 def profile(request, username):
+    """
+    display the corresponding profile as request
+    :param request: the request to display the profile
+    :param username: the username of the profile to be displayed
+    :return: a dict containing the status and the message
+    """
     user = get_object_or_404(User, username=username)
     user_profile = get_object_or_404(UserProfile, user=user)
 
@@ -70,6 +86,11 @@ def profile(request, username):
 
 @transaction.atomic
 def register(request):
+    """
+    Register the user through the user auth
+    :param request: the content of the registration information
+    :return: a dict containing the status and the message
+    """
     context = {}
 
     # Just display the registration form if this is a GET request

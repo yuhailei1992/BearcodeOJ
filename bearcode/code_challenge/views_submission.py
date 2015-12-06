@@ -21,6 +21,11 @@ context_empty_content = {'status': 'Rejected', 'message': 'Null or void submitte
 @login_required
 @transaction.atomic
 def try_submit(request):
+    """
+    Main logic method to submit code for online judge, submission history record, and success rate computation
+    :param request: the content of the submission to be processed
+    :return: a dict containing the status and the message
+    """
     logger.debug('>> try_submit')
     if request.method == 'GET':
         return render(request, 'code_challenge/result.json', context_require_post,
@@ -126,6 +131,12 @@ def try_submit(request):
 @login_required
 @transaction.atomic
 def submit_history(request, problemid):
+    """
+    display the submission history for a specific problem
+    :param request: the request to obtain the submission history for the specific problem
+    :param problemid: the id of the specific problem
+    :return: a dict containing the status and the message
+    """
     curr_problem = get_object_or_404(Problem, id=problemid)
     histories = SubmitHistory.objects.filter(problem=curr_problem).order_by('-created_at')
     context = {'problem': curr_problem,
@@ -136,6 +147,12 @@ def submit_history(request, problemid):
 @login_required
 @transaction.atomic
 def submit_details(request, historyid):
+    """
+    display the submission details for a specific submission
+    :param request: the request to obtain the submission details
+    :param problemid: the id of the specific submission history
+    :return: a dict containing the status and the message
+    """
     history = get_object_or_404(SubmitHistory, id=historyid)
     curr_problem = history.problem
     context = {'history': history,

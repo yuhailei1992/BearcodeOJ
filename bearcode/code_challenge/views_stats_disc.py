@@ -11,6 +11,11 @@ import random
 @transaction.atomic
 @login_required
 def random_pick(request):
+    """
+    Randomly pick a problem for the current user to solve
+    :param request: the request to pick random problem
+    :return: a dict containing the status and the message
+    """
     random_problem = Problem.objects.order_by('?').first()
     if not random_problem:
         problems = Problem.objects.all()
@@ -21,12 +26,22 @@ def random_pick(request):
 @transaction.atomic
 @login_required
 def search_discussion_page(request):
+    """
+    The discussions page where all the discussions displayed and user can search for specific discussion
+    :param request: the request to display discussions available
+    :return: a dict containing the status and the message
+    """
     discussions = Discussion.objects.all().order_by('-created_at')    
     return render(request, 'code_challenge/search_discussion.html', {'discussions': discussions, 'currentuser': request.user})
 
 @transaction.atomic
 @login_required
 def search_discussion(request):
+    """
+    The discussions page where specific discussions displayed with certain keyword
+    :param request: the specific keyword to search
+    :return: a dict containing the status and the message
+    """
     context = {}
     if request.method == 'POST':
         # show all the discussions
@@ -41,12 +56,16 @@ def search_discussion(request):
             discussions.add(discussion)
 
     context['discussions'] = discussions
-    print discussions
     return render(request, 'code_challenge/search_discussion.html', context)
 
 @transaction.atomic
 @login_required
 def ranking_board(request):
+    """
+    The ranking board page where all the users are ranked according to their success rate
+    :param request: the request to rank the users
+    :return: a dict containing the status and the message
+    """
     context = {}
 
     userprofiles = UserProfile.objects.filter(role="nuser").order_by('-success_rate')

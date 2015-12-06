@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 
 class UserProfile(models.Model):
+    """
+    the model for the user profile to store the relative required information
+    """
     user = models.OneToOneField(User, unique=True, primary_key=True)
     username = models.EmailField(unique=True, default="username")
     first_name = models.CharField(max_length=200, null=True)
@@ -25,6 +28,9 @@ class UserProfile(models.Model):
 
 
 class Problem(models.Model):
+    """
+    the model for the problem to solve
+    """
     DIFFICULTY_EASY = 'Easy'
     DIFFICULTY_MIDD = 'Medium'
     DIFFICULTY_HARD = 'Hard'
@@ -71,6 +77,9 @@ class Problem(models.Model):
 
 
 class Discussion(models.Model):
+    """
+    the model for the discussion for each problem
+    """
     title = models.CharField(max_length=50)
     text = models.CharField(max_length=1000)
     user = models.ForeignKey(User)
@@ -82,6 +91,9 @@ class Discussion(models.Model):
 
 
 class Post(models.Model):
+    """
+    the model for the post for each problem
+    """
     text = models.CharField(max_length=42)
     user = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -91,6 +103,9 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    """
+    the model for the comment for each discussion
+    """
     text = models.CharField(max_length=100)
     user = models.ForeignKey(User)
     discussion = models.ForeignKey(Discussion)
@@ -101,6 +116,9 @@ class Comment(models.Model):
 
 
 class SubmitHistory(models.Model):
+    """
+    the model for the submission history for each problem
+    """
     text = models.CharField(max_length=10000)
     user = models.ForeignKey(User)
     problem = models.ForeignKey(Problem)

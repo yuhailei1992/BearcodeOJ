@@ -38,6 +38,10 @@ def check_java_code(user_code):
 
 
 def check_code(user_code, language):
+    """ check the type to call the corresponding function
+    :param language: the type of language the user submitted
+    :return: the corresponding method according to the language type chosen
+    """
     if language == 'Python':
         return check_python_code(user_code)
     else:

@@ -8,6 +8,11 @@ from views_submission import *
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def add_problem(request):
+    """
+    Add problem by admin user
+    :param request: the content of the problem to add
+    :return: a dict containing the status and the message
+    """
     context = {}
     if request.method == 'GET':
         context['form'] = ProblemForm()
@@ -27,6 +32,11 @@ def add_problem(request):
 
 
 def permission_denied(request):
+    """
+    Deny permission if the class is not correct
+    :param request: the content to display
+    :return: a dict containing the status and the message
+    """
     return render(request, 'code_challenge/permission_denied.html', {})
 
 
@@ -34,6 +44,11 @@ def permission_denied(request):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def manage_problem(request):
+    """
+    Manage problem by admin user
+    :param request: the content of the problems to manage
+    :return: a dict containing the status and the message
+    """
     problems = Problem.objects.all()
     return render(request, 'code_challenge/manage_problem.html', {'problems': problems})
 
@@ -42,6 +57,11 @@ def manage_problem(request):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def edit_problem(request, problemid):
+    """
+    Edit problem by admin user
+    :param request: the content of the problem to edit
+    :return: a dict containing the status and the message
+    """
     context = {}
     problem_to_edit = get_object_or_404(Problem, id=problemid)
     context['problem'] = problem_to_edit
@@ -71,6 +91,11 @@ def edit_problem(request, problemid):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def delete_problem(request, problemid):
+    """
+    Delete problem by admin user
+    :param request: the content of the problem to delete
+    :return: a dict containing the status and the message
+    """
     # Deletes item if the logged-in user has an item matching the id.
     try:
         problem_to_delete = get_object_or_404(Problem, id=problemid)
@@ -88,6 +113,11 @@ def delete_problem(request, problemid):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def enable_problem(request, problemid):
+    """
+    Enable problem to be visible by admin user
+    :param request: the content of the problem to manipulate
+    :return: a dict containing the status and the message
+    """
     problem_to_enable = get_object_or_404(Problem, id=problemid)
     problem_to_enable.visible = True
     problem_to_enable.save()
@@ -102,6 +132,11 @@ def enable_problem(request, problemid):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def disable_problem(request, problemid):
+    """
+    Disable the problem to be invisible by admin user
+    :param request: the content of the problem to manipulate
+    :return: a dict containing the status and the message
+    """
     problem_to_enable = get_object_or_404(Problem, id=problemid)
     problem_to_enable.visible = False
     problem_to_enable.save()
@@ -116,6 +151,11 @@ def disable_problem(request, problemid):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def test_problem(request, problemid):
+    """
+    Test problem internally by admin user
+    :param request: the content of the problem to test
+    :return: a dict containing the status and the message
+    """
     curr_problem = get_object_or_404(Problem, id=problemid)
     context = {'problem': curr_problem}
     return render(request, 'code_challenge/problem_internal_test.html', context)
@@ -125,6 +165,11 @@ def test_problem(request, problemid):
 @permission_required('code_challenge.problem_mgmt', login_url="/permission_denied")
 @transaction.atomic
 def test_submit(request):
+    """
+    Test submission of problem by admin user
+    :param request: the content of the problem to test
+    :return: a dict containing the status and the message
+    """
     submit_content = request.POST['codecontent']
     submit_lang = request.POST['language']
     problemid = request.POST['problemid']

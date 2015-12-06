@@ -9,21 +9,24 @@ from code_challenge.models import *
 @login_required
 @transaction.atomic
 def add_comment(request, discussionid):
+    """
+    Add comment to specific discussion under a problem
+    :param request: the content of the comment
+    :param discussionid: the id of the discussion to add comment
+    :return: a dict containing the status and the message
+    """
     curr_discussion = get_object_or_404(Discussion, id=discussionid)
 
     context = {'discussion': curr_discussion}
     if request.method == 'GET':
-        print "come into get"
         context['form'] = CommentForm()
         return render(request, 'code_challenge/each_discussion.html', context)
 
     form = CommentForm(request.POST)
     if not form.is_valid():
-        print "add comment: form is not valid"
         context['form'] = CommentForm()
         redirect(reverse('each_discussion', kwargs={'discussionid': discussionid}))
 
-    print "add comment: valid form"
     new_comment = Comment(text=form.cleaned_data['commenttext'], user=request.user,
                           discussion=curr_discussion)
     new_comment.save()
@@ -36,6 +39,12 @@ def add_comment(request, discussionid):
 @login_required
 @transaction.atomic
 def discussion(request, problemid):
+    """
+    Display discussions under a problem
+    :param request: the request to display the discussions
+    :param problemid: the id of the problem to display corresponding discussions
+    :return: a dict containing the status and the message
+    """
     curr_problem = get_object_or_404(Problem, id=problemid)
     context = {'problem': curr_problem,
                'discussions': Discussion.objects.filter(problem=curr_problem)}
@@ -45,6 +54,12 @@ def discussion(request, problemid):
 @login_required
 @transaction.atomic
 def add_discussion(request, problemid):
+    """
+    Add discussion to specific problem
+    :param request: the content of the newly added discussion
+    :param problemid: the id of the problem to add discussion
+    :return: a dict containing the status and the message
+    """
     curr_problem = get_object_or_404(Problem, id=problemid)
     context = {'problem': curr_problem,
                'discussions': Discussion.objects.filter(problem=curr_problem).order_by(
@@ -71,6 +86,12 @@ def add_discussion(request, problemid):
 @login_required
 @transaction.atomic
 def each_discussion(request, discussionid):
+    """
+    The specific discussion with its comments
+    :param request: the content of the discussion of its corresponding comments
+    :param discussionid: the id of the discussion to display
+    :return: a dict containing the status and the message
+    """
     curr_discussion = get_object_or_404(Discussion, id=discussionid)
     context = {'discussion': Discussion.objects.get(id=discussionid),
                'comments': Comment.objects.filter(discussion=curr_discussion).order_by(
