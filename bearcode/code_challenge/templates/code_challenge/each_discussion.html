@@ -7,54 +7,7 @@
 
 {% block mainbody %}
 
-<style type="text/css" media="screen">
-    #dicussionbody {
-        display: block;
-        text-align:left;
-        padding-left: 10px;
-        padding-right: 10px;
-        margin: auto;
-        width: 90%;
-        border: 1px solid lightgrey;
-    }
-    #commentsSection {
-        display: block;
-        margin: auto;
-        text-align: left;
-        padding-left: 40%;
-    }
-    table{
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-
-    }
-    tr.comment {
-    border-bottom: 1px solid lightgrey;
-    }
-    td, th {
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    }
-    th.title, td.title{
-        width: 40%;
-    }
-    th.author, td.author{
-        width: 35%;
-    }
-    th.time, td.time{
-        width: 35%;
-    }
-    #wrap{
-        word-wrap: break-word;
-        word-break: break-all;
-    }
-    h3{
-        font-weight:bolder;
-        font-size:36px;
-    }
-</style>
+<link rel="stylesheet" href="/static/css/global.css">
 <div class="container">
   <!-- Example row of columns -->
   <div class="row">
@@ -66,22 +19,22 @@
         {% if discussion %}
         <!--<div style="color:black; font-size: 18px;">{{discussion.text}}</div><br>-->
           <table>
-              <tr>
+              <tr class="discuss">
                   <td>
-                      <h3>{{discussion.title}}</h3>
+                      <h1>{{discussion.title}}</h1>
                   </td>
               </tr>
-              <tr>
+              <tr class="discuss">
                   <td class="content" id="wrap">
                       {{discussion.text}}
                   </td>
               </tr>
-              <tr>
+              <tr class="discuss">
                   <td class="discussion_author">
                       by <a href="{% url 'profile' discussion.user.username %}">{{discussion.user.username}}</a>
                   </td>
               </tr>
-              <tr>
+              <tr class="discuss">
                   <td class="discussion_time">
                       at {{discussion.created_at}}
                   </td>
@@ -115,21 +68,12 @@
       <!-- comments go here -->
         <div class="col-md-2"></div>
         <div class="col-md-8">
-        <h2> Existing comments for discussion:</h2>
-        <h2><a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h2><br>
+            <h2> Existing comments for discussion:</h2>
+            <h2><a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h2><br>
 
-        <!--<p>-->
-          <!--<ol id="commentsSection">-->
-            <!--{% for item in comments %}-->
-            <!--<ol id="eachtext">{{item.text}} </ol>-->
-            <!--<ol><a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></ol>-->
-            <!--<ol id="time">{{item.created_at}}</ol><br>-->
-            <!--{% endfor %}-->
-          <!--</ol>-->
-        <!--</p>-->
             <table>
                 {% for item in comments %}
-                <tr class="comment">
+                <tr>
                     <td class="title">{{item.text}} </td>
                     <td class="author">by <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
                     <td class="time">at {{item.created_at}}</td>

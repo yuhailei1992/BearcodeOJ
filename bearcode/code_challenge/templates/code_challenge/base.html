@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="{% static "/static/sticky-footer.css" %}"/>
         <!-- My own css -->
         <link rel="stylesheet" href="{% static "/static/code_challenge.css" %}">
+        <script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
         {% block js %}
         {% endblock %}
         <meta charset="utf-8">
@@ -16,28 +17,7 @@
 
 
     <body>
-        <style>
-            body{
 
-            }
-            nav {
-                font-family: "Fantasy",Consolas,sans-serif;
-                background-color:#ffcc00;
-            }
-
-            li > a {
-                color: #000;
-                font-weight:bolder;
-                font-size: 20px;
-            }
-            .navbar-brand{
-                color: #fff;
-                font-size: 25px;
-                font-weight: bolder;
-                padding-top:6px;
-                padding-left:20px;
-            }
-        </style>
         <div>
         {% block brand %}
         <nav class="navbar navbar-fixed-top">
