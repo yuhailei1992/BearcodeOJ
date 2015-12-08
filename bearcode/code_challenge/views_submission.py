@@ -148,7 +148,7 @@ def submit_history(request, problemid):
     :return: a dict containing the status and the message
     """
     curr_problem = get_object_or_404(Problem, id=problemid)
-    histories = SubmitHistory.objects.filter(problem=curr_problem).order_by('-created_at')
+    histories = SubmitHistory.objects.filter(problem=curr_problem, user=request.user).order_by('-created_at')
     context = {'problem': curr_problem,
                'histories': histories}
     return render(request, 'code_challenge/submit_history.html', context)
