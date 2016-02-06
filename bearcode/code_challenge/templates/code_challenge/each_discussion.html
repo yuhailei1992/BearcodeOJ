@@ -1,0 +1,88 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}Discussion_board{% endblock %}
+
+{% block mainbody %}
+
+<link rel="stylesheet" href="/static/css/global.css">
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <!-- Discussion body goes here -->
+      <h2>Current Discussion: </h2>
+      <div id="dicussionbody">
+        {% if discussion %}
+        <!--<div style="color:black; font-size: 18px;">{{discussion.text}}</div><br>-->
+          <table>
+              <tr class="discuss">
+                  <td>
+                      <h1>{{discussion.title}}</h1>
+                  </td>
+              </tr>
+              <tr class="discuss">
+                  <td class="content" id="wrap">
+                      {{discussion.text}}
+                  </td>
+              </tr>
+              <tr class="discuss">
+                  <td class="discussion_author">
+                      by <a href="{% url 'profile' discussion.user.username %}">{{discussion.user.username}}</a>
+                  </td>
+              </tr>
+              <tr class="discuss">
+                  <td class="discussion_time">
+                      at {{discussion.created_at}}
+                  </td>
+              </tr>
+          </table>
+
+        {% endif %}
+      </div>
+
+        <hr>
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+  <div class="row">
+      <!-- add comment for the discussion here -->
+          <form action="/add-comment/{{discussion.id}}/" method="post">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                <textarea class="input-large form-control" placeholder="comment here! " name="commenttext" rows="2"></textarea>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-warning btn-lg" type="submit">Add Comment</button>
+            </div>
+            <input type="hidden" name="next" value="{{ next }}" />
+            {% csrf_token %}
+          </form>
+          <div class="col-md-2"></div>
+  </div>
+
+    <div class="row">
+      <!-- comments go here -->
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h2> Existing comments for discussion:</h2>
+            <h2><a href="{% url 'discussion' discussion.problem.id %}">{{discussion.title}}</a></h2><br>
+
+            <table>
+                {% for item in comments %}
+                <tr>
+                    <td class="title">{{item.text}} </td>
+                    <td class="author">by <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
+                    <td class="time">at {{item.created_at}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+</div>
+{% endblock %}

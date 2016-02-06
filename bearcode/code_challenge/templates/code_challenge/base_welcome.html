@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="jiaxix">
+
+      <script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+      {% load staticfiles %}
+    <link rel="icon" href="{% static "/static/logo.ico" %}">
+    {% block js %}
+
+    {% endblock %}
+
+
+
+    <title>{% block title %}base{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+
+    <link rel="stylesheet" href="{% static "/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" %}">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .nav-custom{
+            padding: 20px;
+            font-size: 20px;
+        }
+        .parenthesis {
+            font-size: 26px;
+            font-weight: bolder;
+        }
+        a {
+            color: #000;
+        }
+        body {
+            padding-top: 50px;
+            padding-bottom: 20px;
+            height: 100%;
+            font-family: "Fantasy",Consolas,sans-serif;
+            font-size: 20px;
+            background-color:#ffcc00;
+            background-size: 100% auto;
+        }
+        .btn {
+            font-weight: bolder;
+        }
+        .form-pos {
+            width: 100%;
+            padding-top: 150px;
+        }
+    </style>
+  </head>
+
+  <body>
+<!-- fix nav bar-->
+      <!-- Fixed navbar -->
+    <nav class="navbar navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+              <img src="{% static "/static/logo.ico" %}" width="60" height="60" alt="grumblr_logo">
+          </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+
+              <div class="nav navbar-nav navbar-right nav-custom">
+                  <span class="parenthesis">{</span>
+                  <a href="/welcome">Welcome</a>
+                  ,
+                  <a href="/login">Login</a>
+                  ,
+                  <a href="/register">Register</a>
+                  ,
+                  <a href="/about">About</a>
+                  <span class="parenthesis">}</span>
+              </div>
+
+            <!--<li>{<a href="../navbar/">Default</a>,</li>-->
+            <!--<li><a href="../navbar-static-top/">Static top</a>,</li>-->
+            <!--<li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a>}</li>-->
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-2"></div>
+
+
+            {% block mainbody %}{% endblock %}
+
+
+        <div class="col-md-2"></div>
+      </div>
+
+
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+  </body>
+</html>

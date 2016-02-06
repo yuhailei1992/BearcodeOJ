@@ -1,0 +1,36 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+
+{% block title %}Permission Denied{% endblock %}
+
+{% block mainbody %}
+<style>
+    .warning-pos {
+        width: 100%;
+        text-align: left;
+        position: relative;
+        font-size: 25px;
+        padding-top: 100px;
+        color: red;
+    }
+</style>
+  <!-- problems go here -->
+    <div class="container" align="center">
+
+        <div class="container">
+          <!-- Example row of columns -->
+          <div class="row">
+            <div class="col-md-10">
+                <div class="warning-pos">
+                    <h2>Access Denied!</h2><br>
+                    User ({{request.user.username}}) doesn't have Admin permission!
+                </div>
+            </div>
+          </div>
+
+        </div>
+        <table>
+
+        </table>
+    </div>
+
+{% endblock %}

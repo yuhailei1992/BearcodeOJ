@@ -1,0 +1,67 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/global.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block title %}Global_Stream{% endblock %}
+
+{% block mainbody %}
+<link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/global.css">
+  <!-- problems go here -->
+    <div class="container" align="center">
+
+        <div class="container">
+          <!-- Example row of columns -->
+          <div class="row">
+
+            <div class="col-md-10">
+              <br><br>
+              <table id="problems" class="compact hover row-border" cellspacing="0">
+              <thead>
+                <tr>
+                    <th class="pid"> # </th>
+                    <th class="pname"> Problem </th>
+                    <th class="pacceptance"> Acceptance </th>
+                    <th class="pdifficulty"> Difficulty </th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for problem in problems %}
+                <tr>
+                  <td class="pid">
+                      {{problem.id}}
+                  </td>
+                  <td class="pname">
+                      <a href="{% url 'problem' problem.id %}">{{problem.name}}</a>
+                  </td>
+                  <td class="pacceptance">
+                      {{problem.success_rate}}
+                  </td>
+                  <td class="pdifficulty">
+                      {{problem.difficulty}}
+                  </td>
+                </tr>
+                  {% endfor %}
+              </tbody>
+              </table>
+
+            </div>
+
+            <div class="col-md-2 sponsor">
+              <h2>SPONSERED</h2>
+              <p>Definitly come to 15637! A rly COOOOOOOOOOOOOL course.</p>
+              <p>
+                <a class="btn btn-default" href="https://piazza.com/cmu/fall2015/1543715637/home" target="_blank" role="button">View details &raquo;</a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+        <table>
+
+        </table>
+    </div>
+
+{% endblock %}

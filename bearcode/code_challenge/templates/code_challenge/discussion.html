@@ -1,0 +1,63 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+
+{% block title %}Discussion_board{% endblock %}
+
+{% block mainbody %}
+
+<link rel="stylesheet" href="/static/css/global.css">
+  <div class="container" align="center">
+
+      <form action="/add-discussion/{{problem.id}}/" method="post">
+          <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <textarea class="input-large form-control" name="discussiontitle" maxlength="30" placeholder="title" rows="1"></textarea>
+                </div>
+                <div class="col-md-1"></div>
+          </div>
+          <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <textarea class="input-large form-control" name="discussiontext" maxlength="100" placeholder="content" rows="3"></textarea>
+                </div>
+                <div class="col-md-1"></div>
+          </div>
+          <div class="row testbtn">
+                <div class="col-md-9"></div>
+                <div class="col-md-2">
+                    <button class="btn btn-warning" type="submit">Add new Discussion</button>
+                </div>
+                <div class="col-md-1"></div>
+          </div>
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% csrf_token %}
+      </form>
+        <hr>
+
+  <!-- posts go here -->
+
+    <h2> Discussion for problem: <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h2><br>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <table>
+                <tr>
+                    <th class="title">Title</th>
+                    <th class="author">Author</th>
+                    <th class="time">Time</th>
+                </tr>
+                {% for item in discussions %}
+                <tr>
+                    <td class="title"><a  href="{% url 'each_discussion' item.id %}">{{item.title}}</a></td>
+                    <td class="author">by <a href="{% url 'profile' item.user.username %}">{{item.user.username}}</a></td>
+                    <td class="time">at {{item.created_at}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+  </div>
+
+{% endblock %}

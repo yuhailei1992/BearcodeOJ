@@ -1,0 +1,84 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+<script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+
+{% endblock %}
+
+{% block title %}Problem Management Dashboard{% endblock %}
+
+{% block mainbody %}
+<link rel="stylesheet" href="/static/css/problem_mgmt.css">
+<link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
+  <!-- problems go here -->
+    <div class="container" align="center">
+
+        <div class="container">
+          <!-- Example row of columns -->
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <h1>Problem Management Dashboard</h1>
+              <br><br>
+              <table id="problems" class="compact hover row-border" cellspacing="0">
+              <thead>
+                <tr>
+                    <th class="pid"> # </th>
+                    <th class="pname"> Name </th>
+                    <th class="edit"> Edit Problem</th>
+                    <th class="test"> Internal Test</th>
+                    <th class="visible"> Open to User? </th>
+                    <th class="delete"> Delete </th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for problem in problems %}
+                <tr>
+                  <td class="pid">
+                      {{problem.id}}
+                  </td>
+                  <td class="pname">
+                      {{problem.name}}
+                  </td>
+                  <td class="edit">
+                      <a href="{% url 'editproblem' problem.id %}">
+                          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                      </a>
+                  </td>
+                  <td class="test">
+                      <a href="{% url 'testproblem' problem.id %}">
+                          <span class="glyphicon glyphicon-console" aria-hidden="true" style="color:green"></span>
+                      </a>
+                  </td>
+                  <td class="visible">
+                      {% if problem.visible == False %}
+                        <span class="glyphicon glyphicon-minus" aria-hidden="true" style="color:grey"></span>
+                          <a href="{% url 'enableproblem' problem.id %}">enable</a>
+
+                      {% else %}
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"  style="color:green"></span>
+                          <a href="{% url 'disableproblem' problem.id %}">disable</a>
+                      {% endif %}
+                  </td>
+
+                  <td class="delete">
+                      <a href="{% url 'deleteproblem' problem.id %}">
+                          <span class="glyphicon glyphicon-trash" aria-hidden="true" style="color:red"></span>
+                      </a>
+                  </td>
+                </tr>
+                  {% endfor %}
+              </tbody>
+              </table>
+                <p></p>
+                <a class="btn btn-warning btn-lg " id="sign-up-btn" href="{% url 'addproblem' %}">Add a Problem</a>
+            </div>
+            <div class="col-md-1"></div>
+
+          </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

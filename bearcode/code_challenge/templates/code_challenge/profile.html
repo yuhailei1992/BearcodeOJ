@@ -1,0 +1,43 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block mainbody %} 
+<!-- Profiles goes here -->
+  <!-- problems go here -->
+<div class="container" align="center">
+
+    <div class="container">
+        <!-- Example row of columns -->
+        <div class="row">
+            <div class="col-md-4 profile" >
+
+                {% if userprofile %}
+                  <p><img src="{{userprofile.image}}" width="280"/></p>
+                  <ol class="profileInfo">First Name:<label class="name">{{userprofile.first_name}}</label></ol>
+                  <ol class="profileInfo">Last Name:<label class="name">{{userprofile.last_name}}</label></ol>
+                  <ol class="profileInfo">Age:<label class="name">{{userprofile.age}}</label></ol>
+                  <ol class="profileInfo">Bio:<label class="name">{{userprofile.bio}}</label></ol>
+                {% endif %}
+
+                {% ifequal request.user.username user.username %}
+                  <p><a class="btn btn-success" href="/edit_profile">Edit My Profile</a></p>
+                  <p><a class="btn btn-primary" href="/change_password">Change My Password</a></p>
+                {% endifequal %}
+            </div>
+
+            <!-- Posts go here -->
+            <div class="col-md-8 post">
+              <h2> User's problem history: </h2><br>
+
+                <ol class="posts">
+                {% for problem in problems %}
+                  <li><a href="{% url 'problem' problem.id %}">{{problem.name}}</a></li>
+                {% endfor %}
+                </ol>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

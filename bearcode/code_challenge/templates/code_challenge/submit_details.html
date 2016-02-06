@@ -1,0 +1,33 @@
+{% extends "code_challenge/base_afterlogin.html" %}
+{% block js %}
+<script src="/static/js/jquery-2.1.4.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block title %}Discussion_board{% endblock %}
+
+{% block mainbody %}
+    <link rel="stylesheet" href="/static/css/global.css">
+    <div class="container" align="center">
+
+        <div class="container">
+          <!-- Example row of columns -->
+          <div class="row">
+
+            <div class="col-md-10">
+              <br><br>
+              <!-- Discussion body goes here -->
+              <h3>Back to problem: <a href="{% url 'problem' problem.id %}">{{problem.name}}</a></h3>
+              <h2>Submission Details: </h2><hr>
+              <h3 id="status">status: {{history.result}}</h3>
+              <h3 id="time">submitted at: {{history.created_at}}</h3><hr>
+              <h3>submitted code: </h3>
+            <div id="code">
+              {{history.text|linebreaksbr}}
+            </div>
+            </div>
+          </div>
+
+        </div>
+
+    </div>
+{% endblock %}
